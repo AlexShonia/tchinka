@@ -1,5 +1,5 @@
-import { Player }     from "../../../common/types/Player.js";
-import { Projectile } from "../../../common/types/Projectile.js";
+import { Player }     from "../../common/types/Player.js";
+import { Projectile } from "../../common/types/Projectile.js";
 
 const MANA_COST_SHOOT = 25;
 const VOLLEY_COUNT    = 1;

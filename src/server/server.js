@@ -4,8 +4,8 @@ import { join, extname }            from "path";
 import { fileURLToPath }            from "url";
 import { WebSocketServer }          from "ws";
 import { GameData }                 from "./common/GameData.js";
-import { Service }                  from "./stateupdater/incoming/service/service.js";
-import { Receiver } from "./stateupdater/incoming/Receiver.js";
+import { Service }                  from "./incoming/service/service.js";
+import { Receiver } from "./incoming/Receiver.js";
 import { Sender }   from "./outgoing/Sender.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));

@@ -5,16 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-BXSNZQCK.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/entity/GameState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/entity/GameState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/entity/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/entity/Player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/view/display.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/view/display.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/view/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/view/enemyView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/view/projectileView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/view/projectileView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/connection/Connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/connection/Connection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/entity/GameData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/entity/GameData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/model/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/model/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/GameState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/GameState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/view/types/Hud.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/Hud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/view/types/blockView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/blockView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/common/view/types/projectileView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/projectileView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/receiver/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/incoming/Receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/incoming/receiver/service/StateService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/incoming/service/GameStateService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/outgoing/Sender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/outgoing/Sender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/stateupdater/gametick/tick.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/tick.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/stateupdater/incoming/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/Receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/stateupdater/incoming/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/service/service.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,11 +84,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/server/model" />
-      <recent name="$PROJECT_DIR$/src/server/entity" />
-      <recent name="$PROJECT_DIR$/src/server/api" />
-      <recent name="$PROJECT_DIR$/src/client/entity" />
-      <recent name="$PROJECT_DIR$/src/client/model" />
+      <recent name="$PROJECT_DIR$/src/server" />
+      <recent name="$PROJECT_DIR$/src/client/incoming" />
+      <recent name="$PROJECT_DIR$/src/client" />
+      <recent name="$PROJECT_DIR$/src/client/incoming/receiver" />
+      <recent name="$PROJECT_DIR$/src/client/outgoing" />
     </key>
   </component>
   <component name="RunManager">
@@ -99,8 +104,10 @@
     <configuration name="main.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/main.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="main.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/server/main.js" working-dir="$PROJECT_DIR$">
-      <method v="2" />
+    <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/server/server.js" working-dir="$PROJECT_DIR$">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="ENV_FILES" value="" />
@@ -159,7 +166,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.main.js" />
+        <item itemvalue="Node.js.server.js" />
         <item itemvalue="Node.js.main.js" />
       </list>
     </recent_temporary>
@@ -182,7 +189,7 @@
       <workItem from="1790094050859" duration="3483000" />
       <workItem from="1790233506609" duration="370000" />
       <workItem from="1790854328072" duration="656000" />
-      <workItem from="1790854993707" duration="16532000" />
+      <workItem from="1790854993707" duration="22342000" />
     </task>
     <task id="LOCAL-00001" summary="jump and fking move">
       <option name="closed" value="true" />
@@ -217,13 +224,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/client/entity/GameState.js</url>
+          <url>file://$PROJECT_DIR$/src/client/common/GameState.js</url>
           <line>25</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/client/controller/input.js</url>
+          <url>file://$PROJECT_DIR$/src/client/outgoing/input/input.js</url>
           <line>21</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />

@@ -3,7 +3,7 @@ import { EnemyView }      from "../../common/view/types/enemyView.js";
 import { ProjectileView } from "../../common/view/types/projectileView.js";
 import { BlockView }      from "../../common/view/types/blockView.js";
 
-export class StateService {
+export class GameStateService {
 	constructor(gameState, scene, hud) {
 		this._gameState = gameState;
 		this._scene     = scene;

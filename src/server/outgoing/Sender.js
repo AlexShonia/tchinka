@@ -1,4 +1,4 @@
-import { tick } from "../stateupdater/gametick/tick.js";
+import { tick } from "../gametick/tick.js";
 
 const TICK_RATE = 20;
 

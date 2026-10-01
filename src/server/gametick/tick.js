@@ -1,4 +1,4 @@
-import { Enemy } from "../../common/types/Enemy.js";
+import { Enemy } from "../common/types/Enemy.js";
 
 const PLAYER_SPEED          = 0.1;
 const PLAYER_MAX_MANA       = 100;
