@@ -3,10 +3,9 @@ import { readFileSync, existsSync } from "fs";
 import { join, extname }            from "path";
 import { fileURLToPath }            from "url";
 import { WebSocketServer }          from "ws";
-import { GameData }                 from "./GameData.js";
-import { Service }                  from "./service.js";
-import { Connection }               from "./connection/Connection.js";
-import { Sender }                   from "./Sender.js";
+import { GameData }                 from "./entity/GameData.js";
+import { Service }                  from "./model/service.js";
+import { Connection, Sender }       from "./connection/Connection.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST      = join(__dirname, "../../dist");

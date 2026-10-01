@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build":  "vite build",
-    "server": "node src/server/server.js",
+    "server": "node src/server/main.js",
     "client": "vite"
   },
   "dependencies": {
