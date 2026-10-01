@@ -1,5 +1,3 @@
-import { WelcomeMsg, StateMsg } from "./protocol.js";
-
 export class Connection {
 	constructor(url, game) {
 		this._url  = url;
@@ -22,8 +20,8 @@ export class Connection {
 	_listen(ws) {
 		ws.addEventListener("message", (event) => {
 			const raw = JSON.parse(event.data);
-			if (raw.type === "welcome") this._game.applyWelcome(new WelcomeMsg(raw.id));
-			if (raw.type === "state")   this._game.applyState(new StateMsg(raw.players, raw.enemies, raw.projectiles));
+			if (raw.type === "welcome") this._game.applyWelcome(raw);
+			if (raw.type === "state")   this._game.applyState(raw);
 		});
 
 		ws.addEventListener("close", () => {

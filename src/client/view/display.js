@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { PlayerView }     from "./playerView.js";
 import { EnemyView }      from "./enemyView.js";
 import { ProjectileView } from "./projectileView.js";
+import { BlockView }      from "./blockView.js";
 
 const myMat    = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 const otherMat = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: true });
@@ -12,15 +13,17 @@ export class Display {
 	constructor(scene, camera) {
 		this._scene           = scene;
 		this._camera          = camera;
-		this._playerViews     = new Map(); // id -> PlayerView
-		this._enemyViews      = new Map(); // id -> EnemyView
-		this._projectileViews = new Map(); // id -> ProjectileView
+		this._playerViews     = new Map();
+		this._enemyViews      = new Map();
+		this._projectileViews = new Map();
+		this._blockViews      = new Map();
 	}
 
 	update(game) {
 		this._syncViews(this._playerViews,     game._models,     id => new PlayerView(this._scene, id === game.myId ? myMat : otherMat));
 		this._syncViews(this._enemyViews,      game._enemies,    () => new EnemyView(this._scene));
 		this._syncViews(this._projectileViews, game.projectiles, id => new ProjectileView(this._scene, game.projectiles.get(id)));
+		this._syncViews(this._blockViews,      game.blocks,      () => new BlockView(this._scene));
 		this._followMyPlayer(game);
 	}
 
