@@ -1,4 +1,4 @@
-import { MoveMsg, WelcomeMsg, StateMsg } from "./protocol.js";
+import { MoveMsg, ShootMsg, WelcomeMsg, StateMsg, ShootEventMsg } from "./protocol.js";
 
 export class Connection {
 	constructor(url, game) {
@@ -9,7 +9,8 @@ export class Connection {
 	}
 
 	// ── send ──────────────────────────────────────────────────────────────────
-	move(x, z) { this._send(new MoveMsg(x, z)); }
+	move(x, z)  { this._send(new MoveMsg(x, z)); }
+	shoot(x, z) { this._send(new ShootMsg(x, z)); }
 
 	_send(msg) {
 		if (this._ws?.readyState === WebSocket.OPEN)
@@ -21,6 +22,7 @@ export class Connection {
 			const raw = JSON.parse(event.data);
 			if (raw.type === "welcome") this._game.applyWelcome(new WelcomeMsg(raw.id));
 			if (raw.type === "state")   this._game.applyState(new StateMsg(raw.players, raw.enemies));
+			if (raw.type === "shoot")   this._game.applyShoot(new ShootEventMsg(raw.id, raw.x, raw.z));
 		});
 
 		ws.addEventListener("close", () => {

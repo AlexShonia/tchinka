@@ -7,11 +7,11 @@ import { setupInput } from "./controller/input.js";
 const SERVER = `ws://${location.hostname}:1234`;
 
 const world   = new World();
-const game    = new GameState();
+const game    = new GameState(world.scene);
 const display = new Display(world.scene, world.camera);
 const conn    = new Connection(SERVER, game);
 
-setupInput(world, conn);
+setupInput(world, conn, game);
 
 // ── render loop ───────────────────────────────────────────────────────────────
 const perfEl = document.getElementById("perf");

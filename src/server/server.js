@@ -75,6 +75,9 @@ wss.on("connection", (ws) => {
 			player.moveTarget = { x: msg.x, z: msg.z };
 			player.isMoving = true;
 		}
+		if (msg.type === "shoot" && msg.x != null && msg.z != null) {
+			broadcast({ type: "shoot", id, x: msg.x, z: msg.z });
+		}
 	});
 
 	ws.on("close", () => {
