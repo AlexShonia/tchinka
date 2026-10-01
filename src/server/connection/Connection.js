@@ -44,8 +44,9 @@ export class Sender {
 		this._service.tick();
 		this._broadcast({
 			type:        "state",
-			players:     [...this._gameData.players.values()].map(p => ({ id: p.id, x: p.x, z: p.z })),
-			enemies:     this._gameData.enemies.map(e => ({ id: e.id, x: e.x, z: e.z })),
+			wave:        this._gameData.wave,
+			players:     [...this._gameData.players.values()].map(p => ({ id: p.id, x: p.x, z: p.z, health: p.health, mana: p.mana, dead: p.dead })),
+			enemies:     this._gameData.enemies.map(e => ({ id: e.id, x: e.x, z: e.z, hp: e.hp, maxHp: e.maxHp })),
 			projectiles: [...this._gameData.projectiles.values()].map(p => ({ id: p.id, issuerId: p.issuerId, x: p.x, z: p.z, toX: p.toX, toZ: p.toZ })),
 		});
 	}

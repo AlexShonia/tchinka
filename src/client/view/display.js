@@ -1,8 +1,9 @@
 import * as THREE from "three";
-import { PlayerView }     from "./playerView.js";
-import { EnemyView }      from "./enemyView.js";
-import { ProjectileView } from "./projectileView.js";
-import { BlockView }      from "./blockView.js";
+import { PlayerView }     from "./types/playerView.js";
+import { EnemyView }      from "./types/enemyView.js";
+import { ProjectileView } from "./types/projectileView.js";
+import { BlockView }      from "./types/blockView.js";
+import { Hud }            from "./types/Hud.js";
 
 const myMat    = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 const otherMat = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: true });
@@ -17,13 +18,15 @@ export class Display {
 		this._enemyViews      = new Map();
 		this._projectileViews = new Map();
 		this._blockViews      = new Map();
+		this._hud             = new Hud();
 	}
 
 	update(game) {
 		this._syncViews(this._playerViews,     game._models,     id => new PlayerView(this._scene, id === game.myId ? myMat : otherMat));
 		this._syncViews(this._enemyViews,      game._enemies,    () => new EnemyView(this._scene));
-		this._syncViews(this._projectileViews, game.projectiles, id => new ProjectileView(this._scene, game.projectiles.get(id)));
+		this._syncViews(this._projectileViews, game.projectiles, () => new ProjectileView(this._scene));
 		this._syncViews(this._blockViews,      game.blocks,      () => new BlockView(this._scene));
+		this._hud.update(game.localPlayer, game.wave);
 		this._followMyPlayer(game);
 	}
 

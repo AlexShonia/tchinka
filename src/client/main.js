@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Connection } from "./connection/Connection.js";
-import { GameState }  from "./entity/GameState.js";
+import { GameState }  from "./entity/types/GameState.js";
 import { Service }    from "./model/service.js";
 import { Display }    from "./view/display.js";
 import { setupInput } from "./controller/input.js";

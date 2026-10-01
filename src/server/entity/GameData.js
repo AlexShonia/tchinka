@@ -2,10 +2,12 @@ export class GameData {
 	constructor() {
 		this.players     = new Map();
 		this.projectiles = new Map();
+		this.wave        = 1;
 		this.enemies     = Array.from({ length: 5 }, (_, i) => ({
 			id: `e${i}`,
 			x: (Math.random() - 0.5) * 20,
 			z: (Math.random() - 0.5) * 20,
+			hp: 1, maxHp: 1, speed: 0.05, attackCooldown: 0,
 		}));
 		this.blocks = [
 			{ id: "b0", x:  3, z: -2 },
@@ -16,5 +18,6 @@ export class GameData {
 		];
 		this.nextPlayerId = 1;
 		this.nextProjId   = 0;
+		this.nextEnemyId  = 5;
 	}
 }
