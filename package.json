@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "build":  "vite build",
     "server": "node server.js",
     "client": "vite"
   },

@@ -1,19 +1,20 @@
 import * as THREE from "three";
 import { World } from "./world.js";
+import { Receiver } from "./receiver.js";
 
-const SERVER = import.meta.env.VITE_WS_URL ?? "ws://176.221.250.70:1234";
+const SERVER = `ws://${location.hostname}:1234`;
 
-const world = new World();
-const scene = world.scene;
+const world  = new World();
+const scene  = world.scene;
 const camera = world.camera;
 
-// ── rendering maps ──────────────────────────────────────────────────────────
-const playerMeshes = new Map();  // id -> THREE.Mesh
-const enemyMeshes  = new Map();  // id -> THREE.Mesh
+// ── rendering maps ────────────────────────────────────────────────────────────
+const playerMeshes = new Map(); // id -> THREE.Mesh
+const enemyMeshes  = new Map(); // id -> THREE.Mesh
 
-const playerMat = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: true });
+const playerMat   = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: true });
 const myPlayerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-const enemyMat  = new THREE.MeshBasicMaterial({ color: 0xff3333 });
+const enemyMat    = new THREE.MeshBasicMaterial({ color: 0xff3333 });
 
 function getOrCreateMesh(map, id, mat) {
 	if (!map.has(id)) {
@@ -33,7 +34,7 @@ function removeStaleMeshes(map, liveIds) {
 	}
 }
 
-// ── camera follow ────────────────────────────────────────────────────────────
+// ── camera follow ─────────────────────────────────────────────────────────────
 const cameraOffset = new THREE.Vector3(0, 5, 5);
 let myId = null;
 
@@ -45,15 +46,12 @@ function followMyPlayer(players) {
 	camera.lookAt(me.x, 0, me.z);
 }
 
-// ── Snapshot interpolation ───────────────────────────────────────────────────
-const RENDER_DELAY = 150; // ms behind live — buffer for network jitter
-const snapshotBuffer = []; // { time, players, enemies }[]
-
-function applySnapshot(players, enemies) {
+// ── state application ─────────────────────────────────────────────────────────
+function applyState(players, enemies) {
 	const livePlayerIds = new Set(players.map(p => p.id));
 	removeStaleMeshes(playerMeshes, livePlayerIds);
 	for (const p of players) {
-		const mat = p.id === myId ? myPlayerMat : playerMat;
+		const mat  = p.id === myId ? myPlayerMat : playerMat;
 		const mesh = getOrCreateMesh(playerMeshes, p.id, mat);
 		mesh.position.set(p.x, 0.5, p.z);
 	}
@@ -68,110 +66,36 @@ function applySnapshot(players, enemies) {
 	followMyPlayer(players);
 }
 
-function lerpEntities(aList, bList, t) {
-	const bMap = new Map(bList.map(e => [e.id, e]));
-	return aList.map(a => {
-		const b = bMap.get(a.id);
-		if (!b) return a;
-		return { id: a.id, x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t };
-	});
-}
+// ── network ───────────────────────────────────────────────────────────────────
+const receiver = new Receiver(SERVER);
+receiver.onWelcome = (id) => { myId = id; };
+receiver.onState   = (players, enemies) => applyState(players, enemies);
 
-function tickInterpolation() {
-	if (snapshotBuffer.length < 2) return;
-
-	const renderTime = Date.now() - RENDER_DELAY;
-
-	// Drop snapshots too old to be useful (keep one before renderTime as anchor)
-	while (snapshotBuffer.length > 2 && snapshotBuffer[1].time <= renderTime) {
-		snapshotBuffer.shift();
-	}
-
-	const a = snapshotBuffer[0];
-	const b = snapshotBuffer[1];
-
-	if (renderTime < a.time) {
-		// Haven't buffered enough yet — show oldest we have
-		applySnapshot(a.players, a.enemies);
-		return;
-	}
-
-	const span = b.time - a.time;
-	const t = span > 0 ? Math.min((renderTime - a.time) / span, 1) : 1;
-
-	applySnapshot(
-		lerpEntities(a.players, b.players, t),
-		lerpEntities(a.enemies, b.enemies, t),
-	);
-}
-
-// ── WebSocket ─────────────────────────────────────────────────────────────────
-let ws = null;
-
-function connect() {
-	ws = new WebSocket(SERVER);
-
-	ws.addEventListener("open", () => {
-		console.log("Connected to server");
-	});
-
-	ws.addEventListener("message", (event) => {
-		const msg = JSON.parse(event.data);
-
-		if (msg.type === "welcome") {
-			myId = msg.id;
-			console.log("My player id:", myId);
-			return;
-		}
-
-		if (msg.type === "state") {
-			snapshotBuffer.push({ time: Date.now(), players: msg.players, enemies: msg.enemies });
-		}
-	});
-
-	ws.addEventListener("close", () => {
-		console.log("Disconnected — retrying in 2s…");
-		setTimeout(connect, 2000);
-	});
-
-	ws.addEventListener("error", () => ws.close());
-}
-
-connect();
-
-// ── input ────────────────────────────────────────────────────────────────────
-const mouseWorld = new THREE.Vector3();
-
+// ── input ─────────────────────────────────────────────────────────────────────
 window.addEventListener("mousemove", (event) => {
-	world.pointerOnGround(event.clientX, event.clientY, mouseWorld);
+	world.pointerOnGround(event.clientX, event.clientY, new THREE.Vector3());
 });
 
 world.renderer.domElement.addEventListener("click", (event) => {
 	const target = new THREE.Vector3();
-	if (!world.pointerOnGround(event.clientX, event.clientY, target)) return;
-	if (ws && ws.readyState === WebSocket.OPEN) {
-		ws.send(JSON.stringify({ type: "move", x: target.x, z: target.z }));
-	}
+	if (!world.pointerOnGround(event.clientX, event.clientY, target)) { console.log("no ground hit"); return; }
+	console.log("move", target.x, target.z, "ws state:", receiver._ws?.readyState);
+	receiver.send({ type: "move", x: target.x, z: target.z });
 });
 
-// ── perf overlay ─────────────────────────────────────────────────────────────
+// ── perf overlay ──────────────────────────────────────────────────────────────
 const perfEl = document.getElementById("perf");
-let lastFrameTime = performance.now();
 let frameCount = 0;
 let fps = 0;
 
 // ── render loop ───────────────────────────────────────────────────────────────
-function animate() {
-	const now = performance.now();
-	const ms = now - lastFrameTime;
-	lastFrameTime = now;
-
+function animate(now) {
 	frameCount++;
-	if (frameCount % 10 === 0) fps = Math.round(1000 / ms);
+	if (frameCount % 10 === 0) fps = Math.round(1000 / (now - (animate.prev ?? now)));
+	animate.prev = now;
 
-	perfEl.textContent = `${fps} fps\n${ms.toFixed(1)} ms`;
+	perfEl.textContent = `${fps} fps  ${(1000 / (fps || 1)).toFixed(1)} ms`;
 
-	tickInterpolation();
 	world.renderer.render(scene, camera);
 }
 

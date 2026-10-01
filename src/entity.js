@@ -2,7 +2,7 @@ export class Entity {
 	constructor(scene, mesh) {
 		this.scene = scene;
 		this.mesh = mesh;
-		this.speed = 0.1;
+		this.speed = 2;
 		scene.add(mesh);
 	}
 
