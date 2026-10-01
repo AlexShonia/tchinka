@@ -15,9 +15,9 @@ export class WelcomeMsg {
 }
 
 export class StateMsg {
-	constructor(players, enemies) { this.players = players; this.enemies = enemies; }
-}
-
-export class ShootEventMsg {
-	constructor(id, x, z) { this.id = id; this.x = x; this.z = z; }
+	constructor(players, enemies, projectiles) {
+		this.players     = players;
+		this.enemies     = enemies;
+		this.projectiles = projectiles;
+	}
 }
