@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { World } from "./world.js";
 
-const SERVER = "ws://localhost:8080";
+const SERVER = "ws://localhost:1234";
 
 const world = new World();
 const scene = world.scene;
@@ -45,6 +45,66 @@ function followMyPlayer(players) {
 	camera.lookAt(me.x, 0, me.z);
 }
 
+// ── Snapshot interpolation ───────────────────────────────────────────────────
+const RENDER_DELAY = 150; // ms behind live — buffer for network jitter
+const snapshotBuffer = []; // { time, players, enemies }[]
+
+function applySnapshot(players, enemies) {
+	const livePlayerIds = new Set(players.map(p => p.id));
+	removeStaleMeshes(playerMeshes, livePlayerIds);
+	for (const p of players) {
+		const mat = p.id === myId ? myPlayerMat : playerMat;
+		const mesh = getOrCreateMesh(playerMeshes, p.id, mat);
+		mesh.position.set(p.x, 0.5, p.z);
+	}
+
+	const liveEnemyIds = new Set(enemies.map(e => e.id));
+	removeStaleMeshes(enemyMeshes, liveEnemyIds);
+	for (const e of enemies) {
+		const mesh = getOrCreateMesh(enemyMeshes, e.id, enemyMat);
+		mesh.position.set(e.x, 0.5, e.z);
+	}
+
+	followMyPlayer(players);
+}
+
+function lerpEntities(aList, bList, t) {
+	const bMap = new Map(bList.map(e => [e.id, e]));
+	return aList.map(a => {
+		const b = bMap.get(a.id);
+		if (!b) return a;
+		return { id: a.id, x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t };
+	});
+}
+
+function tickInterpolation() {
+	if (snapshotBuffer.length < 2) return;
+
+	const renderTime = Date.now() - RENDER_DELAY;
+
+	// Drop snapshots too old to be useful (keep one before renderTime as anchor)
+	while (snapshotBuffer.length > 2 && snapshotBuffer[1].time <= renderTime) {
+		snapshotBuffer.shift();
+	}
+
+	const a = snapshotBuffer[0];
+	const b = snapshotBuffer[1];
+
+	if (renderTime < a.time) {
+		// Haven't buffered enough yet — show oldest we have
+		applySnapshot(a.players, a.enemies);
+		return;
+	}
+
+	const span = b.time - a.time;
+	const t = span > 0 ? Math.min((renderTime - a.time) / span, 1) : 1;
+
+	applySnapshot(
+		lerpEntities(a.players, b.players, t),
+		lerpEntities(a.enemies, b.enemies, t),
+	);
+}
+
 // ── WebSocket ─────────────────────────────────────────────────────────────────
 let ws = null;
 
@@ -65,24 +125,7 @@ function connect() {
 		}
 
 		if (msg.type === "state") {
-			// --- players ---
-			const livePlayerIds = new Set(msg.players.map(p => p.id));
-			removeStaleMeshes(playerMeshes, livePlayerIds);
-			for (const p of msg.players) {
-				const mat = p.id === myId ? myPlayerMat : playerMat;
-				const mesh = getOrCreateMesh(playerMeshes, p.id, mat);
-				mesh.position.set(p.x, 0.5, p.z);
-			}
-
-			// --- enemies ---
-			const liveEnemyIds = new Set(msg.enemies.map(e => e.id));
-			removeStaleMeshes(enemyMeshes, liveEnemyIds);
-			for (const e of msg.enemies) {
-				const mesh = getOrCreateMesh(enemyMeshes, e.id, enemyMat);
-				mesh.position.set(e.x, 0.5, e.z);
-			}
-
-			followMyPlayer(msg.players);
+			snapshotBuffer.push({ time: Date.now(), players: msg.players, enemies: msg.enemies });
 		}
 	});
 
@@ -113,6 +156,7 @@ world.renderer.domElement.addEventListener("click", (event) => {
 
 // ── render loop ───────────────────────────────────────────────────────────────
 function animate() {
+	tickInterpolation();
 	world.renderer.render(scene, camera);
 }
 

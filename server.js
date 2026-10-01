@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 
-const PORT = 8080;
+const PORT = 1234;
 const TICK_MS = 50; // 20 ticks/s
 const ENEMY_SPEED = 0.05;
 const ENEMY_COUNT = 5;
