@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { World } from "./world.js";
 
-const SERVER = "ws://176.221.250.70:1234";
+const SERVER = import.meta.env.VITE_WS_URL ?? "ws://176.221.250.70:1234";
 
 const world = new World();
 const scene = world.scene;
