@@ -4,7 +4,7 @@ const playerMat   = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: tr
 const myPlayerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 const enemyMat    = new THREE.MeshBasicMaterial({ color: 0xff3333 });
 
-const CAM_OFFSET = new THREE.Vector3(0, 5, 5);
+const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
 
 export class Display {
 	constructor(scene, camera) {

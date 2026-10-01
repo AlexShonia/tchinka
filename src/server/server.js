@@ -5,7 +5,7 @@ import { fileURLToPath }                   from "url";
 import { WebSocketServer }                 from "ws";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const DIST      = join(__dirname, "dist");
+const DIST      = join(__dirname, "../../dist");
 
 const MIME = {
 	".html": "text/html",
