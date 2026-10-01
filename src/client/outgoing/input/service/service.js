@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Outbox } from "../../common/Outbox.js";
 
 const _raycaster = new THREE.Raycaster();
 const _mouse     = new THREE.Vector2();
@@ -12,10 +13,10 @@ function screenToWorld(clientX, clientY, camera, target) {
 }
 
 export class Service {
-	constructor(camera, gameState) {
-		this._camera    = camera;
-		this._gameState = gameState;
-		this.outbox     = [];
+	constructor(camera, getMyId) {
+		this._camera  = camera;
+		this._getMyId = getMyId;
+		this.outbox   = new Outbox();
 	}
 
 	localMove(screenX, screenY) {
@@ -25,7 +26,7 @@ export class Service {
 	}
 
 	localShoot(screenX, screenY) {
-		if (!this._gameState.myId) return;
+		if (!this._getMyId()) return;
 		const target = new THREE.Vector3();
 		if (!screenToWorld(screenX, screenY, this._camera, target)) return;
 		this.outbox.push({ type: "shoot", x: target.x, z: target.z });

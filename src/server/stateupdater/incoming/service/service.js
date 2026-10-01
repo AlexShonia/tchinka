@@ -1,5 +1,5 @@
-import { Player }     from "./entity/types/Player.js";
-import { Projectile } from "./entity/types/Projectile.js";
+import { Player }     from "../../../common/types/Player.js";
+import { Projectile } from "../../../common/types/Projectile.js";
 
 const MANA_COST_SHOOT = 25;
 const VOLLEY_COUNT    = 1;
@@ -22,6 +22,9 @@ export class Service {
 	removePlayer(id) {
 		this._gameData.players.delete(id);
 	}
+
+	get blocks()      { return this._gameData.blocks; }
+	get playerCount() { return this._gameData.players.size; }
 
 	movePlayer(player, x, z) {
 		if (player.dead) return;

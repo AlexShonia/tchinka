@@ -1,10 +1,11 @@
 import * as THREE from "three";
-import { Receiver }  from "./receiver/Receiver.js";
-import { Sender }    from "./sender/Sender.js";
-import { GameState } from "./receiver/entity/GameState.js";
-import { Service }   from "./input/model/service.js";
-import { Hud }       from "./receiver/entity/view/types/Hud.js";
-import { setupInput } from "./input/input.js";
+import { Receiver }     from "./incoming/receiver/Receiver.js";
+import { Sender }       from "./outgoing/sender/Sender.js";
+import { GameState }    from "./incoming/common/GameState.js";
+import { StateService } from "./incoming/receiver/service/StateService.js";
+import { Service }      from "./outgoing/input/service/service.js";
+import { Hud }          from "./incoming/common/view/types/Hud.js";
+import { setupInput }   from "./outgoing/input/input.js";
 
 const SERVER     = `ws://${location.hostname}:1234`;
 const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
@@ -22,11 +23,12 @@ camera.up.set(0, 0, -1);
 camera.lookAt(0, 0, 0);
 
 // ── app ───────────────────────────────────────────────────────────────────────
-const hud       = new Hud();
-const gameState = new GameState(scene, hud);
-const receiver  = new Receiver(SERVER, gameState);
+const hud          = new Hud();
+const gameState    = new GameState();
+const stateService = new StateService(gameState, scene, hud);
+const receiver     = new Receiver(SERVER, stateService);
 const sender    = new Sender(receiver);
-const game      = new Service(camera, gameState);
+const game      = new Service(camera, () => gameState.myId);
 
 setupInput(game, renderer.domElement);
 

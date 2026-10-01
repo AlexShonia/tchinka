@@ -1,13 +1,13 @@
 export class Receiver {
-	constructor(ws, service, gameData) {
+	constructor(ws, service) {
 		this._service = service;
 		this._player  = service.addPlayer();
 
-		ws.send(JSON.stringify({ type: "welcome", id: this._player.id, blocks: gameData.blocks }));
-		console.log(`Player ${this._player.id} joined (total: ${gameData.players.size})`);
+		ws.send(JSON.stringify({ type: "welcome", id: this._player.id, blocks: service.blocks }));
+		console.log(`Player ${this._player.id} joined (total: ${service.playerCount})`);
 
 		ws.on("message", (raw) => this._onMessage(raw));
-		ws.on("close",   ()    => this._onClose(gameData));
+		ws.on("close",   ()    => this._onClose());
 	}
 
 	_onMessage(raw) {
@@ -21,8 +21,8 @@ export class Receiver {
 			this._service.shoot(this._player, msg.x, msg.z);
 	}
 
-	_onClose(gameData) {
+	_onClose() {
 		this._service.removePlayer(this._player.id);
-		console.log(`Player ${this._player.id} left (total: ${gameData.players.size})`);
+		console.log(`Player ${this._player.id} left (total: ${this._service.playerCount})`);
 	}
 }

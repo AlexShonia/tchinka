@@ -3,10 +3,10 @@ import { readFileSync, existsSync } from "fs";
 import { join, extname }            from "path";
 import { fileURLToPath }            from "url";
 import { WebSocketServer }          from "ws";
-import { GameData }                 from "./receiver/model/entity/GameData.js";
-import { Service }                  from "./receiver/model/service.js";
-import { Receiver } from "./receiver/Receiver.js";
-import { Sender }   from "./sender/Sender.js";
+import { GameData }                 from "./common/GameData.js";
+import { Service }                  from "./stateupdater/incoming/service/service.js";
+import { Receiver } from "./stateupdater/incoming/Receiver.js";
+import { Sender }   from "./outgoing/Sender.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST      = join(__dirname, "../../dist");
@@ -36,7 +36,7 @@ const service  = new Service(gameData);
 const wss      = new WebSocketServer({ server: httpServer });
 const sender   = new Sender(wss, gameData);
 
-wss.on("connection", (ws) => new Receiver(ws, service, gameData));
+wss.on("connection", (ws) => new Receiver(ws, service));
 sender.start();
 
 httpServer.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
