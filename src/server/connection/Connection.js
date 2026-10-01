@@ -1,4 +1,4 @@
-const TICK_MS = 1000;
+const TICK_RATE = 20;
 
 export class Connection {
 	constructor(ws, service, gameData) {
@@ -37,7 +37,7 @@ export class Sender {
 	}
 
 	start() {
-		setInterval(() => this._tick(), TICK_MS);
+		setInterval(() => this._tick(), TICK_RATE);
 	}
 
 	_tick() {
