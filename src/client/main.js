@@ -1,11 +1,13 @@
 import * as THREE from "three";
-import { Connection } from "./connection/Connection.js";
-import { GameState }  from "./entity/GameState.js";
-import { Service }    from "./model/service.js";
-import { Display }    from "./view/display.js";
-import { setupInput } from "./controller/input.js";
+import { Receiver }  from "./receiver/Receiver.js";
+import { Sender }    from "./sender/Sender.js";
+import { GameState } from "./receiver/entity/GameState.js";
+import { Service }   from "./input/model/service.js";
+import { Hud }       from "./receiver/entity/view/types/Hud.js";
+import { setupInput } from "./input/input.js";
 
-const SERVER = `ws://${location.hostname}:1234`;
+const SERVER     = `ws://${location.hostname}:1234`;
+const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
 
 // ── three.js setup ────────────────────────────────────────────────────────────
 const scene    = new THREE.Scene();
@@ -20,10 +22,11 @@ camera.up.set(0, 0, -1);
 camera.lookAt(0, 0, 0);
 
 // ── app ───────────────────────────────────────────────────────────────────────
-const gameState = new GameState();
+const hud       = new Hud();
+const gameState = new GameState(scene, hud);
+const receiver  = new Receiver(SERVER, gameState);
+const sender    = new Sender(receiver);
 const game      = new Service(camera, gameState);
-const display   = new Display(scene, camera);
-const conn      = new Connection(SERVER, gameState);
 
 setupInput(game, renderer.domElement);
 
@@ -37,7 +40,13 @@ renderer.setAnimationLoop((now) => {
 	prevNow = now;
 	perfEl.textContent = `${fps} fps  ${(1000 / (fps || 1)).toFixed(1)} ms`;
 
-	conn.flush(game.outbox);
-	display.update(gameState);
+	sender.flush(game.outbox);
+
+	const p = gameState.localPlayer;
+	if (p) {
+		camera.position.set(p.x + CAM_OFFSET.x, CAM_OFFSET.y, p.z + CAM_OFFSET.z);
+		camera.lookAt(p.x, 0, p.z);
+	}
+
 	renderer.render(scene, camera);
 });
