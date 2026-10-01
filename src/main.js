@@ -1,8 +1,8 @@
-import { World }      from "./world.js";
-import { Connection } from "./connection.js";
-import { GameState }  from "./game.js";
-import { Display }    from "./display.js";
-import { setupInput } from "./input.js";
+import { World }      from "./model/world.js";
+import { Connection } from "./connection/connection.js";
+import { GameState }  from "./model/game.js";
+import { Display }    from "./view/display.js";
+import { setupInput } from "./controller/input.js";
 
 const SERVER = `ws://${location.hostname}:1234`;
 

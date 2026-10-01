@@ -4,8 +4,8 @@ export class Connection {
 	constructor(url, game) {
 		this._url  = url;
 		this._game = game;
-		this._ws   = null;
-		this._openConnectionToServer();
+		this._ws   = new WebSocket(url);
+		this._listen(this._ws);
 	}
 
 	// ── send ──────────────────────────────────────────────────────────────────
@@ -16,10 +16,7 @@ export class Connection {
 			this._ws.send(JSON.stringify(msg));
 	}
 
-	// ── connection lifecycle ──────────────────────────────────────────────────
-	_openConnectionToServer() {
-		const ws = this._ws = new WebSocket(this._url);
-
+	_listen(ws) {
 		ws.addEventListener("message", (event) => {
 			const raw = JSON.parse(event.data);
 			if (raw.type === "welcome") this._game.applyWelcome(new WelcomeMsg(raw.id));
@@ -28,9 +25,16 @@ export class Connection {
 
 		ws.addEventListener("close", () => {
 			console.log("Disconnected — retrying in 2s…");
-			setTimeout(() => this._openConnectionToServer(), 2000);
+			setTimeout(() => this._reconnect(), 2000);
 		});
 
 		ws.addEventListener("error", () => ws.close());
 	}
+
+	// ── connection lifecycle ──────────────────────────────────────────────────
+	_reconnect() {
+		this._ws = new WebSocket(this._url);
+		this._listen(this._ws);
+	}
+
 }
