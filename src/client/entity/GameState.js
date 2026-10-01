@@ -1,7 +1,7 @@
-import { Player }     from "../Player.js";
-import { Enemy }      from "./Enemy.js";
-import { Projectile } from "./Projectile.js";
-import { Block }      from "./Block.js";
+import { Player }     from "./types/Player.js";
+import { Enemy }      from "./types/Enemy.js";
+import { Projectile } from "./types/Projectile.js";
+import { Block }      from "./types/Block.js";
 
 export class GameState {
 	constructor() {
