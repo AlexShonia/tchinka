@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { World } from "./world.js";
 
-const SERVER = "ws://localhost:1234";
+const SERVER = "ws://176.221.250.70:1234";
 
 const world = new World();
 const scene = world.scene;
@@ -154,8 +154,23 @@ world.renderer.domElement.addEventListener("click", (event) => {
 	}
 });
 
+// ── perf overlay ─────────────────────────────────────────────────────────────
+const perfEl = document.getElementById("perf");
+let lastFrameTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
 // ── render loop ───────────────────────────────────────────────────────────────
 function animate() {
+	const now = performance.now();
+	const ms = now - lastFrameTime;
+	lastFrameTime = now;
+
+	frameCount++;
+	if (frameCount % 10 === 0) fps = Math.round(1000 / ms);
+
+	perfEl.textContent = `${fps} fps\n${ms.toFixed(1)} ms`;
+
 	tickInterpolation();
 	world.renderer.render(scene, camera);
 }
