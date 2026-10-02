@@ -11,6 +11,7 @@ export class Player {
 		this.hit           = false;
 		this.targetEnemyId = null;
 		this.attackRange    = 2.2;
+		this.attackState    = null;
 		this.attackTimer    = 0;
 		this.attackCooldown = 0;
 		this.attackStart    = 0;

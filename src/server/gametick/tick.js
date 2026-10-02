@@ -1,4 +1,7 @@
 import { Enemy } from "../common/types/Enemy.js";
+import { WindupState }   from "./states/WindupState.js";
+import { AttackState }   from "./states/AttackState.js";
+import { RecoveryState } from "./states/RecoveryState.js";
 
 const PLAYER_SPEED          = 0.1;
 const PLAYER_MAX_MANA       = 100;
@@ -6,13 +9,19 @@ const MANA_REGEN            = 0.3;
 
 const BASE_ENEMY_SPEED      = 0.05;
 const ENEMY_SPEED_PER_WAVE  = 0.008;
-const ENEMY_PREP_TICKS       = 60;
-const ENEMY_ATTACK_TICKS     = 40;
-const ENEMY_DAMAGE           = 10;
+const ENEMY_PREP_TICKS      = 60;
+const ENEMY_DAMAGE          = 10;
 
-const PLAYER_ATTACK_TICKS    = 30;
 const PLAYER_ATTACK_DAMAGE   = 1;
 const PLAYER_ATTACK_COOLDOWN = 50;
+
+const playerWindup   = new WindupState(10);
+const playerAttack   = new AttackState(5);
+const playerRecovery = new RecoveryState(15);
+
+const enemyWindup    = new WindupState(14);
+const enemyAttack    = new AttackState(6);
+const enemyRecovery  = new RecoveryState(20);
 
 const PROJ_SPEED   = 0.3;
 const ENEMY_COUNT  = 5;
@@ -33,20 +42,37 @@ function tickPlayers(gameData) {
 
 		if (p.attackCooldown > 0) p.attackCooldown--;
 
-		if (p.attackTimer > 0) {
-			p.attackTimer--;
-			const mid = Math.floor(PLAYER_ATTACK_TICKS / 2);
-			if (p.attackTimer === mid && p.targetEnemyId) {
-				const target = gameData.enemies.find(e => e.id === p.targetEnemyId);
-				if (target && Math.hypot(target.x - p.x, target.z - p.z) < p.attackRange) {
+		if (p.attackState === playerWindup.name) {
+			playerWindup.tick(p, entity => {
+				playerAttack.enter(entity);
+				entity.attackState = playerAttack.name;
+				const target = gameData.enemies.find(e => e.id === entity.targetEnemyId);
+				if (target && Math.hypot(target.x - entity.x, target.z - entity.z) < entity.attackRange) {
 					target.hp -= PLAYER_ATTACK_DAMAGE;
 					if (target.hp <= 0) {
 						const idx = gameData.enemies.indexOf(target);
 						if (idx !== -1) gameData.enemies.splice(idx, 1);
-						p.targetEnemyId = null;
+						entity.targetEnemyId = null;
 					}
 				}
-			}
+			});
+			continue;
+		}
+
+		if (p.attackState === playerAttack.name) {
+			playerAttack.tick(p, entity => {
+				playerRecovery.enter(entity);
+				entity.attackState = playerRecovery.name;
+			});
+			continue;
+		}
+
+		if (p.attackState === playerRecovery.name) {
+			playerRecovery.tick(p, entity => {
+				entity.attackState    = null;
+				entity.attackTimer    = 0;
+				entity.attackCooldown = PLAYER_ATTACK_COOLDOWN;
+			});
 			continue;
 		}
 
@@ -54,14 +80,13 @@ function tickPlayers(gameData) {
 			const target = gameData.enemies.find(e => e.id === p.targetEnemyId);
 			if (!target || target.hp <= 0) { p.targetEnemyId = null; continue; }
 			const dist = Math.hypot(target.x - p.x, target.z - p.z);
-			if (dist <= p.attackRange && p.attackCooldown <= 0 && p.attackTimer <= 0) {
-				p.attackTimer    = PLAYER_ATTACK_TICKS;
-				p.attackStart    = Date.now();
-				p.attackCooldown = PLAYER_ATTACK_COOLDOWN;
+			if (dist <= p.attackRange && p.attackCooldown <= 0) {
+				playerWindup.enter(p);
+				p.attackState = playerWindup.name;
 			} else if (dist > p.attackRange) {
 				const angle = Math.atan2(target.z - p.z, target.x - p.x);
 				const destX = target.x - Math.cos(angle) * (p.attackRange * 0.8);
-				const destZ = target.z - Math.sin(angle) * (PLAYER_ATTACK_RANGE * 0.8);
+				const destZ = target.z - Math.sin(angle) * (p.attackRange * 0.8);
 				const dx = destX - p.x, dz = destZ - p.z;
 				const d  = Math.hypot(dx, dz);
 				if (d > PLAYER_SPEED) { p.x += (dx / d) * PLAYER_SPEED; p.z += (dz / d) * PLAYER_SPEED; }
@@ -94,20 +119,32 @@ function tickEnemies(gameData) {
 			if (d < nearestDist) { nearestDist = d; nearest = p; }
 		}
 
-		if (e.state === "attacking") {
-			e.attackTimer--;
-			const mid = Math.floor(ENEMY_ATTACK_TICKS / 2);
-			if (e.attackTimer === mid) {
-				if (Math.hypot(nearest.x - e.x, nearest.z - e.z) < e.attackRange) {
+		if (e.state === enemyWindup.name) {
+			enemyWindup.tick(e, entity => {
+				enemyAttack.enter(entity);
+				entity.state = enemyAttack.name;
+				if (Math.hypot(nearest.x - entity.x, nearest.z - entity.z) < entity.attackRange) {
 					nearest.health -= ENEMY_DAMAGE;
 					nearest.hit = true;
-				if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.isMoving = false; }
+					if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.isMoving = false; }
 				}
-			}
-			if (e.attackTimer <= 0) {
-				e.state     = "prep";
-				e.prepTimer = ENEMY_PREP_TICKS;
-			}
+			});
+			continue;
+		}
+
+		if (e.state === enemyAttack.name) {
+			enemyAttack.tick(e, entity => {
+				enemyRecovery.enter(entity);
+				entity.state = enemyRecovery.name;
+			});
+			continue;
+		}
+
+		if (e.state === enemyRecovery.name) {
+			enemyRecovery.tick(e, entity => {
+				entity.state     = "prep";
+				entity.prepTimer = ENEMY_PREP_TICKS;
+			});
 			continue;
 		}
 
@@ -123,10 +160,9 @@ function tickEnemies(gameData) {
 			} else {
 				e.prepTimer--;
 				if (e.prepTimer <= 0) {
-					e.state       = "attacking";
-					e.attackTimer = ENEMY_ATTACK_TICKS;
-					e.attackStart = Date.now();
-					e.target      = nearest.id;
+					enemyWindup.enter(e);
+					e.state  = enemyWindup.name;
+					e.target = nearest.id;
 				}
 			}
 			continue;

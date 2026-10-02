@@ -1,19 +1,27 @@
 import * as THREE from "three";
+import { WindupState }   from "../states/WindupState.js";
+import { AttackState }   from "../states/AttackState.js";
+import { RecoveryState } from "../states/RecoveryState.js";
 
 const enemyMat      = new THREE.MeshBasicMaterial({ color: 0xff3333 });
 const enemyHoverMat = new THREE.MeshBasicMaterial({ color: 0xff8855 });
 const bgMat         = new THREE.MeshBasicMaterial({ color: 0x333333 });
 const fillMat       = new THREE.MeshBasicMaterial({ color: 0xdd1111 });
 
-const BAR_WIDTH      = 1.0;
-const BAR_Y          = 1.3;
-const ATTACK_DURATION = 400;
+const BAR_WIDTH = 1.0;
+const BAR_Y     = 1.3;
+
+const windup   = new WindupState(280);
+const attack   = new AttackState(120);
+const recovery = new RecoveryState(400);
+const STATES   = { windup, attack, recovery };
 
 export class EnemyView {
 	constructor(scene) {
-		this._scene            = scene;
+		this._scene             = scene;
 		this._serverAttackStart = 0;
-		this._attackStart      = 0;
+		this._attackStart       = 0;
+		this._attackState       = null;
 		this.x = 0; this.z = 0; this.hp = 1; this.maxHp = 1;
 
 		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), enemyMat);
@@ -37,6 +45,7 @@ export class EnemyView {
 			this._serverAttackStart = data.attackStart;
 			this._attackStart       = performance.now();
 		}
+		this._attackState = data.state;
 
 		const damaged = data.hp < data.maxHp;
 		this._barGroup.visible = damaged;
@@ -48,14 +57,9 @@ export class EnemyView {
 	}
 
 	tick(now) {
-		const elapsed = now - this._attackStart;
-		if (elapsed >= 0 && elapsed < ATTACK_DURATION) {
-			const t     = elapsed / ATTACK_DURATION;
-			const tilt  = Math.sin(t * Math.PI) * 0.5;
-			this.mesh.rotation.z = tilt;
-		} else {
-			this.mesh.rotation.z = 0;
-		}
+		const state = STATES[this._attackState];
+		if (state) state.apply(this.mesh, now - this._attackStart);
+		else this.mesh.rotation.z = 0;
 	}
 
 	setHovered(on) {
