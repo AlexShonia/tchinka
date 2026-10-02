@@ -9,9 +9,9 @@ export class Hud {
 			textAlign: "right", pointerEvents: "none",
 		});
 		document.body.appendChild(this._perfEl);
-		this._frameCount = 0;
-		this._fps        = 0;
-		this._prevNow    = 0;
+		this._frameCount  = 0;
+		this._fps         = 0;
+		this._windowStart = 0;
 
 		const root = document.createElement("div");
 		Object.assign(root.style, {
@@ -63,9 +63,10 @@ export class Hud {
 
 	tickPerf(now) {
 		this._frameCount++;
-		if (this._frameCount % 10 === 0)
-			this._fps = Math.round(1000 / (now - (this._prevNow || now)));
-		this._prevNow = now;
+		if (this._frameCount % 10 === 0) {
+			if (this._windowStart) this._fps = Math.round(10000 / (now - this._windowStart));
+			this._windowStart = now;
+		}
 		this._perfEl.textContent = `${this._fps} fps  ${this._pingService.ms} ms`;
 	}
 

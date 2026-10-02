@@ -1,28 +1,31 @@
-import { ENEMY_COMBAT } from "../../../shared/combatConfig.js";
-import { WindupState }   from "../../gametick/states/WindupState.js";
-import { AttackState }   from "../../gametick/states/AttackState.js";
-import { RecoveryState } from "../../gametick/states/RecoveryState.js";
-import { PrepState }     from "../../gametick/states/PrepState.js";
-import { IdleState }     from "../../gametick/states/IdleState.js";
+import { ENEMY_COMBAT }    from "../../../shared/combatConfig.js";
+import { Alive }            from "./Alive.js";
+import { BasicAttackState } from "../../gametick/states/basicAttack/BasicAttackState.js";
+import { PrepState }        from "../../gametick/states/PrepState.js";
+import { EnemyIdleState }   from "../../gametick/states/EnemyIdleState.js";
+import { DeadState }        from "../../gametick/states/DeadState.js";
 
-export class Enemy {
+export class Enemy extends Alive {
 	constructor(id, x, z, hp, speed, attackRange = 2.5) {
+		super();
 		this.id          = id;
 		this.x           = x;
 		this.z           = z;
-		this.hp          = hp;
 		this.maxHp       = hp;
+		this.health      = hp;
 		this.speed       = speed;
 		this.attackRange = attackRange;
-		this.attackSpeed = 1;
+		this.damage      = ENEMY_COMBAT.damage;
 		this.offsetAngle = Math.random() * Math.PI * 2;
-		this.state       = "idle";
-		this.states = {
-			windup:   new WindupState(ENEMY_COMBAT.windupTicks),
-			attack:   new AttackState(ENEMY_COMBAT.attackTicks),
-			recovery: new RecoveryState(ENEMY_COMBAT.recoveryTicks),
-			prep:     new PrepState(ENEMY_COMBAT.prepTicks),
-			idle:     new IdleState(),
+
+		this.combatState = {
+			state: "idle",
+			states: {
+				idle:        new EnemyIdleState(),
+				basicAttack: new BasicAttackState(ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
+				prep:        new PrepState(ENEMY_COMBAT.prepTicks),
+				dead:        new DeadState(),
+			},
 		};
 	}
 }

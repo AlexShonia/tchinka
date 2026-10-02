@@ -15,13 +15,16 @@ export class PrepState {
 		const dist  = Math.hypot(destX - actor.x, destZ - actor.z);
 
 		if (dist > 0.3) {
-			actor.state       = "idle";
-			actor.offsetAngle = Math.random() * Math.PI * 2;
+			actor.combatState.state = "idle";
+			actor.offsetAngle       = Math.random() * Math.PI * 2;
 			return;
 		}
 
 		if (--this._timer > 0) return;
-		actor.states.windup.enter(actor.attackSpeed);
-		actor.state = "windup";
+		actor.combatState.states.basicAttack.enter(actor.attackSpeed);
+		actor.combatState.state = "basicAttack";
 	}
+
+	processMoveRequest() {}
+	processAttackRequest() {}
 }

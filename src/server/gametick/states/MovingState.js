@@ -13,12 +13,21 @@ export class MovingState {
 		const dz   = this.moveTarget.z - actor.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
 		if (dist <= actor.moveSpeed) {
-			actor.x     = this.moveTarget.x;
-			actor.z     = this.moveTarget.z;
-			actor.state = "idle";
+			actor.x                 = this.moveTarget.x;
+			actor.z                 = this.moveTarget.z;
+			actor.combatState.state = "idle";
 		} else {
 			actor.x += (dx / dist) * actor.moveSpeed;
 			actor.z += (dz / dist) * actor.moveSpeed;
 		}
+	}
+
+	processMoveRequest(actor, x, z) {
+		this.enter({ x, z });
+	}
+
+	processAttackRequest(actor, enemyId) {
+		actor.combatState.states.targeting.enter(enemyId);
+		actor.combatState.state = "targeting";
 	}
 }

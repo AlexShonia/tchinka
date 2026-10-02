@@ -20,14 +20,10 @@ export class Service {
 	get playerCount() { return this._gameData.players.size; }
 
 	movePlayer(player, x, z) {
-		if (player.dead) return;
-		player.states.moving.enter({ x, z });
-		player.state = "moving";
+		player.currentState.processMoveRequest(player, x, z);
 	}
 
 	attackEnemy(player, enemyId) {
-		if (player.dead) return;
-		player.states.targeting.enter(enemyId);
-		player.state = "targeting";
+		player.currentState.processAttackRequest(player, enemyId);
 	}
 }

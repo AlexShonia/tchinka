@@ -10,15 +10,15 @@ export class TargetingState {
 
 	tick(actor, gameData) {
 		const target = gameData.enemies.find(e => e.id === this.targetEnemyId);
-		if (!target || target.hp <= 0) {
-			actor.state = "idle";
+		if (!target || target.health <= 0) {
+			actor.combatState.state = "idle";
 			return;
 		}
 
 		const dist = Math.hypot(target.x - actor.x, target.z - actor.z);
-		if (dist <= actor.attackRange) {
-			actor.states.windup.enter(actor.attackSpeed);
-			actor.state = "windup";
+		if (dist <= actor.attackRange && actor.combatState.states.basicAttack.recoveryTimer <= 0) {
+			actor.combatState.states.basicAttack.enter(actor.attackSpeed);
+			actor.combatState.state = "basicAttack";
 			return;
 		}
 
@@ -35,5 +35,14 @@ export class TargetingState {
 			actor.x = destX;
 			actor.z = destZ;
 		}
+	}
+
+	processMoveRequest(actor, x, z) {
+		actor.combatState.states.moving.enter({ x, z });
+		actor.combatState.state = "moving";
+	}
+
+	processAttackRequest(_actor, enemyId) {
+		this.enter(enemyId);
 	}
 }
