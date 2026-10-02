@@ -8,7 +8,7 @@ export class Enemy {
 		this.speed       = speed;
 		this.attackRange = attackRange;
 		this.offsetAngle = Math.random() * Math.PI * 2;
-		this.state       = "moving"; // "moving" | "prep" | "windup" | "attack" | "recovery"
+		this.state       = "idle";
 		this.prepTimer   = 0;
 		this.attackTimer = 0;
 		this.attackStart = 0;

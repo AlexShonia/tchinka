@@ -42,10 +42,10 @@ function tickPlayers(gameData) {
 
 		if (p.attackCooldown > 0) p.attackCooldown--;
 
-		if (p.attackState === playerWindup.name) {
+		if (p.state === playerWindup.name) {
 			playerWindup.tick(p, entity => {
 				playerAttack.enter(entity);
-				entity.attackState = playerAttack.name;
+				entity.state = playerAttack.name;
 				const target = gameData.enemies.find(e => e.id === entity.targetEnemyId);
 				if (target && Math.hypot(target.x - entity.x, target.z - entity.z) < entity.attackRange) {
 					target.hp -= PLAYER_ATTACK_DAMAGE;
@@ -59,17 +59,17 @@ function tickPlayers(gameData) {
 			continue;
 		}
 
-		if (p.attackState === playerAttack.name) {
+		if (p.state === playerAttack.name) {
 			playerAttack.tick(p, entity => {
 				playerRecovery.enter(entity);
-				entity.attackState = playerRecovery.name;
+				entity.state = playerRecovery.name;
 			});
 			continue;
 		}
 
-		if (p.attackState === playerRecovery.name) {
+		if (p.state === playerRecovery.name) {
 			playerRecovery.tick(p, entity => {
-				entity.attackState    = null;
+				entity.state          = "idle";
 				entity.attackTimer    = 0;
 				entity.attackCooldown = PLAYER_ATTACK_COOLDOWN;
 			});
@@ -82,7 +82,7 @@ function tickPlayers(gameData) {
 			const dist = Math.hypot(target.x - p.x, target.z - p.z);
 			if (dist <= p.attackRange && p.attackCooldown <= 0) {
 				playerWindup.enter(p);
-				p.attackState = playerWindup.name;
+				p.state = playerWindup.name;
 			} else if (dist > p.attackRange) {
 				const angle = Math.atan2(target.z - p.z, target.x - p.x);
 				const destX = target.x - Math.cos(angle) * (p.attackRange * 0.8);
@@ -168,7 +168,8 @@ function tickEnemies(gameData) {
 			continue;
 		}
 
-		// state === "moving"
+		// state === "idle" | "moving"
+		e.state = "moving";
 		if (dist < 0.08) {
 			e.state     = "prep";
 			e.prepTimer = ENEMY_PREP_TICKS;

@@ -8,6 +8,7 @@ export class Projectile {
 		this.toZ      = toZ;
 		this.dirX     = dirX;
 		this.dirZ     = dirZ;
+		this.state    = "idle";
 		this.landed   = false;
 		this.life     = life;
 	}
