@@ -20,6 +20,7 @@ export const PlayerTransitions = {
 	},
 	[StateName.WINDUP]: {
 		[StateEvent.MOVE_REQUESTED]:     StateName.MOVING,
+		[StateEvent.NOT_RECOVERED]:      StateName.RECOVERY,
 		[StateEvent.WINDUP_FINISHED]:    StateName.HIT,
 	},
 	[StateName.HIT]: {

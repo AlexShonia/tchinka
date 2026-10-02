@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
-      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-KpurnzUT.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/ChaseAroundState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/ChaseAroundState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/WindupState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/name/StateEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/name/StateEvent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/transitions/PlayerTransitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/transitions/PlayerTransitions.js" afterDir="false" />
-    </list>
+    <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

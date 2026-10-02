@@ -16,7 +16,10 @@ export class WindupState extends BaseState {
 	}
 
 	tick(gameData) {
-		if (this.actor.isAttackOnCooldown) return; // reached the target before the last attack's cooldown ended: hold until it does
+		if (this.actor.isAttackOnCooldown) {
+			this.actor.transition(StateEvent.NOT_RECOVERED, { targetId: this.targetId });
+			return;
+		}
 		if (--this._timer > 0) return;
 		this.actor.transition(StateEvent.WINDUP_FINISHED, { targetId: this.targetId });
 	}

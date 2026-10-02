@@ -11,6 +11,7 @@ export const EnemyTransitions = {
 		[StateEvent.TARGET_REACHED]:     StateName.WINDUP,
 	},
 	[StateName.WINDUP]: {
+		[StateEvent.NOT_RECOVERED]:      StateName.RECOVERY,
 		[StateEvent.WINDUP_FINISHED]:    StateName.HIT,
 	},
 	[StateName.HIT]: {
