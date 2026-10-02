@@ -1,9 +1,9 @@
 import { ENEMY_COMBAT }    from "../../../shared/combatConfig.js";
 import { Alive }            from "./Alive.js";
 import { Player }           from "./Player.js";
-import { WindupState }      from "../../gametick/states/WindupState.js";
-import { AttackState }      from "../../gametick/states/AttackState.js";
-import { RecoveryState }    from "../../gametick/states/RecoveryState.js";
+import { WindupState }      from "../../gametick/states/attack/WindupState.js";
+import { AttackState }      from "../../gametick/states/attack/AttackState.js";
+import { RecoveryState }    from "../../gametick/states/attack/RecoveryState.js";
 import { ChaseAroundState } from "../../gametick/states/ChaseAroundState.js";
 import { IdleState }         from "../../gametick/states/IdleState.js";
 import { DeadState }        from "../../gametick/states/DeadState.js";

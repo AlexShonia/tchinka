@@ -1,6 +1,6 @@
-import { BaseState }  from "./base/BaseState.js";
-import { StateName }  from "./name/StateName.js";
-import { StateEvent } from "./name/StateEvent.js";
+import { BaseState }  from "../base/BaseState.js";
+import { StateName }  from "../name/StateName.js";
+import { StateEvent } from "../name/StateEvent.js";
 
 export class RecoveryState extends BaseState {
 	constructor(actor, recoveryTicks) {
