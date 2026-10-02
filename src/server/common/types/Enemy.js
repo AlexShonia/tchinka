@@ -7,6 +7,7 @@ export class Enemy {
 		this.maxHp       = hp;
 		this.speed       = speed;
 		this.attackRange = attackRange;
+		this.attackSpeed = 1;
 		this.offsetAngle = Math.random() * Math.PI * 2;
 		this.state       = "idle";
 		this.prepTimer   = 0;

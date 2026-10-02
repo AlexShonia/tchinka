@@ -2,26 +2,22 @@ import { Enemy } from "../common/types/Enemy.js";
 import { WindupState }   from "./states/WindupState.js";
 import { AttackState }   from "./states/AttackState.js";
 import { RecoveryState } from "./states/RecoveryState.js";
+import { PLAYER_COMBAT, ENEMY_COMBAT } from "../../shared/combatConfig.js";
 
-const PLAYER_SPEED          = 0.1;
-const PLAYER_MAX_MANA       = 100;
-const MANA_REGEN            = 0.3;
+const PLAYER_SPEED         = 0.1;
+const PLAYER_MAX_MANA      = 100;
+const MANA_REGEN           = 0.3;
 
-const BASE_ENEMY_SPEED      = 0.05;
-const ENEMY_SPEED_PER_WAVE  = 0.008;
-const ENEMY_PREP_TICKS      = 60;
-const ENEMY_DAMAGE          = 10;
+const BASE_ENEMY_SPEED     = 0.05;
+const ENEMY_SPEED_PER_WAVE = 0.008;
 
-const PLAYER_ATTACK_DAMAGE   = 1;
-const PLAYER_ATTACK_COOLDOWN = 50;
+const playerWindup   = new WindupState(PLAYER_COMBAT.windupTicks);
+const playerAttack   = new AttackState(PLAYER_COMBAT.attackTicks);
+const playerRecovery = new RecoveryState(PLAYER_COMBAT.recoveryTicks);
 
-const playerWindup   = new WindupState(10);
-const playerAttack   = new AttackState(5);
-const playerRecovery = new RecoveryState(15);
-
-const enemyWindup    = new WindupState(14);
-const enemyAttack    = new AttackState(6);
-const enemyRecovery  = new RecoveryState(20);
+const enemyWindup    = new WindupState(ENEMY_COMBAT.windupTicks);
+const enemyAttack    = new AttackState(ENEMY_COMBAT.attackTicks);
+const enemyRecovery  = new RecoveryState(ENEMY_COMBAT.recoveryTicks);
 
 const PROJ_SPEED   = 0.3;
 const ENEMY_COUNT  = 5;
@@ -48,7 +44,7 @@ function tickPlayers(gameData) {
 				entity.state = playerAttack.name;
 				const target = gameData.enemies.find(e => e.id === entity.targetEnemyId);
 				if (target && Math.hypot(target.x - entity.x, target.z - entity.z) < entity.attackRange) {
-					target.hp -= PLAYER_ATTACK_DAMAGE;
+					target.hp -= PLAYER_COMBAT.damage;
 					if (target.hp <= 0) {
 						const idx = gameData.enemies.indexOf(target);
 						if (idx !== -1) gameData.enemies.splice(idx, 1);
@@ -71,7 +67,7 @@ function tickPlayers(gameData) {
 			playerRecovery.tick(p, entity => {
 				entity.state          = "idle";
 				entity.attackTimer    = 0;
-				entity.attackCooldown = PLAYER_ATTACK_COOLDOWN;
+				entity.attackCooldown = Math.round(PLAYER_COMBAT.cooldownTicks / (entity.attackSpeed ?? 1));
 			});
 			continue;
 		}
@@ -124,7 +120,7 @@ function tickEnemies(gameData) {
 				enemyAttack.enter(entity);
 				entity.state = enemyAttack.name;
 				if (Math.hypot(nearest.x - entity.x, nearest.z - entity.z) < entity.attackRange) {
-					nearest.health -= ENEMY_DAMAGE;
+					nearest.health -= ENEMY_COMBAT.damage;
 					nearest.hit = true;
 					if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.isMoving = false; }
 				}
@@ -143,7 +139,7 @@ function tickEnemies(gameData) {
 		if (e.state === enemyRecovery.name) {
 			enemyRecovery.tick(e, entity => {
 				entity.state     = "prep";
-				entity.prepTimer = ENEMY_PREP_TICKS;
+				entity.prepTimer = ENEMY_COMBAT.prepTicks;
 			});
 			continue;
 		}
@@ -154,7 +150,7 @@ function tickEnemies(gameData) {
 
 		if (e.state === "prep") {
 			if (dist > 0.3) {
-				e.state       = "moving";
+				e.state       = "idle";
 				e.prepTimer   = 0;
 				e.offsetAngle = Math.random() * Math.PI * 2;
 			} else {
@@ -168,11 +164,10 @@ function tickEnemies(gameData) {
 			continue;
 		}
 
-		// state === "idle" | "moving"
-		e.state = "moving";
+		// state === "idle"
 		if (dist < 0.08) {
 			e.state     = "prep";
-			e.prepTimer = ENEMY_PREP_TICKS;
+			e.prepTimer = ENEMY_COMBAT.prepTicks;
 		} else {
 			e.x += ((destX - e.x) / dist) * e.speed;
 			e.z += ((destZ - e.z) / dist) * e.speed;
