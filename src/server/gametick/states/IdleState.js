@@ -1,5 +1,6 @@
-import { BaseState } from "./base/BaseState.js";
-import { StateName }        from "./name/StateName.js";
+import { BaseState }  from "./base/BaseState.js";
+import { StateName }  from "./name/StateName.js";
+import { StateEvent } from "./name/StateEvent.js";
 
 export class IdleState extends BaseState {
 	constructor(actor) {
@@ -7,16 +8,7 @@ export class IdleState extends BaseState {
 	}
 
 	tick(gameData) {
-		this.actor.onIdle(gameData);
-	}
-
-	processMoveRequest(x, z) {
-		this.actor.getState(StateName.MOVING).initialize({ x, z });
-		this.actor.changeState(StateName.MOVING);
-	}
-
-	processAttackRequest(targetId) {
-		this.actor.getState(StateName.TARGETING).initialize(targetId);
-		this.actor.changeState(StateName.TARGETING);
+		const target = this.actor.findTarget(gameData);
+		if (target) this.actor.transition(StateEvent.TARGET_FOUND, { targetId: target.id });
 	}
 }

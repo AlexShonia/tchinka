@@ -5,8 +5,7 @@ export class BaseState {
 		this.name  = name;
 	}
 
+	initialize(context) {}
 	passiveTick() {}
 	tick(gameData) {}
-	processMoveRequest(x, z) {}
-	processAttackRequest(targetId) {}
 }

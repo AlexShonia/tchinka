@@ -3,11 +3,8 @@ export const StateName = Object.freeze({
 	MOVING:       "moving",
 	TARGETING:    "targeting",
 	CHASE_AROUND: "chaseAround",
-	BASIC_ATTACK: "basicAttack",
-	DEAD:         "dead",
-
-	// BasicAttackState sub-states
 	WINDUP:       "windup",
 	HIT:          "hit",
 	RECOVERY:     "recovery",
+	DEAD:         "dead",
 });

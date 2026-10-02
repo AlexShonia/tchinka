@@ -1,5 +1,6 @@
 import { BaseState } from "./base/BaseState.js";
 import { StateName }        from "./name/StateName.js";
+import { StateEvent } from "./name/StateEvent.js";
 
 export class MovingState extends BaseState {
 	constructor(actor) {
@@ -7,7 +8,7 @@ export class MovingState extends BaseState {
 		this.moveTarget = null;
 	}
 
-	initialize(moveTarget) {
+	initialize({ moveTarget }) {
 		this.moveTarget = moveTarget;
 	}
 
@@ -18,19 +19,10 @@ export class MovingState extends BaseState {
 		if (dist <= this.actor.moveSpeed) {
 			this.actor.x = this.moveTarget.x;
 			this.actor.z = this.moveTarget.z;
-			this.actor.changeState(StateName.IDLE);
+			this.actor.transition(StateEvent.ARRIVED);
 		} else {
 			this.actor.x += (dx / dist) * this.actor.moveSpeed;
 			this.actor.z += (dz / dist) * this.actor.moveSpeed;
 		}
-	}
-
-	processMoveRequest(x, z) {
-		this.initialize({ x, z });
-	}
-
-	processAttackRequest(targetId) {
-		this.actor.getState(StateName.TARGETING).initialize(targetId);
-		this.actor.changeState(StateName.TARGETING);
 	}
 }

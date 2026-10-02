@@ -1,5 +1,6 @@
 import { BaseState } from "./base/BaseState.js";
 import { StateName }        from "./name/StateName.js";
+import { StateEvent } from "./name/StateEvent.js";
 
 const STAND_RANGE = 0.8; // stand a bit inside attackRange, standing exactly on it makes hits borderline
 
@@ -10,14 +11,14 @@ export class ChaseAroundState extends BaseState {
 		this.targetId     = null;
 	}
 
-	initialize(targetId) {
+	initialize({ targetId }) {
 		this.targetId = targetId;
 	}
 
 	tick(gameData) { //TODO this chace logic runs on every tick maybe weird
 		const target = gameData.findAlive(this.targetId);
 		if (!target || target.isDead) {
-			this.actor.changeState(StateName.IDLE);
+			this.actor.transition(StateEvent.TARGET_LOST);
 			return;
 		}
 
@@ -31,7 +32,7 @@ export class ChaseAroundState extends BaseState {
 			return;
 		}
 
-		this.actor.getState(StateName.BASIC_ATTACK).initialize(this.actor.attackSpeed, this.targetId);
-		this.actor.changeState(StateName.BASIC_ATTACK);
+		const event = this.actor.isAttackOnCooldown ? StateEvent.ATTACK_ON_COOLDOWN : StateEvent.TARGET_REACHED;
+		this.actor.transition(event, { targetId: this.targetId });
 	}
 }

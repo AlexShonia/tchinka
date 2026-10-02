@@ -10,8 +10,9 @@ export class Alive extends Entity {
 		this.health            = 0;
 		this.hit               = false;
 		this.combatState = {
-			state:  StateName.IDLE,
-			states: {},
+			state:       StateName.IDLE,
+			states:      {},
+			transitions: {},
 		};
 	}
 
@@ -23,6 +24,10 @@ export class Alive extends Entity {
 		return this.combatState.state === StateName.DEAD;
 	}
 
+	get isAttackOnCooldown() {
+		return this.getState(StateName.RECOVERY).recoveryTimer > 0;
+	}
+
 	getState(name) {
 		return this.combatState.states[name];
 	}
@@ -31,16 +36,21 @@ export class Alive extends Entity {
 		this.combatState.state = name;
 	}
 
+	// a state reports an event; this entity's transition map says where it leads (no entry = ignored)
+	transition(event, context) {
+		const next = this.combatState.transitions[this.combatState.state]?.[event];
+		if (next === undefined) return;
+		this.getState(next).initialize(context);
+		this.changeState(next);
+	}
+
 	canAttack(target) {
 		return false;
 	}
 
-	// what to do each tick while idle (players wait for requests, so nothing by default)
-	onIdle(gameData) {}
-
-	// what to do once an attack (windup, hit, recovery) is over; entities override this
-	onAttackFinished(targetId) {
-		this.changeState(StateName.IDLE);
+	// who to go after while idle; players wait for requests, so nobody by default
+	findTarget(gameData) {
+		return null;
 	}
 
 	takeDamage(amount) {
