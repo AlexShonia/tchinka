@@ -1,6 +1,7 @@
 export class MovingState {
-	constructor() {
+	constructor(actor) {
 		this.name       = "moving";
+		this.actor      = actor;
 		this.moveTarget = null;
 	}
 
@@ -8,30 +9,30 @@ export class MovingState {
 		this.moveTarget = moveTarget;
 	}
 
-	initializeAndChangeTo(actor, moveTarget) {
+	initializeAndChangeTo(moveTarget) {
 		this.initialize(moveTarget);
-		actor.combatState.state = this.name;
+		this.actor.combatState.state = this.name;
 	}
 
-	tick(actor) {
-		const dx   = this.moveTarget.x - actor.x;
-		const dz   = this.moveTarget.z - actor.z;
+	tick() {
+		const dx   = this.moveTarget.x - this.actor.x;
+		const dz   = this.moveTarget.z - this.actor.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
-		if (dist <= actor.moveSpeed) {
-			actor.x                 = this.moveTarget.x;
-			actor.z                 = this.moveTarget.z;
-			actor.combatState.state = "idle";
+		if (dist <= this.actor.moveSpeed) {
+			this.actor.x                 = this.moveTarget.x;
+			this.actor.z                 = this.moveTarget.z;
+			this.actor.combatState.state = "idle";
 		} else {
-			actor.x += (dx / dist) * actor.moveSpeed;
-			actor.z += (dz / dist) * actor.moveSpeed;
+			this.actor.x += (dx / dist) * this.actor.moveSpeed;
+			this.actor.z += (dz / dist) * this.actor.moveSpeed;
 		}
 	}
 
-	processMoveRequest(actor, x, z) {
+	processMoveRequest(x, z) {
 		this.initialize({ x, z });
 	}
 
-	processAttackRequest(actor, enemyId) {
-		actor.combatState.states.targeting.initializeAndChangeTo(actor, enemyId);
+	processAttackRequest(enemyId) {
+		this.actor.combatState.states.targeting.initializeAndChangeTo(enemyId);
 	}
 }

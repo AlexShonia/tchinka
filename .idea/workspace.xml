@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-C3tIqMOk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/common/types/Alive.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Alive.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/EnemyIdleState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/EnemyIdleState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/PrepState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/PrepState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/BasicAttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/BasicAttackState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/AttackState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/RecoveryState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/WindupState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/tick.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/tick.js" afterDir="false" />
-    </list>
+    <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -1,16 +1,17 @@
 export class IdleState {
-	constructor() {
-		this.name = "idle";
+	constructor(actor) {
+		this.name  = "idle";
+		this.actor = actor;
 	}
 
 	tick() {}
 
-	processMoveRequest(actor, x, z) {
-		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
+	processMoveRequest(x, z) {
+		this.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
 	}
 
-	processAttackRequest(actor, enemyId) {
-		if (actor.attackCooldown > 0) return;
-		actor.combatState.states.targeting.initializeAndChangeTo(actor, enemyId);
+	processAttackRequest(enemyId) {
+		if (this.actor.attackCooldown > 0) return;
+		this.actor.combatState.states.targeting.initializeAndChangeTo(enemyId);
 	}
 }

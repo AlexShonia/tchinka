@@ -1,8 +1,9 @@
 import { nearestPlayer } from "../../utils/nearest.js";
 
 export class PrepState {
-	constructor(baseTicks) {
+	constructor(actor, baseTicks) {
 		this.name       = "prep";
+		this.actor      = actor;
 		this._baseTicks = baseTicks;
 		this._timer     = 0;
 	}
@@ -11,27 +12,27 @@ export class PrepState {
 		this._timer = this._baseTicks;
 	}
 
-	initializeAndChangeTo(actor) {
+	initializeAndChangeTo() {
 		this.initialize();
-		actor.combatState.state = this.name;
+		this.actor.combatState.state = this.name;
 	}
 
-	tick(actor, gameData) {
-		const nearest = nearestPlayer(actor, gameData);
-		if (!nearest) { actor.combatState.state = "idle"; return; }
+	tick(gameData) {
+		const nearest = nearestPlayer(this.actor, gameData);
+		if (!nearest) { this.actor.combatState.state = "idle"; return; }
 
-		const destX = nearest.x + Math.cos(actor.offsetAngle) * actor.attackRange;
-		const destZ = nearest.z + Math.sin(actor.offsetAngle) * actor.attackRange;
-		const dist  = Math.hypot(destX - actor.x, destZ - actor.z);
+		const destX = nearest.x + Math.cos(this.actor.offsetAngle) * this.actor.attackRange;
+		const destZ = nearest.z + Math.sin(this.actor.offsetAngle) * this.actor.attackRange;
+		const dist  = Math.hypot(destX - this.actor.x, destZ - this.actor.z);
 
 		if (dist > 0.3) {
-			actor.combatState.state = "idle";
-			actor.offsetAngle       = Math.random() * Math.PI * 2;
+			this.actor.combatState.state = "idle";
+			this.actor.offsetAngle       = Math.random() * Math.PI * 2;
 			return;
 		}
 
 		if (--this._timer > 0) return;
-		actor.combatState.states.basicAttack.initializeAndChangeTo(actor, actor.attackSpeed);
+		this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed);
 	}
 
 	processMoveRequest() {}

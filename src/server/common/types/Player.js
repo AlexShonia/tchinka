@@ -19,11 +19,11 @@ export class Player extends Alive {
 		this.combatState = {
 			state: "idle",
 			states: {
-				idle:         new IdleState(),
-				moving:       new MovingState(),
-				targeting:    new TargetingState(),
-				basicAttack:  new BasicAttackState(PLAYER_COMBAT.windupTicks, PLAYER_COMBAT.attackTicks, PLAYER_COMBAT.recoveryTicks),
-				dead:         new DeadState(),
+				idle:         new IdleState(this),
+				moving:       new MovingState(this),
+				targeting:    new TargetingState(this),
+				basicAttack:  new BasicAttackState(this, PLAYER_COMBAT.windupTicks, PLAYER_COMBAT.attackTicks, PLAYER_COMBAT.recoveryTicks),
+				dead:         new DeadState(this),
 			},
 		};
 	}

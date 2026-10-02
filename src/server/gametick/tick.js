@@ -20,13 +20,13 @@ function tickPlayers(gameData) {
 	for (const p of gameData.players.values()) {
 		p.hit = false;
 		if (p.combatState.state === "dead") continue;
-		p.currentState?.tick(p, gameData);
+		p.currentState?.tick(gameData);
 	}
 }
 
 function tickEnemies(gameData) {
 	for (const e of gameData.enemies) {
-		e.currentState.tick(e, gameData);
+		e.currentState.tick(gameData);
 	}
 }
 

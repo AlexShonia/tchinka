@@ -8,12 +8,12 @@ export class WindupState {
 		this._timer = Math.max(1, Math.round(basicAttack.windupTicks / basicAttack.attackSpeed));
 	}
 
-	tick(basicAttack, actor, gameData) {
+	tick(basicAttack, gameData) {
 		if (--this._timer > 0) return;
 		basicAttack._recovery.recoveryTimer = Math.max(1, Math.round(
 			(basicAttack.hitTicks + basicAttack.recoveryTicks) / basicAttack.attackSpeed
 		));
-		basicAttack._transition("attack", actor, gameData);
+		basicAttack._transition("attack", gameData);
 	}
 
 	processMoveRequest() {}

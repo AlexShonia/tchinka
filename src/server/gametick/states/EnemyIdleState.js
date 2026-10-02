@@ -1,23 +1,24 @@
 import { nearestPlayer } from "../../utils/nearest.js";
 
 export class EnemyIdleState {
-	constructor() {
-		this.name = "idle";
+	constructor(actor) {
+		this.name  = "idle";
+		this.actor = actor;
 	}
 
-	tick(actor, gameData) {
-		const nearest = nearestPlayer(actor, gameData);
+	tick(gameData) {
+		const nearest = nearestPlayer(this.actor, gameData);
 		if (!nearest) return;
 
-		const destX = nearest.x + Math.cos(actor.offsetAngle) * actor.attackRange;
-		const destZ = nearest.z + Math.sin(actor.offsetAngle) * actor.attackRange;
-		const dist  = Math.hypot(destX - actor.x, destZ - actor.z);
+		const destX = nearest.x + Math.cos(this.actor.offsetAngle) * this.actor.attackRange;
+		const destZ = nearest.z + Math.sin(this.actor.offsetAngle) * this.actor.attackRange;
+		const dist  = Math.hypot(destX - this.actor.x, destZ - this.actor.z);
 
 		if (dist < 0.08) {
-			actor.combatState.states.prep.initializeAndChangeTo(actor);
+			this.actor.combatState.states.prep.initializeAndChangeTo();
 		} else {
-			actor.x += ((destX - actor.x) / dist) * actor.speed;
-			actor.z += ((destZ - actor.z) / dist) * actor.speed;
+			this.actor.x += ((destX - this.actor.x) / dist) * this.actor.speed;
+			this.actor.z += ((destZ - this.actor.z) / dist) * this.actor.speed;
 		}
 	}
 

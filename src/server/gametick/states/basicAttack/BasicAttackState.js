@@ -3,8 +3,9 @@ import { AttackState }   from "./types/AttackState.js";
 import { RecoveryState } from "./types/RecoveryState.js";
 
 export class BasicAttackState {
-	constructor(windupTicks, hitTicks, recoveryTicks) {
+	constructor(actor, windupTicks, hitTicks, recoveryTicks) {
 		this.name          = "basicAttack";
+		this.actor         = actor;
 		this.windupTicks   = windupTicks;
 		this.hitTicks      = hitTicks;
 		this.recoveryTicks = recoveryTicks;
@@ -17,8 +18,8 @@ export class BasicAttackState {
 		this._current  = this._windup;
 	}
 
-	get subStateName()   { return this._current.name; }
-	get recoveryTimer()  { return this._recovery.recoveryTimer; }
+	get subStateName()  { return this._current.name; }
+	get recoveryTimer() { return this._recovery.recoveryTimer; }
 
 	initialize(attackSpeed = 1, targetEnemyId) {
 		this.attackSpeed   = attackSpeed;
@@ -27,24 +28,24 @@ export class BasicAttackState {
 		this._current.initialize(this);
 	}
 
-	initializeAndChangeTo(actor, attackSpeed = 1, targetEnemyId) {
+	initializeAndChangeTo(attackSpeed = 1, targetEnemyId) {
 		this.initialize(attackSpeed, targetEnemyId);
-		actor.combatState.state = this.name;
+		this.actor.combatState.state = this.name;
 	}
 
-	_transition(name, actor, gameData) {
+	_transition(name, gameData) {
 		const map     = { windup: this._windup, attack: this._attack, recovery: this._recovery };
 		this._current = map[name];
-		this._current.initialize(this, actor, gameData);
+		this._current.initialize(this, gameData);
 	}
 
-	tick(actor, gameData) {
+	tick(gameData) {
 		if (this._recovery.recoveryTimer > 0) this._current = this._recovery;
-		this._current.tick(this, actor, gameData);
+		this._current.tick(this, gameData);
 	}
 
-	processMoveRequest(actor, x, z) {
-		this._current.processMoveRequest(this, actor, x, z);
+	processMoveRequest(x, z) {
+		this._current.processMoveRequest(this, x, z);
 	}
 
 	processAttackRequest() {}

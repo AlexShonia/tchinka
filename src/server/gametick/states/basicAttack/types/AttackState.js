@@ -7,15 +7,16 @@ export class AttackState {
 		this._timer = 0;
 	}
 
-	initialize(basicAttack, actor, gameData) {
+	initialize(basicAttack, gameData) {
 		this._timer = Math.max(1, Math.round(basicAttack.hitTicks / basicAttack.attackSpeed));
+		const actor = basicAttack.actor;
 		if (actor.combatState.states.targeting) this._damageTarget(actor, gameData, basicAttack.targetEnemyId);
 		else this._damageNearest(actor, gameData);
 	}
 
-	tick(basicAttack, actor, gameData) {
+	tick(basicAttack, gameData) {
 		if (--this._timer > 0) return;
-		basicAttack._transition("recovery", actor, gameData);
+		basicAttack._transition("recovery", gameData);
 	}
 
 	_damageTarget(actor, gameData, targetEnemyId) {

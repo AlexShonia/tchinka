@@ -1,6 +1,7 @@
 export class TargetingState {
-	constructor() {
+	constructor(actor) {
 		this.name          = "targeting";
+		this.actor         = actor;
 		this.targetEnemyId = null;
 	}
 
@@ -8,44 +9,44 @@ export class TargetingState {
 		this.targetEnemyId = targetEnemyId;
 	}
 
-	initializeAndChangeTo(actor, targetEnemyId) {
+	initializeAndChangeTo(targetEnemyId) {
 		this.initialize(targetEnemyId);
-		actor.combatState.state = this.name;
+		this.actor.combatState.state = this.name;
 	}
 
-	tick(actor, gameData) {
+	tick(gameData) {
 		const target = gameData.enemies.find(e => e.id === this.targetEnemyId);
 		if (!target || target.health <= 0) {
-			actor.combatState.state = "idle";
+			this.actor.combatState.state = "idle";
 			return;
 		}
 
-		const dist = Math.hypot(target.x - actor.x, target.z - actor.z);
-		if (dist <= actor.attackRange && actor.combatState.states.basicAttack.recoveryTimer <= 0) {
-			actor.combatState.states.basicAttack.initializeAndChangeTo(actor, actor.attackSpeed, this.targetEnemyId);
+		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
+		if (dist <= this.actor.attackRange && this.actor.combatState.states.basicAttack.recoveryTimer <= 0) {
+			this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed, this.targetEnemyId);
 			return;
 		}
 
-		const angle = Math.atan2(target.z - actor.z, target.x - actor.x);
-		const destX = target.x - Math.cos(angle) * (actor.attackRange * 0.8);
-		const destZ = target.z - Math.sin(angle) * (actor.attackRange * 0.8);
-		const dx    = destX - actor.x;
-		const dz    = destZ - actor.z;
+		const angle = Math.atan2(target.z - this.actor.z, target.x - this.actor.x);
+		const destX = target.x - Math.cos(angle) * (this.actor.attackRange * 0.8);
+		const destZ = target.z - Math.sin(angle) * (this.actor.attackRange * 0.8);
+		const dx    = destX - this.actor.x;
+		const dz    = destZ - this.actor.z;
 		const d     = Math.hypot(dx, dz);
-		if (d > actor.moveSpeed) {
-			actor.x += (dx / d) * actor.moveSpeed;
-			actor.z += (dz / d) * actor.moveSpeed;
+		if (d > this.actor.moveSpeed) {
+			this.actor.x += (dx / d) * this.actor.moveSpeed;
+			this.actor.z += (dz / d) * this.actor.moveSpeed;
 		} else {
-			actor.x = destX;
-			actor.z = destZ;
+			this.actor.x = destX;
+			this.actor.z = destZ;
 		}
 	}
 
-	processMoveRequest(actor, x, z) {
-		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
+	processMoveRequest(x, z) {
+		this.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
 	}
 
-	processAttackRequest(_actor, enemyId) {
+	processAttackRequest(enemyId) {
 		this.initialize(enemyId);
 	}
 }

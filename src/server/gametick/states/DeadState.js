@@ -1,6 +1,7 @@
 export class DeadState {
-	constructor() {
-		this.name = "dead";
+	constructor(actor) {
+		this.name  = "dead";
+		this.actor = actor;
 	}
 
 	tick() {}

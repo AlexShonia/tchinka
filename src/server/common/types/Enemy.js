@@ -21,10 +21,10 @@ export class Enemy extends Alive {
 		this.combatState = {
 			state: "idle",
 			states: {
-				idle:        new EnemyIdleState(),
-				basicAttack: new BasicAttackState(ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
-				prep:        new PrepState(ENEMY_COMBAT.prepTicks),
-				dead:        new DeadState(),
+				idle:        new EnemyIdleState(this),
+				basicAttack: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
+				prep:        new PrepState(this, ENEMY_COMBAT.prepTicks),
+				dead:        new DeadState(this),
 			},
 		};
 	}

@@ -20,10 +20,10 @@ export class Service {
 	get playerCount() { return this._gameData.players.size; }
 
 	movePlayer(player, x, z) {
-		player.currentState.processMoveRequest(player, x, z);
+		player.currentState.processMoveRequest(x, z);
 	}
 
 	attackEnemy(player, enemyId) {
-		player.currentState.processAttackRequest(player, enemyId);
+		player.currentState.processAttackRequest(enemyId);
 	}
 }

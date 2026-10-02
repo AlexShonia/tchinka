@@ -6,18 +6,19 @@ export class RecoveryState {
 
 	initialize() {}
 
-	tick(basicAttack, actor, gameData) {
+	tick(basicAttack, gameData) {
 		if (this.recoveryTimer > 0) { this.recoveryTimer--; return; }
+		const actor = basicAttack.actor;
 		if (actor.combatState.states.prep) {
-			actor.combatState.states.prep.initializeAndChangeTo(actor);
+			actor.combatState.states.prep.initializeAndChangeTo();
 		} else {
 			actor.combatState.state = "idle";
 		}
 	}
 
-	processMoveRequest(basicAttack, actor, x, z) {
+	processMoveRequest(basicAttack, x, z) {
 		if (this.recoveryTimer > 0) return;
-		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
+		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
 	}
 
 	processAttackRequest() {}
