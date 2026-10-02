@@ -1,10 +1,8 @@
-import { PingService } from "./service/PingService.js";
-
 export class Receiver {
-	constructor(url, stateService) {
+	constructor(url, stateService, pingService) {
 		this._url          = url;
 		this._stateService = stateService;
-		this._pingService  = new PingService();
+		this._pingService  = pingService;
 		this._connect();
 	}
 
@@ -23,6 +21,5 @@ export class Receiver {
 		this._ws.addEventListener("error", () => this._ws.close());
 	}
 
-	get ws()  { return this._ws; }
-	get ms()  { return this._pingService.ms; }
+	get ws() { return this._ws; }
 }

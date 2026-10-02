@@ -1,11 +1,12 @@
 import * as THREE from "three";
-import { Receiver }     from "./incoming/Receiver.js";
-import { Sender }       from "./outgoing/sender/Sender.js";
-import { GameState }    from "./common/GameState.js";
+import { Receiver }         from "./incoming/Receiver.js";
+import { Sender }           from "./outgoing/sender/Sender.js";
+import { GameState }        from "./common/GameState.js";
 import { GameStateService } from "./incoming/service/GameStateService.js";
-import { Service }      from "./outgoing/input/service/service.js";
-import { Hud }          from "./common/view/types/Hud.js";
-import { setupInput }   from "./outgoing/input/input.js";
+import { PingService }      from "./incoming/service/PingService.js";
+import { Service }          from "./outgoing/input/service/service.js";
+import { Hud }              from "./common/view/types/Hud.js";
+import { setupInput }       from "./outgoing/input/input.js";
 
 const SERVER     = `ws://${location.hostname}:1234`;
 const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
@@ -26,17 +27,12 @@ camera.lookAt(0, 0, 0);
 const hud          = new Hud();
 const gameState    = new GameState();
 const stateService = new GameStateService(gameState, scene, hud);
-const receiver     = new Receiver(SERVER, stateService);
-const sender    = new Sender(receiver);
-const game      = new Service(camera, () => gameState.myId);
+const pingService  = new PingService(() => receiver.ws);
+const receiver     = new Receiver(SERVER, stateService, pingService);
+const sender       = new Sender(() => receiver.ws);
+const game         = new Service(camera, () => gameState.myId);
 
 setupInput(game, renderer.domElement);
-
-setInterval(() => {
-	const ws = receiver.ws;
-	if (ws?.readyState === WebSocket.OPEN)
-		ws.send(JSON.stringify({ type: "ping", clientTime: Date.now() }));
-}, 1000);
 
 // ── render loop ───────────────────────────────────────────────────────────────
 const perfEl = document.getElementById("perf");
@@ -46,7 +42,7 @@ renderer.setAnimationLoop((now) => {
 	frameCount++;
 	if (frameCount % 10 === 0) fps = Math.round(1000 / (now - (prevNow || now)));
 	prevNow = now;
-	perfEl.textContent = `${fps} fps  ${receiver.ms} ms`;
+	perfEl.textContent = `${fps} fps  ${pingService.ms} ms`;
 
 	sender.flush(game.outbox);
 
