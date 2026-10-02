@@ -21,8 +21,7 @@ export class TargetingState extends BaseState {
 
 		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
 		if (dist <= this.actor.attackRange) {
-			const event = this.actor.isAttackOnCooldown ? StateEvent.ATTACK_ON_COOLDOWN : StateEvent.TARGET_REACHED;
-			this.actor.transition(event, { targetId: this.targetId });
+			this.actor.transition(StateEvent.TARGET_REACHED, { targetId: this.targetId });
 			return;
 		}
 

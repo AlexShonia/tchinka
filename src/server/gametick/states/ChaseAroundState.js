@@ -32,7 +32,6 @@ export class ChaseAroundState extends BaseState {
 			return;
 		}
 
-		const event = this.actor.isAttackOnCooldown ? StateEvent.ATTACK_ON_COOLDOWN : StateEvent.TARGET_REACHED;
-		this.actor.transition(event, { targetId: this.targetId });
+		this.actor.transition(StateEvent.TARGET_REACHED, { targetId: this.targetId });
 	}
 }

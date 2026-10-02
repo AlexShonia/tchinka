@@ -17,7 +17,6 @@ export const PlayerTransitions = {
 		[StateEvent.ATTACK_REQUESTED]:   StateName.TARGETING,
 		[StateEvent.TARGET_LOST]:        StateName.IDLE,
 		[StateEvent.TARGET_REACHED]:     StateName.WINDUP,
-		[StateEvent.ATTACK_ON_COOLDOWN]: StateName.RECOVERY,
 	},
 	[StateName.WINDUP]: {
 		[StateEvent.MOVE_REQUESTED]:     StateName.MOVING,
