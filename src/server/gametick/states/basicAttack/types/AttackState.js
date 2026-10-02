@@ -1,21 +1,24 @@
 import { PLAYER_COMBAT, ENEMY_COMBAT } from "../../../../../shared/combatConfig.js";
 
 export class AttackState {
-	constructor() {
-		this.name   = "hit";
-		this._timer = 0;
+	constructor(basicAttack) {
+		this.name        = "hit";
+		this.basicAttack = basicAttack;
+		this._timer      = 0;
 	}
 
-	initialize(basicAttack, gameData) {
+	initialize(gameData) {
+		const basicAttack = this.basicAttack;
 		this._timer = Math.max(1, Math.round(basicAttack.hitTicks / basicAttack.attackSpeed));
 		const actor = basicAttack.actor;
 		if (actor.combatState.states.targeting) this._damageTargetEnemy(actor, gameData, basicAttack.targetEnemyId);
 		else                                     this._damageTargetPlayer(actor, gameData, basicAttack.targetEnemyId);
 	}
 
-	tick(basicAttack, gameData) {
+	tick(gameData) {
 		if (--this._timer > 0) return;
-		basicAttack._transition("recovery", gameData);
+		const basicAttack = this.basicAttack;
+		basicAttack._current = basicAttack._recovery;
 	}
 
 	_damageTargetEnemy(actor, gameData, targetEnemyId) {
@@ -40,10 +43,6 @@ export class AttackState {
 		if (target.health > 0) return;
 
 		target.health            = 0;
-		target.combatState.state = "dead";
-	}
-
-	processMoveRequest(basicAttack, x, z) {
-		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
+		target.changeState("dead");
 	}
 }

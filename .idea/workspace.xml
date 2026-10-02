@@ -5,9 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Alive.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Alive.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/ChaseNearestPlayerState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/ChaseNearestPlayerState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/DeadState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/DeadState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/gametick/states/IdleState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/IdleState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/MovingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/MovingState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/base/BaseState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/base/BaseState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/BasicAttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/BasicAttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/AttackState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/RecoveryState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/WindupState.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,15 +250,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/server/gametick/states/basicAttack/types/WindupState.js</url>
-          <line>10</line>
+          <line>11</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/server/gametick/states/basicAttack/BasicAttackState.js</url>
-          <line>32</line>
+          <line>24</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/server/gametick/states/DeadState.js</url>
+          <line>4</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

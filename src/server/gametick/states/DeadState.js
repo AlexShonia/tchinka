@@ -2,8 +2,6 @@ import { BaseState } from "./base/BaseState.js";
 
 export class DeadState extends BaseState {
 	constructor(actor) {
-		super();
-		this.name  = "dead";
-		this.actor = actor;
+		super(actor, "dead");
 	}
 }

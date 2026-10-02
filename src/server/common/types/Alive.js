@@ -18,4 +18,8 @@ export class Alive extends Entity {
 		return this.combatState.states[this.combatState.state];
 	}
 
+	changeState(name) {
+		this.combatState.state = name;
+	}
+
 }

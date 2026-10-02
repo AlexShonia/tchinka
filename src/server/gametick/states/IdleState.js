@@ -2,16 +2,16 @@ import { BaseState } from "./base/BaseState.js";
 
 export class IdleState extends BaseState {
 	constructor(actor) {
-		super();
-		this.name  = "idle";
-		this.actor = actor;
+		super(actor, "idle");
 	}
 
 	processMoveRequest(x, z) {
-		this.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
+		this.actor.combatState.states.moving.initialize({ x, z });
+		this.actor.changeState("moving");
 	}
 
 	processAttackRequest(targetEnemyId) {
-		this.actor.combatState.states.targeting.initializeAndChangeTo(targetEnemyId);
+		this.actor.combatState.states.targeting.initialize(targetEnemyId);
+		this.actor.changeState("targeting");
 	}
 }

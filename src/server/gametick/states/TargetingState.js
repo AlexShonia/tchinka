@@ -2,9 +2,7 @@ import { BaseState } from "./base/BaseState.js";
 
 export class TargetingState extends BaseState {
 	constructor(actor) {
-		super();
-		this.name          = "targeting";
-		this.actor         = actor;
+		super(actor, "targeting");
 		this.targetEnemyId = null;
 	}
 
@@ -12,21 +10,17 @@ export class TargetingState extends BaseState {
 		this.targetEnemyId = targetEnemyId;
 	}
 
-	initializeAndChangeTo(targetEnemyId) {
-		this.initialize(targetEnemyId);
-		this.actor.combatState.state = this.name;
-	}
-
 	tick(gameData) {
 		const target = gameData.enemies.find(e => e.id === this.targetEnemyId);
 		if (!target || target.health <= 0) {
-			this.actor.combatState.state = "idle";
+			this.actor.changeState("idle");
 			return;
 		}
 
 		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
 		if (dist <= this.actor.attackRange && this.actor.combatState.states.basicAttack.recoveryTimer <= 0) {
-			this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed, this.targetEnemyId);
+			this.actor.combatState.states.basicAttack.initialize(this.actor.attackSpeed, this.targetEnemyId);
+			this.actor.changeState("basicAttack");
 			return;
 		}
 
@@ -46,7 +40,8 @@ export class TargetingState extends BaseState {
 	}
 
 	processMoveRequest(x, z) {
-		this.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
+		this.actor.combatState.states.moving.initialize({ x, z });
+		this.actor.changeState("moving");
 	}
 
 	processAttackRequest(targetEnemyId) {

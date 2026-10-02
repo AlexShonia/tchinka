@@ -1,23 +1,19 @@
 export class WindupState {
-	constructor() {
-		this.name   = "windup";
-		this._timer = 0;
+	constructor(basicAttack) {
+		this.name        = "windup";
+		this.basicAttack = basicAttack;
+		this._timer      = 0;
 	}
 
-	initialize(basicAttack) {
-		this._timer = Math.max(1, Math.round(basicAttack.windupTicks / basicAttack.attackSpeed));
+	initialize() {
+		this._timer = Math.max(1, Math.round(this.basicAttack.windupTicks / this.basicAttack.attackSpeed));
 	}
 
-	tick(basicAttack, gameData) {
+	tick(gameData) {
 		if (--this._timer > 0) return;
-		basicAttack._recovery.recoveryTimer = Math.max(1, Math.round(
-			(basicAttack.hitTicks + basicAttack.recoveryTicks) / basicAttack.attackSpeed
-		));
-		basicAttack._transition("attack", gameData);
+		const basicAttack = this.basicAttack;
+		basicAttack._recovery.initialize();
+		basicAttack._attack.initialize(gameData);
+		basicAttack._current = basicAttack._attack;
 	}
-
-	processMoveRequest(basicAttack, x, z) {
-		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
-	}
-	processAttackRequest() {}
 }
