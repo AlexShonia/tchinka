@@ -8,8 +8,7 @@ export class Projectile {
 		this.toZ      = toZ;
 		this.dirX     = dirX;
 		this.dirZ     = dirZ;
-		this.state    = "idle";
-		this.landed   = false;
+		this.state    = "flying"; //TODO dont write states as fking strings its a fking object and create seperate file and class for it
 		this.life     = life;
 	}
 }

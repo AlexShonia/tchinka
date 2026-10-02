@@ -1,23 +1,11 @@
 import { Enemy } from "../common/types/Enemy.js";
-import { WindupState }   from "./states/WindupState.js";
-import { AttackState }   from "./states/AttackState.js";
-import { RecoveryState } from "./states/RecoveryState.js";
 import { PLAYER_COMBAT, ENEMY_COMBAT } from "../../shared/combatConfig.js";
 
-const PLAYER_SPEED         = 0.1;
 const PLAYER_MAX_MANA      = 100;
 const MANA_REGEN           = 0.3;
 
 const BASE_ENEMY_SPEED     = 0.05;
 const ENEMY_SPEED_PER_WAVE = 0.008;
-
-const playerWindup   = new WindupState(PLAYER_COMBAT.windupTicks);
-const playerAttack   = new AttackState(PLAYER_COMBAT.attackTicks);
-const playerRecovery = new RecoveryState(PLAYER_COMBAT.recoveryTicks);
-
-const enemyWindup    = new WindupState(ENEMY_COMBAT.windupTicks);
-const enemyAttack    = new AttackState(ENEMY_COMBAT.attackTicks);
-const enemyRecovery  = new RecoveryState(ENEMY_COMBAT.recoveryTicks);
 
 const PROJ_SPEED   = 0.3;
 const ENEMY_COUNT  = 5;
@@ -36,70 +24,74 @@ function tickPlayers(gameData) {
 		p.hit = false;
 		if (p.dead) continue;
 
-		if (p.attackCooldown > 0) p.attackCooldown--;
-
-		if (p.state === playerWindup.name) {
-			playerWindup.tick(p, entity => {
-				playerAttack.enter(entity);
-				entity.state = playerAttack.name;
-				const target = gameData.enemies.find(e => e.id === entity.targetEnemyId);
-				if (target && Math.hypot(target.x - entity.x, target.z - entity.z) < entity.attackRange) {
+		if (p.state === "windup") {
+			p.states.windup.tick(() => {
+				p.states.attack.enter(p.attackSpeed);
+				p.state = "attack";
+				const target = gameData.enemies.find(e => e.id === p.states.targeting.targetEnemyId);
+				if (target && Math.hypot(target.x - p.x, target.z - p.z) < p.attackRange) {
 					target.hp -= PLAYER_COMBAT.damage;
 					if (target.hp <= 0) {
 						const idx = gameData.enemies.indexOf(target);
 						if (idx !== -1) gameData.enemies.splice(idx, 1);
-						entity.targetEnemyId = null;
+						p.states.targeting.targetEnemyId = null;
 					}
 				}
 			});
 			continue;
 		}
 
-		if (p.state === playerAttack.name) {
-			playerAttack.tick(p, entity => {
-				playerRecovery.enter(entity);
-				entity.state = playerRecovery.name;
+		if (p.state === "attack") {
+			p.states.attack.tick(() => {
+				p.states.recovery.enter(p.attackSpeed);
+				p.state = "recovery";
 			});
 			continue;
 		}
 
-		if (p.state === playerRecovery.name) {
-			playerRecovery.tick(p, entity => {
-				entity.state          = "idle";
-				entity.attackTimer    = 0;
-				entity.attackCooldown = Math.round(PLAYER_COMBAT.cooldownTicks / (entity.attackSpeed ?? 1));
+		if (p.state === "recovery") {
+			p.states.recovery.tick(() => {
+				p.states.cooldown.enter(p.attackSpeed);
+				p.state = "cooldown";
 			});
 			continue;
 		}
 
-		if (p.targetEnemyId) {
-			const target = gameData.enemies.find(e => e.id === p.targetEnemyId);
-			if (!target || target.hp <= 0) { p.targetEnemyId = null; continue; }
+		if (p.state === "cooldown") {
+			p.states.cooldown.tick(() => { p.state = "idle"; });
+			continue;
+		}
+
+		if (p.state === "targeting") {
+			const target = gameData.enemies.find(e => e.id === p.states.targeting.targetEnemyId);
+			if (!target || target.hp <= 0) { p.state = "idle"; continue; }
 			const dist = Math.hypot(target.x - p.x, target.z - p.z);
-			if (dist <= p.attackRange && p.attackCooldown <= 0) {
-				playerWindup.enter(p);
-				p.state = playerWindup.name;
-			} else if (dist > p.attackRange) {
+			if (dist <= p.attackRange) {
+				p.states.windup.enter(p.attackSpeed);
+				p.state = "windup";
+			} else {
 				const angle = Math.atan2(target.z - p.z, target.x - p.x);
 				const destX = target.x - Math.cos(angle) * (p.attackRange * 0.8);
 				const destZ = target.z - Math.sin(angle) * (p.attackRange * 0.8);
 				const dx = destX - p.x, dz = destZ - p.z;
 				const d  = Math.hypot(dx, dz);
-				if (d > PLAYER_SPEED) { p.x += (dx / d) * PLAYER_SPEED; p.z += (dz / d) * PLAYER_SPEED; }
+				if (d > p.moveSpeed) { p.x += (dx / d) * p.moveSpeed; p.z += (dz / d) * p.moveSpeed; }
 				else { p.x = destX; p.z = destZ; }
 			}
 			continue;
 		}
 
-		if (!p.isMoving || !p.moveTarget) continue;
-		const dx   = p.moveTarget.x - p.x;
-		const dz   = p.moveTarget.z - p.z;
-		const dist = Math.sqrt(dx * dx + dz * dz);
-		if (dist <= PLAYER_SPEED) {
-			p.x = p.moveTarget.x; p.z = p.moveTarget.z; p.isMoving = false;
-		} else {
-			p.x += (dx / dist) * PLAYER_SPEED;
-			p.z += (dz / dist) * PLAYER_SPEED;
+		if (p.state === "moving") {
+			const { moveTarget } = p.states.moving;
+			const dx   = moveTarget.x - p.x;
+			const dz   = moveTarget.z - p.z;
+			const dist = Math.sqrt(dx * dx + dz * dz);
+			if (dist <= p.moveSpeed) {
+				p.x = moveTarget.x; p.z = moveTarget.z; p.state = "idle";
+			} else {
+				p.x += (dx / dist) * p.moveSpeed;
+				p.z += (dz / dist) * p.moveSpeed;
+			}
 		}
 	}
 }
@@ -115,31 +107,31 @@ function tickEnemies(gameData) {
 			if (d < nearestDist) { nearestDist = d; nearest = p; }
 		}
 
-		if (e.state === enemyWindup.name) {
-			enemyWindup.tick(e, entity => {
-				enemyAttack.enter(entity);
-				entity.state = enemyAttack.name;
-				if (Math.hypot(nearest.x - entity.x, nearest.z - entity.z) < entity.attackRange) {
+		if (e.state === "windup") {
+			e.states.windup.tick(() => {
+				e.states.attack.enter(e.attackSpeed);
+				e.state = "attack";
+				if (Math.hypot(nearest.x - e.x, nearest.z - e.z) < e.attackRange) {
 					nearest.health -= ENEMY_COMBAT.damage;
 					nearest.hit = true;
-					if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.isMoving = false; }
+					if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.state = "idle"; }
 				}
 			});
 			continue;
 		}
 
-		if (e.state === enemyAttack.name) {
-			enemyAttack.tick(e, entity => {
-				enemyRecovery.enter(entity);
-				entity.state = enemyRecovery.name;
+		if (e.state === "attack") {
+			e.states.attack.tick(() => {
+				e.states.recovery.enter(e.attackSpeed);
+				e.state = "recovery";
 			});
 			continue;
 		}
 
-		if (e.state === enemyRecovery.name) {
-			enemyRecovery.tick(e, entity => {
-				entity.state     = "prep";
-				entity.prepTimer = ENEMY_COMBAT.prepTicks;
+		if (e.state === "recovery") {
+			e.states.recovery.tick(() => {
+				e.states.prep.enter();
+				e.state = "prep";
 			});
 			continue;
 		}
@@ -151,23 +143,20 @@ function tickEnemies(gameData) {
 		if (e.state === "prep") {
 			if (dist > 0.3) {
 				e.state       = "idle";
-				e.prepTimer   = 0;
 				e.offsetAngle = Math.random() * Math.PI * 2;
 			} else {
-				e.prepTimer--;
-				if (e.prepTimer <= 0) {
-					enemyWindup.enter(e);
-					e.state  = enemyWindup.name;
-					e.target = nearest.id;
-				}
+				e.states.prep.tick(() => {
+					e.states.windup.enter(e.attackSpeed);
+					e.state = "windup";
+				});
 			}
 			continue;
 		}
 
 		// state === "idle"
 		if (dist < 0.08) {
-			e.state     = "prep";
-			e.prepTimer = ENEMY_COMBAT.prepTicks;
+			e.states.prep.enter();
+			e.state = "prep";
 		} else {
 			e.x += ((destX - e.x) / dist) * e.speed;
 			e.z += ((destZ - e.z) / dist) * e.speed;
@@ -180,10 +169,9 @@ function tickMana(gameData) {
 		if (!p.dead) p.mana = Math.min(PLAYER_MAX_MANA, p.mana + MANA_REGEN);
 }
 
-
 function tickCollisions(gameData) {
 	for (const [projId, p] of gameData.projectiles) {
-		if (p.landed) continue;
+		if (p.state === "landed") continue;
 		for (let i = gameData.enemies.length - 1; i >= 0; i--) {
 			const e = gameData.enemies[i];
 			if (Math.hypot(p.x - e.x, p.z - e.z) < 0.6) {
@@ -202,7 +190,7 @@ function tickCollisions(gameData) {
 
 function tickProjectiles(gameData) {
 	for (const [id, p] of gameData.projectiles) {
-		if (p.landed) {
+		if (p.state === "landed") {
 			if (--p.life <= 0) gameData.projectiles.delete(id);
 			continue;
 		}
@@ -210,7 +198,7 @@ function tickProjectiles(gameData) {
 		const dz   = p.toZ - p.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
 		if (dist <= PROJ_SPEED) {
-			p.x = p.toX; p.z = p.toZ; p.landed = true;
+			p.x = p.toX; p.z = p.toZ; p.state = "landed";
 		} else {
 			p.x += p.dirX * PROJ_SPEED;
 			p.z += p.dirZ * PROJ_SPEED;

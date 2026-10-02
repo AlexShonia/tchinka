@@ -1,12 +1,12 @@
-export class RecoveryState {
+export class CooldownState {
 	constructor(baseTicks) {
-		this.name       = "recovery";
+		this.name       = "cooldown";
 		this._baseTicks = baseTicks;
 		this._timer     = 0;
 	}
 
 	enter(attackSpeed = 1) {
-		this._timer = Math.max(1, Math.round(this._baseTicks / attackSpeed));
+		this._timer = Math.round(this._baseTicks / attackSpeed);
 	}
 
 	tick(onExpire) {

@@ -1,5 +1,7 @@
 export const TICK_MS = 20;
 
+export const PLAYER_MOVE_SPEED = 0.1;
+
 export const PLAYER_COMBAT = {
 	windupTicks:   10,
 	attackTicks:   5,

@@ -28,15 +28,14 @@ export class Service {
 
 	movePlayer(player, x, z) {
 		if (player.dead) return;
-		player.targetEnemyId = null;
-		player.moveTarget    = { x, z };
-		player.isMoving      = true;
+		player.states.moving.enter({ x, z });
+		player.state = "moving";
 	}
 
 	attackEnemy(player, enemyId) {
 		if (player.dead) return;
-		player.targetEnemyId = enemyId;
-		player.isMoving      = false;
+		player.states.targeting.enter(enemyId);
+		player.state = "targeting";
 	}
 
 	shoot(player, aimX, aimZ) {

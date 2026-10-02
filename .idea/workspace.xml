@@ -6,19 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-D177bIuS.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-B6RhdKwn.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/AttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/RecoveryState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/WindupState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/common/types/Enemy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Enemy.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/common/types/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Projectile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Projectile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/AttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/RecoveryState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/WindupState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/gametick/tick.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/tick.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/incoming/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/Receiver.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/incoming/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/service/service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/outgoing/Sender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/outgoing/Sender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/combatConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/combatConfig.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +38,12 @@
     &quot;assignee&quot;: &quot;giorgi12326&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/AlexShonia/tchinka.git&quot;,
-    &quot;accountId&quot;: &quot;f803bc53-237c-4024-baee-8698bdc720be&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:AlexShonia/tchinka.git",
+    "accountId": "f803bc53-237c-4024-baee-8698bdc720be"
   }
-}</component>
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -53,35 +57,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.main.js.executor": "Run",
-    "Node.js.server.js.executor": "Run",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/giorgi.tsintsadze/IdeaProjects/tchinka",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.build.executor": "Run",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.main.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.server.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/giorgi.tsintsadze/IdeaProjects/tchinka&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/client/outgoing" />
@@ -91,7 +95,7 @@
       <recent name="$PROJECT_DIR$/src/client/incoming/receiver" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.server.js">
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -172,6 +176,10 @@
       <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Node.js.main.js" />
+      <item itemvalue="Node.js.server.js" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.server.js" />
@@ -198,6 +206,7 @@
       <workItem from="1790233506609" duration="370000" />
       <workItem from="1790854328072" duration="656000" />
       <workItem from="1790854993707" duration="29799000" />
+      <workItem from="1790939685633" duration="3768000" />
     </task>
     <task id="LOCAL-00001" summary="jump and fking move">
       <option name="closed" value="true" />
@@ -234,13 +243,11 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/client/common/GameState.js</url>
           <line>25</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/client/outgoing/input/input.js</url>
           <line>21</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

@@ -10,24 +10,21 @@ const criticalMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: tr
 
 const CRITICAL_DURATION = 400;
 
-const windup   = new WindupState(toMs(PLAYER_COMBAT.windupTicks));
-const attack   = new AttackState(toMs(PLAYER_COMBAT.attackTicks));
-const recovery = new RecoveryState(toMs(PLAYER_COMBAT.recoveryTicks));
-const STATES   = { windup, attack, recovery };
-
 export class PlayerView {
 	constructor(scene, isLocal) {
-		this._scene       = scene;
-		this._isLocal     = isLocal;
-		this._serverAttackStart = 0;
-		this._attackState       = null;
-		this._stateStart        = 0;
-		this._attackSpeed       = 1;
-		this._hitTime           = 0;
+		this._scene   = scene;
+		this._isLocal = isLocal;
+		this._state   = "idle";
+		this._hitTime = 0;
 		this.x = 0; this.z = 0;
 		this.health = 100; this.mana = 100; this.dead = false;
 		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), isLocal ? myMat : otherMat);
 		scene.add(this.mesh);
+		this._states = {
+			windup:   new WindupState(toMs(PLAYER_COMBAT.windupTicks), this.mesh),
+			attack:   new AttackState(toMs(PLAYER_COMBAT.attackTicks), this.mesh),
+			recovery: new RecoveryState(toMs(PLAYER_COMBAT.recoveryTicks), this.mesh),
+		};
 	}
 
 	update(data) {
@@ -35,21 +32,18 @@ export class PlayerView {
 		this.health = data.health; this.mana = data.mana; this.dead = data.dead;
 		this.mesh.position.set(data.x, 0.5, data.z);
 		if (data.hit) this._hitTime = performance.now();
-		if (data.state !== this._attackState) {
-			this._stateStart  = performance.now();
-			this._attackState = data.state;
+		if (data.state !== this._state) {
+			this._state = data.state;
+			const state = this._states[data.state];
+			if (state) state.enter(data.attackSpeed ?? 1);
 		}
-		if (data.attackStart !== this._serverAttackStart) {
-			this._serverAttackStart = data.attackStart;
-		}
-		this._attackSpeed = data.attackSpeed ?? 1;
 	}
 
 	tick(now) {
-		const hitElapsed = now - this._hitTime;
-		const state = STATES[this._attackState];
-		if (state) state.apply(this.mesh, now - this._stateStart, this._attackSpeed);
+		const state = this._states[this._state];
+		if (state) state.apply();
 		else this.mesh.rotation.z = 0;
+		const hitElapsed = now - this._hitTime;
 		const inCritical = hitElapsed >= 0 && hitElapsed < CRITICAL_DURATION;
 		this.mesh.material = inCritical ? criticalMat : (this._isLocal ? myMat : otherMat);
 	}

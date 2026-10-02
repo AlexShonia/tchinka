@@ -2,13 +2,14 @@ export class AttackState {
 	constructor(baseTicks) {
 		this.name       = "attack";
 		this._baseTicks = baseTicks;
+		this._timer     = 0;
 	}
 
-	enter(entity) {
-		entity.attackTimer = Math.max(1, Math.round(this._baseTicks / (entity.attackSpeed ?? 1)));
+	enter(attackSpeed = 1) {
+		this._timer = Math.max(1, Math.round(this._baseTicks / attackSpeed));
 	}
 
-	tick(entity, onExpire) {
-		if (--entity.attackTimer <= 0) onExpire(entity);
+	tick(onExpire) {
+		if (--this._timer <= 0) onExpire();
 	}
 }
