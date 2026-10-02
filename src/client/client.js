@@ -32,6 +32,12 @@ const game      = new Service(camera, () => gameState.myId);
 
 setupInput(game, renderer.domElement);
 
+setInterval(() => {
+	const ws = receiver.ws;
+	if (ws?.readyState === WebSocket.OPEN)
+		ws.send(JSON.stringify({ type: "ping", clientTime: Date.now() }));
+}, 1000);
+
 // ── render loop ───────────────────────────────────────────────────────────────
 const perfEl = document.getElementById("perf");
 let frameCount = 0, fps = 0, prevNow = 0;
@@ -40,7 +46,7 @@ renderer.setAnimationLoop((now) => {
 	frameCount++;
 	if (frameCount % 10 === 0) fps = Math.round(1000 / (now - (prevNow || now)));
 	prevNow = now;
-	perfEl.textContent = `${fps} fps  ${(1000 / (fps || 1)).toFixed(1)} ms`;
+	perfEl.textContent = `${fps} fps  ${receiver.ms} ms`;
 
 	sender.flush(game.outbox);
 

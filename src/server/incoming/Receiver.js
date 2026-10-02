@@ -1,5 +1,10 @@
+import { Ping } from "./ping/Ping.js";
+
+const ping = new Ping();
+
 export class Receiver {
 	constructor(ws, service) {
+		this._ws      = ws;
 		this._service = service;
 		this._player  = service.addPlayer();
 
@@ -13,6 +18,8 @@ export class Receiver {
 	_onMessage(raw) {
 		let msg;
 		try { msg = JSON.parse(raw); } catch { return; }
+
+		if (msg.type === "ping") { ping.onPing(this._ws, msg); return; }
 
 		if (msg.type === "move"  && msg.x != null && msg.z != null)
 			this._service.movePlayer(this._player, msg.x, msg.z);
