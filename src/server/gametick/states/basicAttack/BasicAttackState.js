@@ -1,4 +1,4 @@
-import { BaseState }    from "../BaseState.js";
+import { BaseState }    from "../base/BaseState.js";
 import { WindupState }   from "./types/WindupState.js";
 import { AttackState }   from "./types/AttackState.js";
 import { RecoveryState } from "./types/RecoveryState.js";

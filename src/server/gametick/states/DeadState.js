@@ -1,4 +1,4 @@
-import { BaseState } from "./BaseState.js";
+import { BaseState } from "./base/BaseState.js";
 
 export class DeadState extends BaseState {
 	constructor(actor) {

@@ -1,8 +1,7 @@
 import { ENEMY_COMBAT }    from "../../../shared/combatConfig.js";
 import { Alive }            from "./Alive.js";
 import { BasicAttackState } from "../../gametick/states/basicAttack/BasicAttackState.js";
-import { PrepState }        from "../../gametick/states/PrepState.js";
-import { EnemyIdleState }   from "../../gametick/states/EnemyIdleState.js";
+import { ChaseNearestPlayerState }        from "../../gametick/states/ChaseNearestPlayerState.js";
 import { DeadState }        from "../../gametick/states/DeadState.js";
 
 export class Enemy extends Alive {
@@ -19,11 +18,10 @@ export class Enemy extends Alive {
 		this.offsetAngle = Math.random() * Math.PI * 2;
 
 		this.combatState = {
-			state: "idle",
+			state: "prep",
 			states: {
-				idle:        new EnemyIdleState(this),
 				basicAttack: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
-				prep:        new PrepState(this, ENEMY_COMBAT.prepTicks),
+				prep:        new ChaseNearestPlayerState(this, ENEMY_COMBAT.prepTicks),
 				dead:        new DeadState(this),
 			},
 		};

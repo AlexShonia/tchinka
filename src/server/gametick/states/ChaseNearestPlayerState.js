@@ -1,7 +1,7 @@
-import { BaseState }    from "./BaseState.js";
+import { BaseState }    from "./base/BaseState.js";
 import { nearestPlayer } from "../../utils/nearest.js";
 
-export class PrepState extends BaseState {
+export class ChaseNearestPlayerState extends BaseState {
 	constructor(actor, baseTicks) {
 		super();
 		this.name       = "prep";
@@ -19,21 +19,22 @@ export class PrepState extends BaseState {
 		this.actor.combatState.state = this.name;
 	}
 
-	tick(gameData) {
+	tick(gameData) { //TODO this chace logic runs on every tick maybe weird
 		const nearest = nearestPlayer(this.actor, gameData);
-		if (!nearest) { this.actor.combatState.state = "idle"; return; }
+		if (!nearest) return;
 
 		const destX = nearest.x + Math.cos(this.actor.offsetAngle) * this.actor.attackRange;
 		const destZ = nearest.z + Math.sin(this.actor.offsetAngle) * this.actor.attackRange;
 		const dist  = Math.hypot(destX - this.actor.x, destZ - this.actor.z);
 
-		if (dist > 0.3) {
-			this.actor.combatState.state = "idle";
-			this.actor.offsetAngle       = Math.random() * Math.PI * 2;
+		if (dist > 0.08) {
+			this.actor.x    += ((destX - this.actor.x) / dist) * this.actor.speed;
+			this.actor.z    += ((destZ - this.actor.z) / dist) * this.actor.speed;
+			this._timer      = this._baseTicks;
 			return;
 		}
 
 		if (--this._timer > 0) return;
-		this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed);
+		this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed, nearest.id);
 	}
 }

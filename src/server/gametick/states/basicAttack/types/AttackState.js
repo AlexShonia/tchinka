@@ -1,5 +1,4 @@
 import { PLAYER_COMBAT, ENEMY_COMBAT } from "../../../../../shared/combatConfig.js";
-import { nearestPlayer } from "../../../../utils/nearest.js";
 
 export class AttackState {
 	constructor() {
@@ -10,8 +9,8 @@ export class AttackState {
 	initialize(basicAttack, gameData) {
 		this._timer = Math.max(1, Math.round(basicAttack.hitTicks / basicAttack.attackSpeed));
 		const actor = basicAttack.actor;
-		if (actor.combatState.states.targeting) this._damageTarget(actor, gameData, basicAttack.targetEnemyId);
-		else this._damageNearest(actor, gameData);
+		if (actor.combatState.states.targeting) this._damageTargetEnemy(actor, gameData, basicAttack.targetEnemyId);
+		else                                     this._damageTargetPlayer(actor, gameData, basicAttack.targetEnemyId);
 	}
 
 	tick(basicAttack, gameData) {
@@ -19,7 +18,7 @@ export class AttackState {
 		basicAttack._transition("recovery", gameData);
 	}
 
-	_damageTarget(actor, gameData, targetEnemyId) {
+	_damageTargetEnemy(actor, gameData, targetEnemyId) {
 		const target = gameData.enemies.find(e => e.id === targetEnemyId);
 		if (!target || Math.hypot(target.x - actor.x, target.z - actor.z) >= actor.attackRange) return;
 
@@ -31,20 +30,20 @@ export class AttackState {
 		actor.combatState.states.targeting.targetEnemyId = null;
 	}
 
-	_damageNearest(actor, gameData) {
-		const nearest = nearestPlayer(actor, gameData);
-		if (!nearest || Math.hypot(nearest.x - actor.x, nearest.z - actor.z) >= actor.attackRange) return;
+	_damageTargetPlayer(actor, gameData, targetPlayerId) {
+		const target = [...gameData.players.values()].find(p => p.id === targetPlayerId);
+		if (!target || target.combatState.state === "dead") return;
+		if (Math.hypot(target.x - actor.x, target.z - actor.z) >= actor.attackRange) return;
 
-		nearest.health -= ENEMY_COMBAT.damage;
-		nearest.hit = true;
-		if (nearest.health > 0) return;
+		target.health -= ENEMY_COMBAT.damage;
+		target.hit     = true;
+		if (target.health > 0) return;
 
-		nearest.health            = 0;
-		nearest.combatState.state = "dead";
+		target.health            = 0;
+		target.combatState.state = "dead";
 	}
 
 	processMoveRequest(basicAttack, x, z) {
 		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
 	}
-	processAttackRequest() {}
 }
