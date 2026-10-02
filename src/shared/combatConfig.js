@@ -11,10 +11,9 @@ export const PLAYER_COMBAT = {
 };
 
 export const ENEMY_COMBAT = {
-	windupTicks:   14,
+	windupTicks:   50,
 	attackTicks:   6,
 	recoveryTicks: 20,
-	prepTicks:     60,
 	damage:        10,
 };
 

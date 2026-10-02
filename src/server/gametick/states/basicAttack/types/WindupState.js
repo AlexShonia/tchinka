@@ -1,6 +1,8 @@
+import { StateName }        from "../../name/StateName.js";
+
 export class WindupState {
 	constructor(basicAttack) {
-		this.name        = "windup";
+		this.name        = StateName.WINDUP;
 		this.basicAttack = basicAttack;
 		this._timer      = 0;
 	}

@@ -17,4 +17,13 @@ export class GameData {
 		this.nextPlayerId = 1;
 		this.nextEnemyId  = 5;
 	}
+
+	*allAlive() {
+		yield* this.players.values();
+		yield* this.enemies;
+	}
+
+	findAlive(id) {
+		return this.players.get(id) ?? this.enemies.find(e => e.id === id);
+	}
 }

@@ -1,8 +1,8 @@
-import { OVERSHOOT } from "./poses.js";
+import { TILT_BACK, OVERSHOOT } from "./poses.js";
 
-export class RecoveryState {
+export class HitState {
 	constructor(baseDuration, mesh) {
-		this.name          = "recovery";
+		this.name          = "hit";
 		this._baseDuration = baseDuration;
 		this._mesh         = mesh;
 		this._start        = 0;
@@ -18,6 +18,6 @@ export class RecoveryState {
 		const elapsed  = performance.now() - this._start;
 		const duration = this._baseDuration / this._attackSpeed;
 		const t        = Math.min(elapsed / duration, 1);
-		this._mesh.rotation.z = OVERSHOOT * (1 - t);
+		this._mesh.rotation.z = -TILT_BACK + (TILT_BACK + OVERSHOOT) * t;
 	}
 }

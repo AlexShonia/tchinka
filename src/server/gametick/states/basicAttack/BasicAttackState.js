@@ -2,15 +2,16 @@ import { BaseState }    from "../base/BaseState.js";
 import { WindupState }   from "./types/WindupState.js";
 import { AttackState }   from "./types/AttackState.js";
 import { RecoveryState } from "./types/RecoveryState.js";
+import { StateName }        from "../name/StateName.js";
 
 export class BasicAttackState extends BaseState {
 	constructor(actor, windupTicks, hitTicks, recoveryTicks) {
-		super(actor, "basicAttack");
+		super(actor, StateName.BASIC_ATTACK);
 		this.windupTicks   = windupTicks;
 		this.hitTicks      = hitTicks;
 		this.recoveryTicks = recoveryTicks;
 		this.attackSpeed   = 1;
-		this.targetEnemyId = null;
+		this.targetId = null;
 
 		this._windup   = new WindupState(this);
 		this._attack   = new AttackState(this);
@@ -18,9 +19,9 @@ export class BasicAttackState extends BaseState {
 		this._current  = this._windup;
 	}
 
-	initialize(attackSpeed = 1, targetEnemyId) {
+	initialize(attackSpeed = 1, targetId) {
 		this.attackSpeed   = attackSpeed;
-		this.targetEnemyId = targetEnemyId;
+		this.targetId = targetId;
 		if (this._recovery.recoveryTimer > 0) {
 			this._current = this._recovery;
 		} else {
@@ -34,8 +35,8 @@ export class BasicAttackState extends BaseState {
 	}
 
 	processMoveRequest(x, z) {
-		this.actor.combatState.states.moving.initialize({ x, z });
-		this.actor.changeState("moving");
+		this.actor.getState(StateName.MOVING).initialize({ x, z });
+		this.actor.changeState(StateName.MOVING);
 	}
 
 	passiveTick() {

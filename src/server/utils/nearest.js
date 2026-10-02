@@ -1,9 +1,9 @@
-export function nearestPlayer(actor, gameData) {
+export function nearestTarget(actor, gameData) {
 	let nearest = null, nearestDist = Infinity;
-	for (const p of gameData.players.values()) {
-		if (p.combatState.state === "dead") continue;
-		const d = Math.hypot(p.x - actor.x, p.z - actor.z);
-		if (d < nearestDist) { nearestDist = d; nearest = p; }
+	for (const t of gameData.allAlive()) {
+		if (t === actor || t.isDead || !actor.canAttack(t)) continue;
+		const d = Math.hypot(t.x - actor.x, t.z - actor.z);
+		if (d < nearestDist) { nearestDist = d; nearest = t; }
 	}
 	return nearest;
 }

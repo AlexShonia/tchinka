@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { WindupState }   from "../states/WindupState.js";
+import { HitState }      from "../states/HitState.js";
 import { RecoveryState } from "../states/RecoveryState.js";
 import { ENEMY_COMBAT, toMs } from "../../../../shared/combatConfig.js";
 
@@ -21,6 +22,7 @@ export class EnemyView {
 		scene.add(this.mesh);
 		this._states = {
 			windup:   new WindupState(toMs(ENEMY_COMBAT.windupTicks), this.mesh),
+			hit:      new HitState(toMs(ENEMY_COMBAT.attackTicks), this.mesh),
 			recovery: new RecoveryState(toMs(ENEMY_COMBAT.recoveryTicks), this.mesh),
 		};
 

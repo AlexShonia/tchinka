@@ -1,3 +1,5 @@
+import { TILT_BACK } from "./poses.js";
+
 export class WindupState {
 	constructor(baseDuration, mesh) {
 		this.name          = "windup";
@@ -16,6 +18,6 @@ export class WindupState {
 		const elapsed  = performance.now() - this._start;
 		const duration = this._baseDuration / this._attackSpeed;
 		const t = Math.min(elapsed / duration, 1);
-		this._mesh.rotation.z = -0.5 * t;
+		this._mesh.rotation.z = -TILT_BACK * t;
 	}
 }

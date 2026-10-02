@@ -12,6 +12,7 @@ const SPAWN_RADIUS = 15;
 export function tick(gameData) {
 	tickPlayers(gameData);
 	tickEnemies(gameData);
+	removeDeadEnemies(gameData);
 	tickWaves(gameData);
 	tickMana(gameData);
 }
@@ -20,7 +21,7 @@ function tickPlayers(gameData) {
 	for (const p of gameData.players.values()) {
 		p.hit = false;
 		for (const s of Object.values(p.combatState.states)) s.passiveTick();
-		if (p.combatState.state === "dead") continue;
+		if (p.isDead) continue;
 		p.currentState?.tick(gameData);
 	}
 }
@@ -32,9 +33,13 @@ function tickEnemies(gameData) {
 	}
 }
 
+function removeDeadEnemies(gameData) {
+	gameData.enemies = gameData.enemies.filter(e => !e.isDead);
+}
+
 function tickMana(gameData) {
 	for (const p of gameData.players.values())
-		if (p.combatState.state !== "dead") p.mana = Math.min(PLAYER_MAX_MANA, p.mana + MANA_REGEN);
+		if (!p.isDead) p.mana = Math.min(PLAYER_MAX_MANA, p.mana + MANA_REGEN);
 }
 
 function tickWaves(gameData) {

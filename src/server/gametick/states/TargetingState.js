@@ -1,26 +1,27 @@
 import { BaseState } from "./base/BaseState.js";
+import { StateName }        from "./name/StateName.js";
 
 export class TargetingState extends BaseState {
 	constructor(actor) {
-		super(actor, "targeting");
-		this.targetEnemyId = null;
+		super(actor, StateName.TARGETING);
+		this.targetId = null;
 	}
 
-	initialize(targetEnemyId) {
-		this.targetEnemyId = targetEnemyId;
+	initialize(targetId) {
+		this.targetId = targetId;
 	}
 
 	tick(gameData) {
-		const target = gameData.enemies.find(e => e.id === this.targetEnemyId);
-		if (!target || target.health <= 0) {
-			this.actor.changeState("idle");
+		const target = gameData.findAlive(this.targetId);
+		if (!target || target.isDead || !this.actor.canAttack(target)) {
+			this.actor.changeState(StateName.IDLE);
 			return;
 		}
 
 		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
-		if (dist <= this.actor.attackRange && this.actor.combatState.states.basicAttack.recoveryTimer <= 0) {
-			this.actor.combatState.states.basicAttack.initialize(this.actor.attackSpeed, this.targetEnemyId);
-			this.actor.changeState("basicAttack");
+		if (dist <= this.actor.attackRange) { // if still on cooldown, BasicAttackState starts in recovery and ends back here
+			this.actor.getState(StateName.BASIC_ATTACK).initialize(this.actor.attackSpeed, this.targetId);
+			this.actor.changeState(StateName.BASIC_ATTACK);
 			return;
 		}
 
@@ -40,11 +41,11 @@ export class TargetingState extends BaseState {
 	}
 
 	processMoveRequest(x, z) {
-		this.actor.combatState.states.moving.initialize({ x, z });
-		this.actor.changeState("moving");
+		this.actor.getState(StateName.MOVING).initialize({ x, z });
+		this.actor.changeState(StateName.MOVING);
 	}
 
-	processAttackRequest(targetEnemyId) {
-		this.initialize(targetEnemyId);
+	processAttackRequest(targetId) {
+		this.initialize(targetId);
 	}
 }

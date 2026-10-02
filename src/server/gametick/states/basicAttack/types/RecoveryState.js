@@ -1,6 +1,8 @@
+import { StateName }        from "../../name/StateName.js";
+
 export class RecoveryState {
 	constructor(basicAttack) {
-		this.name          = "recovery";
+		this.name          = StateName.RECOVERY;
 		this.basicAttack   = basicAttack;
 		this.recoveryTimer = 0;
 	}
@@ -12,13 +14,8 @@ export class RecoveryState {
 	}
 
 	tick(gameData) {
-		if (this.recoveryTimer > 0) { this.recoveryTimer--; return; }
-		const actor = this.basicAttack.actor;
-		if (actor.combatState.states.prep) {
-			actor.combatState.states.prep.initialize();
-			actor.changeState("prep");
-		} else {
-			actor.changeState("idle");
-		}
+		if (this.recoveryTimer > 0) return; // counted down in BasicAttackState.passiveTick
+		const basicAttack = this.basicAttack;
+		basicAttack.actor.onAttackFinished(basicAttack.targetId);
 	}
 }
