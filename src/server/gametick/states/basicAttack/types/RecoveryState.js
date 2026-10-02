@@ -6,6 +6,10 @@ export class RecoveryState {
 
 	initialize() {}
 
+	initializeAndChangeTo(actor) {
+		actor.combatState.state = this;
+	}
+
 	tick(basicAttack, gameData) {
 		if (this.recoveryTimer > 0) { this.recoveryTimer--; return; }
 		const actor = basicAttack.actor;

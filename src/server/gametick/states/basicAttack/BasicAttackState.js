@@ -30,6 +30,8 @@ export class BasicAttackState extends BaseState {
 	initialize(attackSpeed = 1, targetEnemyId) {
 		this.attackSpeed   = attackSpeed;
 		this.targetEnemyId = targetEnemyId;
+		if(this.recoveryTimer > 0)
+			this._recovery.initializeAndChangeTo(this.actor) //TODO this is retarded why is superclass telling sublcass that that subclass should change state of superclass pff  this should be just every state has emthod changetoAnditialize it take some other state and also calls initialize after hcanging to it
 		this._current      = this._windup;
 		this._current.initialize(this);
 	}

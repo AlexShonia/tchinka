@@ -12,7 +12,6 @@ export class IdleState extends BaseState {
 	}
 
 	processAttackRequest(targetEnemyId) {
-		if (this.actor.attackCooldown > 0) return;
 		this.actor.combatState.states.targeting.initializeAndChangeTo(targetEnemyId);
 	}
 }
