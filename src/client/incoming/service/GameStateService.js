@@ -1,7 +1,6 @@
-import { PlayerView }     from "../../common/view/types/playerView.js";
-import { EnemyView }      from "../../common/view/types/enemyView.js";
-import { ProjectileView } from "../../common/view/types/projectileView.js";
-import { BlockView }      from "../../common/view/types/blockView.js";
+import { PlayerView } from "../../common/view/types/playerView.js";
+import { EnemyView }  from "../../common/view/types/enemyView.js";
+import { BlockView }  from "../../common/view/types/blockView.js";
 
 export class GameStateService {
 	constructor(gameState, scene, hud) {
@@ -21,9 +20,8 @@ export class GameStateService {
 
 	applyState(msg) {
 		this._gameState.wave = msg.wave;
-		this._sync(this._gameState.players,     msg.players,     (d) => new PlayerView(this._scene, d.id === this._gameState.myId));
-		this._sync(this._gameState.enemies,     msg.enemies,     ()  => new EnemyView(this._scene));
-		this._sync(this._gameState.projectiles, msg.projectiles, ()  => new ProjectileView(this._scene));
+		this._sync(this._gameState.players, msg.players, (d) => new PlayerView(this._scene, d.id === this._gameState.myId));
+		this._sync(this._gameState.enemies, msg.enemies, ()  => new EnemyView(this._scene));
 		this._hud.update(this._gameState.localPlayer, this._gameState.wave);
 	}
 

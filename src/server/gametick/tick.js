@@ -6,15 +6,13 @@ const MANA_REGEN           = 0.3;
 const BASE_ENEMY_SPEED     = 0.05;
 const ENEMY_SPEED_PER_WAVE = 0.008;
 
-const PROJ_SPEED   = 0.3;
 const ENEMY_COUNT  = 5;
 const SPAWN_RADIUS = 15;
 
 export function tick(gameData) {
 	tickPlayers(gameData);
 	tickEnemies(gameData);
-	tickProjectiles(gameData);
-	tickCollisions(gameData);
+	tickWaves(gameData);
 	tickMana(gameData);
 }
 
@@ -45,41 +43,10 @@ function tickMana(gameData) {
 		if (!p.dead) p.mana = Math.min(PLAYER_MAX_MANA, p.mana + MANA_REGEN);
 }
 
-function tickCollisions(gameData) {
-	for (const [projId, p] of gameData.projectiles) {
-		if (p.state === "landed") continue;
-		for (let i = gameData.enemies.length - 1; i >= 0; i--) {
-			const e = gameData.enemies[i];
-			if (Math.hypot(p.x - e.x, p.z - e.z) < 0.6) {
-				gameData.projectiles.delete(projId);
-				e.hp--;
-				if (e.hp <= 0) gameData.enemies.splice(i, 1);
-				break;
-			}
-		}
-	}
-	if (gameData.enemies.length === 0) {
-		gameData.wave++;
-		spawnEnemies(gameData);
-	}
-}
-
-function tickProjectiles(gameData) {
-	for (const [id, p] of gameData.projectiles) {
-		if (p.state === "landed") {
-			if (--p.life <= 0) gameData.projectiles.delete(id);
-			continue;
-		}
-		const dx   = p.toX - p.x;
-		const dz   = p.toZ - p.z;
-		const dist = Math.sqrt(dx * dx + dz * dz);
-		if (dist <= PROJ_SPEED) {
-			p.x = p.toX; p.z = p.toZ; p.state = "landed";
-		} else {
-			p.x += p.dirX * PROJ_SPEED;
-			p.z += p.dirZ * PROJ_SPEED;
-		}
-	}
+function tickWaves(gameData) {
+	if (gameData.enemies.length > 0) return;
+	gameData.wave++;
+	spawnEnemies(gameData);
 }
 
 function spawnEnemies(gameData) {

@@ -4,7 +4,6 @@ export class GameState {
 		this.wave        = 1;
 		this.players     = new Map();
 		this.enemies     = new Map();
-		this.projectiles = new Map();
 		this.blocks      = new Map();
 	}
 
