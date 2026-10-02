@@ -1,7 +1,9 @@
+import { BaseState }    from "./BaseState.js";
 import { nearestPlayer } from "../../utils/nearest.js";
 
-export class PrepState {
+export class PrepState extends BaseState {
 	constructor(actor, baseTicks) {
+		super();
 		this.name       = "prep";
 		this.actor      = actor;
 		this._baseTicks = baseTicks;
@@ -34,7 +36,4 @@ export class PrepState {
 		if (--this._timer > 0) return;
 		this.actor.combatState.states.basicAttack.initializeAndChangeTo(this.actor.attackSpeed);
 	}
-
-	processMoveRequest() {}
-	processAttackRequest() {}
 }

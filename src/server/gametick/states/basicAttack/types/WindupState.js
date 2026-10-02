@@ -16,6 +16,8 @@ export class WindupState {
 		basicAttack._transition("attack", gameData);
 	}
 
-	processMoveRequest() {}
+	processMoveRequest(basicAttack, x, z) {
+		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
+	}
 	processAttackRequest() {}
 }

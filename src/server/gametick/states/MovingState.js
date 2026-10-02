@@ -1,5 +1,8 @@
-export class MovingState {
+import { BaseState } from "./BaseState.js";
+
+export class MovingState extends BaseState {
 	constructor(actor) {
+		super();
 		this.name       = "moving";
 		this.actor      = actor;
 		this.moveTarget = null;
@@ -32,7 +35,7 @@ export class MovingState {
 		this.initialize({ x, z });
 	}
 
-	processAttackRequest(enemyId) {
-		this.actor.combatState.states.targeting.initializeAndChangeTo(enemyId);
+	processAttackRequest(targetEnemyId) {
+		this.actor.combatState.states.targeting.initializeAndChangeTo(targetEnemyId);
 	}
 }

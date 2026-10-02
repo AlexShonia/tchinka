@@ -43,6 +43,8 @@ export class AttackState {
 		nearest.combatState.state = "dead";
 	}
 
-	processMoveRequest() {}
+	processMoveRequest(basicAttack, x, z) {
+		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
+	}
 	processAttackRequest() {}
 }

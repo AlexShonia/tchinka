@@ -5,7 +5,7 @@ export const PLAYER_MOVE_SPEED = 0.1;
 export const PLAYER_COMBAT = {
 	windupTicks:   10,
 	attackTicks:   5,
-	recoveryTicks: 15,
+	recoveryTicks: 55,
 	cooldownTicks: 50,
 	damage:        1,
 };

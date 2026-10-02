@@ -1,9 +1,11 @@
+import { BaseState }    from "../BaseState.js";
 import { WindupState }   from "./types/WindupState.js";
 import { AttackState }   from "./types/AttackState.js";
 import { RecoveryState } from "./types/RecoveryState.js";
 
-export class BasicAttackState {
+export class BasicAttackState extends BaseState {
 	constructor(actor, windupTicks, hitTicks, recoveryTicks) {
+		super();
 		this.name          = "basicAttack";
 		this.actor         = actor;
 		this.windupTicks   = windupTicks;
@@ -20,6 +22,10 @@ export class BasicAttackState {
 
 	get subStateName()  { return this._current.name; }
 	get recoveryTimer() { return this._recovery.recoveryTimer; }
+
+	passiveTick() {
+		if (this._recovery.recoveryTimer > 0) this._recovery.recoveryTimer--;
+	}
 
 	initialize(attackSpeed = 1, targetEnemyId) {
 		this.attackSpeed   = attackSpeed;
@@ -47,6 +53,4 @@ export class BasicAttackState {
 	processMoveRequest(x, z) {
 		this._current.processMoveRequest(this, x, z);
 	}
-
-	processAttackRequest() {}
 }

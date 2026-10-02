@@ -1,7 +1,9 @@
+import { BaseState }    from "./BaseState.js";
 import { nearestPlayer } from "../../utils/nearest.js";
 
-export class EnemyIdleState {
+export class EnemyIdleState extends BaseState {
 	constructor(actor) {
+		super();
 		this.name  = "idle";
 		this.actor = actor;
 	}
@@ -21,7 +23,4 @@ export class EnemyIdleState {
 			this.actor.z += ((destZ - this.actor.z) / dist) * this.actor.speed;
 		}
 	}
-
-	processMoveRequest() {}
-	processAttackRequest() {}
 }

@@ -19,6 +19,7 @@ export function tick(gameData) {
 function tickPlayers(gameData) {
 	for (const p of gameData.players.values()) {
 		p.hit = false;
+		for (const s of Object.values(p.combatState.states)) s.passiveTick();
 		if (p.combatState.state === "dead") continue;
 		p.currentState?.tick(gameData);
 	}
@@ -26,6 +27,7 @@ function tickPlayers(gameData) {
 
 function tickEnemies(gameData) {
 	for (const e of gameData.enemies) {
+		for (const s of Object.values(e.combatState.states)) s.passiveTick();
 		e.currentState.tick(gameData);
 	}
 }

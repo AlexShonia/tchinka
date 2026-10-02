@@ -17,7 +17,6 @@ export class RecoveryState {
 	}
 
 	processMoveRequest(basicAttack, x, z) {
-		if (this.recoveryTimer > 0) return;
 		basicAttack.actor.combatState.states.moving.initializeAndChangeTo({ x, z });
 	}
 
