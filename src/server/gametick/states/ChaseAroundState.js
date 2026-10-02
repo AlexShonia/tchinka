@@ -22,6 +22,7 @@ export class ChaseAroundState extends BaseState {
 			return;
 		}
 
+		this.actor.faceTowards(target);
 		const destX = target.x + Math.cos(this._offsetAngle) * this.actor.attackRange * STAND_RANGE;
 		const destZ = target.z + Math.sin(this._offsetAngle) * this.actor.attackRange * STAND_RANGE;
 		const dist  = Math.hypot(destX - this.actor.x, destZ - this.actor.z);

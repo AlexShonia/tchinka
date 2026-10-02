@@ -19,6 +19,7 @@ export class TargetingState extends BaseState {
 			return;
 		}
 
+		this.actor.faceTowards(target);
 		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
 		if (dist <= this.actor.attackRange) {
 			this.actor.transition(StateEvent.TARGET_REACHED, { targetId: this.targetId });

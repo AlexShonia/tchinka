@@ -5,13 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-NCF_tDTE.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-BQ_CvjQg.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/common/types/Enemy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Enemy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/HitState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/HitState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/RecoveryState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/WindupState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/poses.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/poses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/Hud.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/Hud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/input.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Alive.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Alive.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Entity.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Entity.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/common/types/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/attack/AttackState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/RecoveryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/attack/RecoveryState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/attack/WindupState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/ChaseAroundState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/ChaseAroundState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/MovingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/MovingState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/TargetingState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/attack/AttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/attack/AttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/attack/WindupState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/attack/WindupState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/name/StateEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/name/StateEvent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/states/name/StateName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/states/name/StateName.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/transitions/PlayerTransitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/transitions/PlayerTransitions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/incoming/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/Receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/incoming/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/service/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/outgoing/Sender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/outgoing/Sender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/utils/nearest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/utils/nearest.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/combatConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/combatConfig.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,11 +103,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/server/gametick/states/jumpAttack" />
       <recent name="$PROJECT_DIR$/src/server/gametick/states/attack" />
       <recent name="$PROJECT_DIR$/src/server/gametick/states/name" />
       <recent name="$PROJECT_DIR$/src/server/gametick/states/base" />
       <recent name="$PROJECT_DIR$/src/server/gametick/states" />
-      <recent name="$PROJECT_DIR$/src/server/gametick/states/types" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.server.js">
@@ -240,7 +262,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/client/outgoing/input/input.js</url>
-          <line>21</line>
+          <line>25</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">

@@ -18,6 +18,8 @@ export class HitState {
 		const elapsed  = performance.now() - this._start;
 		const duration = this._baseDuration / this._attackSpeed;
 		const t        = Math.min(elapsed / duration, 1);
-		this._mesh.rotation.z = -TILT_BACK + (TILT_BACK + OVERSHOOT) * t;
+		this._mesh.rotation.x = 0;
+		this._mesh.rotation.z = 0;
+		this._mesh.userData.swingYaw = -TILT_BACK + (TILT_BACK + OVERSHOOT) * t;
 	}
 }

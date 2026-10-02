@@ -15,6 +15,10 @@ export class InputController {
 			_mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 		});
 
+		window.addEventListener("keydown", (e) => {
+			if (e.code === "KeyQ" && !e.repeat) service.useAbility("q");
+		});
+
 		domElement.addEventListener("click", (e) => {
 			if (this._hovered) {
 				service.attackEnemy(this._hovered.id);

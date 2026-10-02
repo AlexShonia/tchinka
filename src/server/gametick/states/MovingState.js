@@ -10,6 +10,7 @@ export class MovingState extends BaseState {
 
 	initialize({ moveTarget }) {
 		this.moveTarget = moveTarget;
+		this.actor.faceTowards(moveTarget);
 	}
 
 	tick() {

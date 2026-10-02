@@ -5,6 +5,9 @@ export const StateName = Object.freeze({
 	CHASE_AROUND: "chaseAround",
 	WINDUP:       "windup",
 	HIT:          "hit",
+	JUMP_WINDUP:  "jumpWindup",
+	JUMP_AIR:     "jumpAir",
+	JUMP_RECOVERY: "jumpRecovery",
 	RECOVERY:     "recovery",
 	DEAD:         "dead",
 });

@@ -20,6 +20,14 @@ export class Alive extends Entity {
 		return this.combatState.states[this.combatState.state];
 	}
 
+	faceTowards(point) {
+		if (!point) return;
+		const dx = point.x - this.x;
+		const dz = point.z - this.z;
+		if (dx === 0 && dz === 0) return;
+		this.facing = Math.atan2(dx, dz);
+	}
+
 	get isDead() {
 		return this.combatState.state === StateName.DEAD;
 	}
@@ -51,6 +59,19 @@ export class Alive extends Entity {
 	// who to go after while idle; players wait for requests, so nobody by default
 	findTarget(gameData) {
 		return null;
+	}
+
+	// damages the target if it is alive, attackable and within attackRange; returns whether it did
+	hitTarget(target, multiplier = 1) {
+		if (!target || target.isDead || !this.canAttack(target)) return false;
+		if (Math.hypot(target.x - this.x, target.z - this.z) >= this.attackRange) return false;
+		target.takeDamage(this.damage * multiplier);
+		return true;
+	}
+
+	// an ability the entity armed that replaces its next normal attack; only entities with abilities have any
+	get hasArmedAbility() {
+		return false;
 	}
 
 	takeDamage(amount) {

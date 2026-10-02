@@ -10,6 +10,14 @@ export const PLAYER_COMBAT = {
 	damage:        1,
 };
 
+// placeholder numbers
+export const PLAYER_JUMP = {
+	windupTicks:      12,
+	airTicks:         20,
+	damageMultiplier: 2,
+	cooldownTicks:    250,
+};
+
 export const ENEMY_COMBAT = {
 	windupTicks:   50,
 	attackTicks:   6,

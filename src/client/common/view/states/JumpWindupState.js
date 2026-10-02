@@ -1,8 +1,9 @@
-import { TILT_BACK } from "./poses.js";
+import { JUMP_TILT_BACK, JUMP_CROUCH, smooth } from "./poses.js";
 
-export class WindupState {
+export class JumpWindupState {
 	constructor(baseDuration, mesh) {
-		this.name          = "windup";
+		this.name          = "jumpWindup";
+		this.drivesScale   = true;
 		this._baseDuration = baseDuration;
 		this._mesh         = mesh;
 		this._start        = 0;
@@ -17,9 +18,11 @@ export class WindupState {
 	apply() {
 		const elapsed  = performance.now() - this._start;
 		const duration = this._baseDuration / this._attackSpeed;
-		const t = Math.min(elapsed / duration, 1);
-		this._mesh.rotation.x = 0;
+		const t        = smooth(Math.min(elapsed / duration, 1));
 		this._mesh.rotation.z = 0;
-		this._mesh.userData.swingYaw = -TILT_BACK * t;
+		this._mesh.userData.swingYaw = 0;
+		this._mesh.rotation.x = -JUMP_TILT_BACK * t;
+		this._mesh.scale.y    = 1 - (1 - JUMP_CROUCH) * t;
+		this._mesh.position.y = 0.5 * this._mesh.scale.y;
 	}
 }

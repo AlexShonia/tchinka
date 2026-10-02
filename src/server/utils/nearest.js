@@ -8,11 +8,3 @@ export function nearestTarget(actor, gameData) {
 	return nearest;
 }
 
-export function nearestEnemy(actor, gameData) {
-	let nearest = null, nearestDist = Infinity;
-	for (const e of gameData.enemies) {
-		const d = Math.hypot(e.x - actor.x, e.z - actor.z);
-		if (d < nearestDist) { nearestDist = d; nearest = e; }
-	}
-	return nearest;
-}

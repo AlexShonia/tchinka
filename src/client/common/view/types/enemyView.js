@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { setupFacing, turnToward } from "../facing.js";
 import { WindupState }   from "../states/WindupState.js";
 import { HitState }      from "../states/HitState.js";
 import { RecoveryState } from "../states/RecoveryState.js";
@@ -19,6 +20,9 @@ export class EnemyView {
 		this.x = 0; this.z = 0; this.hp = 1; this.maxHp = 1;
 
 		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), enemyMat);
+		setupFacing(this.mesh);
+		this._facing = 0;
+		this._yaw    = 0;
 		scene.add(this.mesh);
 		this._states = {
 			windup:   new WindupState(toMs(ENEMY_COMBAT.windupTicks), this.mesh),
@@ -38,6 +42,7 @@ export class EnemyView {
 		this.id = data.id;
 		this.x = data.x; this.z = data.z; this.hp = data.hp; this.maxHp = data.maxHp;
 		this.mesh.position.set(data.x, 0.5, data.z);
+		this._facing = data.facing ?? 0;
 		this._barGroup.position.set(data.x, BAR_Y, data.z);
 
 		if (data.state !== this._state) {
@@ -56,9 +61,11 @@ export class EnemyView {
 	}
 
 	tick(now) {
+		this._yaw = turnToward(this._yaw, this._facing);
 		const state = this._states[this._state];
 		if (state) state.apply();
-		else this.mesh.rotation.z = 0;
+		else { this.mesh.rotation.x = 0; this.mesh.rotation.z = 0; this.mesh.userData.swingYaw = 0; }
+		this.mesh.rotation.y = this._yaw + this.mesh.userData.swingYaw;
 	}
 
 	setHovered(on) {

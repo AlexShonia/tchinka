@@ -25,6 +25,11 @@ export class Service {
 		this.outbox.push({ type: "move", x: target.x, z: target.z });
 	}
 
+	useAbility(key) {
+		if (!this._getMyId()) return;
+		this.outbox.push({ type: "ability", key });
+	}
+
 	attackEnemy(enemyId) {
 		if (!this._getMyId()) return;
 		this.outbox.push({ type: "attack", enemyId });

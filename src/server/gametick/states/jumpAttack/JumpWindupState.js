@@ -2,9 +2,10 @@ import { BaseState }  from "../base/BaseState.js";
 import { StateName }  from "../name/StateName.js";
 import { StateEvent } from "../name/StateEvent.js";
 
-export class WindupState extends BaseState {
+// Crouch and tilt back before the leap. Cancellable by the map; nothing is spent yet, the ability stays armed.
+export class JumpWindupState extends BaseState {
 	constructor(actor, windupTicks) {
-		super(actor, StateName.WINDUP);
+		super(actor, StateName.JUMP_WINDUP);
 		this._windupTicks = windupTicks;
 		this._timer       = 0;
 		this.targetId     = null;
@@ -17,14 +18,6 @@ export class WindupState extends BaseState {
 
 	tick(gameData) {
 		this.actor.faceTowards(gameData.findAlive(this.targetId));
-		if (this.actor.hasArmedAbility) { // abilities have their own cooldown, they don't wait for the attack cooldown
-			this.actor.transition(StateEvent.ABILITY_ARMED, { targetId: this.targetId });
-			return;
-		}
-		if (this.actor.isAttackOnCooldown) {
-			this.actor.transition(StateEvent.NOT_RECOVERED, { targetId: this.targetId });
-			return;
-		}
 		if (--this._timer > 0) return;
 		this.actor.transition(StateEvent.WINDUP_FINISHED, { targetId: this.targetId });
 	}

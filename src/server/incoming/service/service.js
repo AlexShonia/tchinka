@@ -1,5 +1,8 @@
 import { Player }      from "../../common/types/Player.js";
 import { StateEvent }  from "../../gametick/states/name/StateEvent.js";
+import { AbilityName } from "../../gametick/states/name/AbilityName.js";
+
+const ABILITY_KEYS = { q: AbilityName.JUMPING_ATTACK };
 
 export class Service {
 	constructor(gameData) {
@@ -22,6 +25,11 @@ export class Service {
 
 	movePlayer(player, x, z) {
 		player.transition(StateEvent.MOVE_REQUESTED, { moveTarget: { x, z } });
+	}
+
+	useAbility(player, key) {
+		const ability = ABILITY_KEYS[key];
+		if (ability) player.useAbility(ability);
 	}
 
 	attackEnemy(player, enemyId) {
