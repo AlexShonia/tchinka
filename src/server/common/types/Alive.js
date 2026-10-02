@@ -18,8 +18,4 @@ export class Alive extends Entity {
 		return this.combatState.states[this.combatState.state];
 	}
 
-	// runs every game tick regardless of which state is active
-	tickTimers() {
-		if (this.attackCooldown > 0) this.attackCooldown--;
-	}
 }

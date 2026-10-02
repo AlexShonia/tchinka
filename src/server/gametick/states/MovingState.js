@@ -4,8 +4,13 @@ export class MovingState {
 		this.moveTarget = null;
 	}
 
-	enter(moveTarget) {
+	initialize(moveTarget) {
 		this.moveTarget = moveTarget;
+	}
+
+	initializeAndChangeTo(actor, moveTarget) {
+		this.initialize(moveTarget);
+		actor.combatState.state = this.name;
 	}
 
 	tick(actor) {
@@ -23,11 +28,10 @@ export class MovingState {
 	}
 
 	processMoveRequest(actor, x, z) {
-		this.enter({ x, z });
+		this.initialize({ x, z });
 	}
 
 	processAttackRequest(actor, enemyId) {
-		actor.combatState.states.targeting.enter(enemyId);
-		actor.combatState.state = "targeting";
+		actor.combatState.states.targeting.initializeAndChangeTo(actor, enemyId);
 	}
 }

@@ -1,3 +1,5 @@
+import { nearestPlayer } from "../../utils/nearest.js";
+
 export class PrepState {
 	constructor(baseTicks) {
 		this.name       = "prep";
@@ -5,11 +7,19 @@ export class PrepState {
 		this._timer     = 0;
 	}
 
-	enter() {
+	initialize() {
 		this._timer = this._baseTicks;
 	}
 
-	tick(actor, _gameData, nearest) {
+	initializeAndChangeTo(actor) {
+		this.initialize();
+		actor.combatState.state = this.name;
+	}
+
+	tick(actor, gameData) {
+		const nearest = nearestPlayer(actor, gameData);
+		if (!nearest) { actor.combatState.state = "idle"; return; }
+
 		const destX = nearest.x + Math.cos(actor.offsetAngle) * actor.attackRange;
 		const destZ = nearest.z + Math.sin(actor.offsetAngle) * actor.attackRange;
 		const dist  = Math.hypot(destX - actor.x, destZ - actor.z);
@@ -21,8 +31,7 @@ export class PrepState {
 		}
 
 		if (--this._timer > 0) return;
-		actor.combatState.states.basicAttack.enter(actor.attackSpeed);
-		actor.combatState.state = "basicAttack";
+		actor.combatState.states.basicAttack.initializeAndChangeTo(actor, actor.attackSpeed);
 	}
 
 	processMoveRequest() {}

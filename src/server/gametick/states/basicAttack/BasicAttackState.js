@@ -1,5 +1,5 @@
 import { WindupState }   from "./types/WindupState.js";
-import { AttackState }      from "./types/AttackState.js";
+import { AttackState }   from "./types/AttackState.js";
 import { RecoveryState } from "./types/RecoveryState.js";
 
 export class BasicAttackState {
@@ -9,30 +9,38 @@ export class BasicAttackState {
 		this.hitTicks      = hitTicks;
 		this.recoveryTicks = recoveryTicks;
 		this.attackSpeed   = 1;
-		this.recoveryTimer = 0;
+		this.targetEnemyId = null;
 
 		this._windup   = new WindupState();
-		this._attack      = new AttackState();
+		this._attack   = new AttackState();
 		this._recovery = new RecoveryState();
 		this._current  = this._windup;
 	}
 
-	get subStateName() { return this._current.name; }
+	get subStateName()   { return this._current.name; }
+	get recoveryTimer()  { return this._recovery.recoveryTimer; }
 
-	enter(attackSpeed = 1) {
-		this.attackSpeed = attackSpeed;
-		this._transition("windup");
+	initialize(attackSpeed = 1, targetEnemyId) {
+		this.attackSpeed   = attackSpeed;
+		this.targetEnemyId = targetEnemyId;
+		this._current      = this._windup;
+		this._current.initialize(this);
 	}
 
-	_transition(name, actor, gameData, nearest) {
-		const map = { windup: this._windup, attack: this._attack, recovery: this._recovery };
-		this._current = this._windup;
-		this._current.enter(this, actor, gameData, nearest);
+	initializeAndChangeTo(actor, attackSpeed = 1, targetEnemyId) {
+		this.initialize(attackSpeed, targetEnemyId);
+		actor.combatState.state = this.name;
 	}
 
-	tick(actor, gameData, nearest) {
-		if (this.recoveryTimer > 0) this.recoveryTimer--;
-		this._current.tick(this, actor, gameData, nearest);
+	_transition(name, actor, gameData) {
+		const map     = { windup: this._windup, attack: this._attack, recovery: this._recovery };
+		this._current = map[name];
+		this._current.initialize(this, actor, gameData);
+	}
+
+	tick(actor, gameData) {
+		if (this._recovery.recoveryTimer > 0) this._current = this._recovery;
+		this._current.tick(this, actor, gameData);
 	}
 
 	processMoveRequest(actor, x, z) {

@@ -19,24 +19,14 @@ export function tick(gameData) {
 function tickPlayers(gameData) {
 	for (const p of gameData.players.values()) {
 		p.hit = false;
-		p.tickTimers();
 		if (p.combatState.state === "dead") continue;
 		p.currentState?.tick(p, gameData);
 	}
 }
 
 function tickEnemies(gameData) {
-	const alivePlayers = [...gameData.players.values()].filter(p => p.combatState.state !== "dead");
-	if (alivePlayers.length === 0) return;
-
 	for (const e of gameData.enemies) {
-		e.tickTimers();
-		let nearest = alivePlayers[0], nearestDist = Infinity;
-		for (const p of alivePlayers) {
-			const d = Math.hypot(p.x - e.x, p.z - e.z);
-			if (d < nearestDist) { nearestDist = d; nearest = p; }
-		}
-		e.currentState.tick(e, gameData, nearest);
+		e.currentState.tick(e, gameData);
 	}
 }
 

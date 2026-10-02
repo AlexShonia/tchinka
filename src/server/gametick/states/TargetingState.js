@@ -4,8 +4,13 @@ export class TargetingState {
 		this.targetEnemyId = null;
 	}
 
-	enter(targetEnemyId) {
+	initialize(targetEnemyId) {
 		this.targetEnemyId = targetEnemyId;
+	}
+
+	initializeAndChangeTo(actor, targetEnemyId) {
+		this.initialize(targetEnemyId);
+		actor.combatState.state = this.name;
 	}
 
 	tick(actor, gameData) {
@@ -17,8 +22,7 @@ export class TargetingState {
 
 		const dist = Math.hypot(target.x - actor.x, target.z - actor.z);
 		if (dist <= actor.attackRange && actor.combatState.states.basicAttack.recoveryTimer <= 0) {
-			actor.combatState.states.basicAttack.enter(actor.attackSpeed);
-			actor.combatState.state = "basicAttack";
+			actor.combatState.states.basicAttack.initializeAndChangeTo(actor, actor.attackSpeed, this.targetEnemyId);
 			return;
 		}
 
@@ -38,11 +42,10 @@ export class TargetingState {
 	}
 
 	processMoveRequest(actor, x, z) {
-		actor.combatState.states.moving.enter({ x, z });
-		actor.combatState.state = "moving";
+		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
 	}
 
 	processAttackRequest(_actor, enemyId) {
-		this.enter(enemyId);
+		this.initialize(enemyId);
 	}
 }

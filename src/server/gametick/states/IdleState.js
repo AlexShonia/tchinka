@@ -6,14 +6,11 @@ export class IdleState {
 	tick() {}
 
 	processMoveRequest(actor, x, z) {
-		actor.combatState.states.moving.enter({ x, z });
-		actor.combatState.state = "moving";
+		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
 	}
 
 	processAttackRequest(actor, enemyId) {
 		if (actor.attackCooldown > 0) return;
-		actor.combatState.states.targeting.enter(enemyId);
-		actor.combatState.state = "targeting";
+		actor.combatState.states.targeting.initializeAndChangeTo(actor, enemyId);
 	}
-
 }

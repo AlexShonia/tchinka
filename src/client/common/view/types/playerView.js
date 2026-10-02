@@ -33,7 +33,7 @@ export class PlayerView {
 		if (data.state !== this._state) {
 			this._state = data.state;
 			const state = this._states[data.state];
-			if (state) state.enter(data.attackSpeed ?? 1);
+			if (state) state.enter(data.attackSpeed ?? 1, this.targetEnemyId);
 		}
 	}
 

@@ -1,24 +1,23 @@
 export class RecoveryState {
 	constructor() {
-		this.name = "recovery";
+		this.name          = "recovery";
+		this.recoveryTimer = 0;
 	}
 
-	enter() {}
+	initialize() {}
 
-	tick(basicAttack, actor) {
-		if (basicAttack.recoveryTimer > 0) return;
+	tick(basicAttack, actor, gameData) {
+		if (this.recoveryTimer > 0) { this.recoveryTimer--; return; }
 		if (actor.combatState.states.prep) {
-			actor.combatState.states.prep.enter();
-			actor.combatState.state = "prep";
+			actor.combatState.states.prep.initializeAndChangeTo(actor);
 		} else {
 			actor.combatState.state = "idle";
 		}
 	}
 
 	processMoveRequest(basicAttack, actor, x, z) {
-		if (basicAttack.recoveryTimer > 0) return;
-		actor.combatState.states.moving.enter({ x, z });
-		actor.combatState.state = "moving";
+		if (this.recoveryTimer > 0) return;
+		actor.combatState.states.moving.initializeAndChangeTo(actor, { x, z });
 	}
 
 	processAttackRequest() {}
