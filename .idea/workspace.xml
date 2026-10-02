@@ -6,11 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-CCoFOi5K.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-D177bIuS.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/incoming/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/incoming/Receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/input.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/service/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Enemy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Enemy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/common/types/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/gametick/tick.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/tick.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/incoming/Receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/Receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/incoming/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/service/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/outgoing/Sender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/outgoing/Sender.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,7 +197,7 @@
       <workItem from="1790094050859" duration="3483000" />
       <workItem from="1790233506609" duration="370000" />
       <workItem from="1790854328072" duration="656000" />
-      <workItem from="1790854993707" duration="25570000" />
+      <workItem from="1790854993707" duration="29799000" />
     </task>
     <task id="LOCAL-00001" summary="jump and fking move">
       <option name="closed" value="true" />

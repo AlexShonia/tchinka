@@ -6,10 +6,13 @@ const MANA_REGEN            = 0.3;
 
 const BASE_ENEMY_SPEED      = 0.05;
 const ENEMY_SPEED_PER_WAVE  = 0.008;
-const ENEMY_SLOW_FACTOR     = 0.15;
-const ENEMY_ATTACK_RANGE    = 1.0;
-const ENEMY_DAMAGE          = 5;
-const ENEMY_ATTACK_COOLDOWN = 40;
+const ENEMY_PREP_TICKS       = 60;
+const ENEMY_ATTACK_TICKS     = 40;
+const ENEMY_DAMAGE           = 10;
+
+const PLAYER_ATTACK_TICKS    = 30;
+const PLAYER_ATTACK_DAMAGE   = 1;
+const PLAYER_ATTACK_COOLDOWN = 50;
 
 const PROJ_SPEED   = 0.3;
 const ENEMY_COUNT  = 5;
@@ -21,12 +24,53 @@ export function tick(gameData) {
 	tickProjectiles(gameData);
 	tickCollisions(gameData);
 	tickMana(gameData);
-	tickEnemyAttacks(gameData);
 }
 
 function tickPlayers(gameData) {
 	for (const p of gameData.players.values()) {
-		if (p.dead || !p.isMoving || !p.moveTarget) continue;
+		p.hit = false;
+		if (p.dead) continue;
+
+		if (p.attackCooldown > 0) p.attackCooldown--;
+
+		if (p.attackTimer > 0) {
+			p.attackTimer--;
+			const mid = Math.floor(PLAYER_ATTACK_TICKS / 2);
+			if (p.attackTimer === mid && p.targetEnemyId) {
+				const target = gameData.enemies.find(e => e.id === p.targetEnemyId);
+				if (target && Math.hypot(target.x - p.x, target.z - p.z) < p.attackRange) {
+					target.hp -= PLAYER_ATTACK_DAMAGE;
+					if (target.hp <= 0) {
+						const idx = gameData.enemies.indexOf(target);
+						if (idx !== -1) gameData.enemies.splice(idx, 1);
+						p.targetEnemyId = null;
+					}
+				}
+			}
+			continue;
+		}
+
+		if (p.targetEnemyId) {
+			const target = gameData.enemies.find(e => e.id === p.targetEnemyId);
+			if (!target || target.hp <= 0) { p.targetEnemyId = null; continue; }
+			const dist = Math.hypot(target.x - p.x, target.z - p.z);
+			if (dist <= p.attackRange && p.attackCooldown <= 0 && p.attackTimer <= 0) {
+				p.attackTimer    = PLAYER_ATTACK_TICKS;
+				p.attackStart    = Date.now();
+				p.attackCooldown = PLAYER_ATTACK_COOLDOWN;
+			} else if (dist > p.attackRange) {
+				const angle = Math.atan2(target.z - p.z, target.x - p.x);
+				const destX = target.x - Math.cos(angle) * (p.attackRange * 0.8);
+				const destZ = target.z - Math.sin(angle) * (PLAYER_ATTACK_RANGE * 0.8);
+				const dx = destX - p.x, dz = destZ - p.z;
+				const d  = Math.hypot(dx, dz);
+				if (d > PLAYER_SPEED) { p.x += (dx / d) * PLAYER_SPEED; p.z += (dz / d) * PLAYER_SPEED; }
+				else { p.x = destX; p.z = destZ; }
+			}
+			continue;
+		}
+
+		if (!p.isMoving || !p.moveTarget) continue;
 		const dx   = p.moveTarget.x - p.x;
 		const dz   = p.moveTarget.z - p.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
@@ -42,17 +86,60 @@ function tickPlayers(gameData) {
 function tickEnemies(gameData) {
 	const alivePlayers = [...gameData.players.values()].filter(p => !p.dead);
 	if (alivePlayers.length === 0) return;
+
 	for (const e of gameData.enemies) {
 		let nearest = alivePlayers[0], nearestDist = Infinity;
 		for (const p of alivePlayers) {
 			const d = Math.hypot(p.x - e.x, p.z - e.z);
 			if (d < nearestDist) { nearestDist = d; nearest = p; }
 		}
-		const dx    = nearest.x - e.x;
-		const dz    = nearest.z - e.z;
-		const dist  = Math.sqrt(dx * dx + dz * dz);
-		const speed = e.attackCooldown > 0 ? e.speed * ENEMY_SLOW_FACTOR : e.speed;
-		if (dist > 0.1) { e.x += (dx / dist) * speed; e.z += (dz / dist) * speed; }
+
+		if (e.state === "attacking") {
+			e.attackTimer--;
+			const mid = Math.floor(ENEMY_ATTACK_TICKS / 2);
+			if (e.attackTimer === mid) {
+				if (Math.hypot(nearest.x - e.x, nearest.z - e.z) < e.attackRange) {
+					nearest.health -= ENEMY_DAMAGE;
+					nearest.hit = true;
+				if (nearest.health <= 0) { nearest.health = 0; nearest.dead = true; nearest.isMoving = false; }
+				}
+			}
+			if (e.attackTimer <= 0) {
+				e.state     = "prep";
+				e.prepTimer = ENEMY_PREP_TICKS;
+			}
+			continue;
+		}
+
+		const destX = nearest.x + Math.cos(e.offsetAngle) * e.attackRange;
+		const destZ = nearest.z + Math.sin(e.offsetAngle) * e.attackRange;
+		const dist  = Math.hypot(destX - e.x, destZ - e.z);
+
+		if (e.state === "prep") {
+			if (dist > 0.3) {
+				e.state       = "moving";
+				e.prepTimer   = 0;
+				e.offsetAngle = Math.random() * Math.PI * 2;
+			} else {
+				e.prepTimer--;
+				if (e.prepTimer <= 0) {
+					e.state       = "attacking";
+					e.attackTimer = ENEMY_ATTACK_TICKS;
+					e.attackStart = Date.now();
+					e.target      = nearest.id;
+				}
+			}
+			continue;
+		}
+
+		// state === "moving"
+		if (dist < 0.08) {
+			e.state     = "prep";
+			e.prepTimer = ENEMY_PREP_TICKS;
+		} else {
+			e.x += ((destX - e.x) / dist) * e.speed;
+			e.z += ((destZ - e.z) / dist) * e.speed;
+		}
 	}
 }
 
@@ -61,20 +148,6 @@ function tickMana(gameData) {
 		if (!p.dead) p.mana = Math.min(PLAYER_MAX_MANA, p.mana + MANA_REGEN);
 }
 
-function tickEnemyAttacks(gameData) {
-	const alivePlayers = [...gameData.players.values()].filter(p => !p.dead);
-	for (const e of gameData.enemies) {
-		if (e.attackCooldown > 0) { e.attackCooldown--; continue; }
-		for (const p of alivePlayers) {
-			if (Math.hypot(p.x - e.x, p.z - e.z) < ENEMY_ATTACK_RANGE) {
-				p.health -= ENEMY_DAMAGE;
-				if (p.health <= 0) { p.health = 0; p.dead = true; p.isMoving = false; }
-				e.attackCooldown = ENEMY_ATTACK_COOLDOWN;
-				break;
-			}
-		}
-	}
-}
 
 function tickCollisions(gameData) {
 	for (const [projId, p] of gameData.projectiles) {

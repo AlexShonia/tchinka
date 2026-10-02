@@ -25,10 +25,8 @@ export class Service {
 		this.outbox.push({ type: "move", x: target.x, z: target.z });
 	}
 
-	localShoot(screenX, screenY) {
+	attackEnemy(enemyId) {
 		if (!this._getMyId()) return;
-		const target = new THREE.Vector3();
-		if (!screenToWorld(screenX, screenY, this._camera, target)) return;
-		this.outbox.push({ type: "shoot", x: target.x, z: target.z });
+		this.outbox.push({ type: "attack", enemyId });
 	}
 }

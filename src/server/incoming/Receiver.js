@@ -21,11 +21,14 @@ export class Receiver {
 
 		if (msg.type === "ping") { ping.onPing(this._ws, msg); return; }
 
-		if (msg.type === "move"  && msg.x != null && msg.z != null)
+		if (msg.type === "move"   && msg.x != null && msg.z != null)
 			this._service.movePlayer(this._player, msg.x, msg.z);
 
-		if (msg.type === "shoot" && msg.x != null && msg.z != null)
+		if (msg.type === "shoot"  && msg.x != null && msg.z != null)
 			this._service.shoot(this._player, msg.x, msg.z);
+
+		if (msg.type === "attack" && msg.enemyId != null)
+			this._service.attackEnemy(this._player, msg.enemyId);
 	}
 
 	_onClose() {

@@ -6,7 +6,7 @@ import { GameStateService } from "./incoming/service/GameStateService.js";
 import { PingService }      from "./incoming/service/PingService.js";
 import { Service }          from "./outgoing/input/service/service.js";
 import { Hud }              from "./common/view/types/Hud.js";
-import { setupInput }       from "./outgoing/input/input.js";
+import { InputController }  from "./outgoing/input/input.js";
 
 const SERVER     = `ws://${location.hostname}:1234`;
 const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
@@ -28,15 +28,16 @@ const receiver     = new Receiver(SERVER, stateService, pingService);
 const sender       = new Sender(() => receiver.ws);
 const game         = new Service(camera, () => gameState.myId);
 
-setupInput(game, renderer.domElement);
+const input = new InputController(game, renderer.domElement, camera, () => gameState.enemies.values());
 
 // ── render loop ───────────────────────────────────────────────────────────────
 renderer.setAnimationLoop((now) => {
 	hud.tickPerf(now);
-
 	sender.flush(game.outbox);
 	resetCameraPosition();
-
+	input.tick();
+	for (const v of gameState.enemies.values())  v.tick(now);
+	for (const v of gameState.players.values())  v.tick(now);
 	renderer.render(scene, camera);
 });
 

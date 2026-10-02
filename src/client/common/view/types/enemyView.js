@@ -1,15 +1,19 @@
 import * as THREE from "three";
 
-const enemyMat = new THREE.MeshBasicMaterial({ color: 0xff3333 });
-const bgMat    = new THREE.MeshBasicMaterial({ color: 0x333333 });
-const fillMat  = new THREE.MeshBasicMaterial({ color: 0xdd1111 });
+const enemyMat      = new THREE.MeshBasicMaterial({ color: 0xff3333 });
+const enemyHoverMat = new THREE.MeshBasicMaterial({ color: 0xff8855 });
+const bgMat         = new THREE.MeshBasicMaterial({ color: 0x333333 });
+const fillMat       = new THREE.MeshBasicMaterial({ color: 0xdd1111 });
 
-const BAR_WIDTH = 1.0;
-const BAR_Y     = 1.3;
+const BAR_WIDTH      = 1.0;
+const BAR_Y          = 1.3;
+const ATTACK_DURATION = 400;
 
 export class EnemyView {
 	constructor(scene) {
-		this._scene = scene;
+		this._scene            = scene;
+		this._serverAttackStart = 0;
+		this._attackStart      = 0;
 		this.x = 0; this.z = 0; this.hp = 1; this.maxHp = 1;
 
 		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), enemyMat);
@@ -24,9 +28,15 @@ export class EnemyView {
 	}
 
 	update(data) {
+		this.id = data.id;
 		this.x = data.x; this.z = data.z; this.hp = data.hp; this.maxHp = data.maxHp;
 		this.mesh.position.set(data.x, 0.5, data.z);
 		this._barGroup.position.set(data.x, BAR_Y, data.z);
+
+		if (data.attackStart && data.attackStart !== this._serverAttackStart) {
+			this._serverAttackStart = data.attackStart;
+			this._attackStart       = performance.now();
+		}
 
 		const damaged = data.hp < data.maxHp;
 		this._barGroup.visible = damaged;
@@ -35,6 +45,21 @@ export class EnemyView {
 			this._fill.scale.x    = r;
 			this._fill.position.x = (r - 1) / 2 * BAR_WIDTH;
 		}
+	}
+
+	tick(now) {
+		const elapsed = now - this._attackStart;
+		if (elapsed >= 0 && elapsed < ATTACK_DURATION) {
+			const t     = elapsed / ATTACK_DURATION;
+			const tilt  = Math.sin(t * Math.PI) * 0.5;
+			this.mesh.rotation.z = tilt;
+		} else {
+			this.mesh.rotation.z = 0;
+		}
+	}
+
+	setHovered(on) {
+		this.mesh.material = on ? enemyHoverMat : enemyMat;
 	}
 
 	remove() {
