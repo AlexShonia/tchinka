@@ -1,11 +1,8 @@
 import * as THREE from "three";
 import { setupFacing, turnToward } from "../facing.js";
-import { WindupState }   from "../states/WindupState.js";
-import { HitState }      from "../states/HitState.js";
-import { RecoveryState } from "../states/RecoveryState.js";
-import { JumpWindupState } from "../states/JumpWindupState.js";
-import { JumpAirState }    from "../states/JumpAirState.js";
-import { JumpRecoveryState } from "../states/JumpRecoveryState.js";
+import { settle } from "../settle.js";
+import { BasicAttackState } from "../states/BasicAttackState.js";
+import { JumpAttackState }  from "../states/JumpAttackState.js";
 import { PLAYER_COMBAT, PLAYER_JUMP, toMs } from "../../../../shared/combatConfig.js";
 
 const myMat       = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
@@ -30,12 +27,8 @@ export class PlayerView {
 		this._yaw    = 0;
 		scene.add(this.mesh);
 		this._states = {
-			windup:   new WindupState(toMs(PLAYER_COMBAT.windupTicks), this.mesh),
-			hit:      new HitState(toMs(PLAYER_COMBAT.attackTicks), this.mesh),
-			recovery: new RecoveryState(toMs(PLAYER_COMBAT.recoveryTicks), this.mesh),
-			jumpWindup:    new JumpWindupState(toMs(PLAYER_JUMP.windupTicks), this.mesh),
-			jumpAir:       new JumpAirState(toMs(PLAYER_JUMP.airTicks), this.mesh),
-			jumpRecovery:  new JumpRecoveryState(toMs(PLAYER_COMBAT.recoveryTicks), this.mesh),
+			basicAttack: new BasicAttackState(toMs(PLAYER_COMBAT.windupTicks), toMs(PLAYER_COMBAT.attackTicks), this.mesh),
+			jumpAttack:  new JumpAttackState(toMs(PLAYER_JUMP.windupTicks), toMs(PLAYER_JUMP.airTicks), this.mesh),
 		};
 	}
 
@@ -57,7 +50,7 @@ export class PlayerView {
 		this._yaw = turnToward(this._yaw, this._facing);
 		const state = this._states[this._state];
 		if (state) state.apply();
-		else { this.mesh.rotation.x = 0; this.mesh.rotation.z = 0; this.mesh.userData.swingYaw = 0; }
+		else settle(this.mesh);
 		this.mesh.rotation.y = this._yaw + this.mesh.userData.swingYaw;
 		if (!state?.drivesScale) { // straighten out after a landing squash
 			this.mesh.scale.y    += (1 - this.mesh.scale.y) * 0.2;

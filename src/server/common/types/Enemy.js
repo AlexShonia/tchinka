@@ -1,9 +1,7 @@
 import { ENEMY_COMBAT }    from "../../../shared/combatConfig.js";
 import { Alive }            from "./Alive.js";
 import { Player }           from "./Player.js";
-import { WindupState }      from "../../gametick/states/attack/WindupState.js";
-import { AttackState }      from "../../gametick/states/attack/AttackState.js";
-import { RecoveryState }    from "../../gametick/states/attack/RecoveryState.js";
+import { BasicAttackState } from "../../gametick/states/BasicAttackState.js";
 import { ChaseAroundState } from "../../gametick/states/ChaseAroundState.js";
 import { IdleState }         from "../../gametick/states/IdleState.js";
 import { DeadState }        from "../../gametick/states/DeadState.js";
@@ -27,9 +25,7 @@ export class Enemy extends Alive {
 			state: StateName.IDLE,
 			states: {
 				[StateName.IDLE]:         new IdleState(this),
-				[StateName.WINDUP]:       new WindupState(this, ENEMY_COMBAT.windupTicks),
-				[StateName.HIT]:          new AttackState(this, ENEMY_COMBAT.attackTicks),
-				[StateName.RECOVERY]:     new RecoveryState(this, ENEMY_COMBAT.recoveryTicks),
+				[StateName.BASIC_ATTACK]: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
 				[StateName.CHASE_AROUND]: new ChaseAroundState(this),
 				[StateName.DEAD]:         new DeadState(this),
 			},

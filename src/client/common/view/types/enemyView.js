@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { setupFacing, turnToward } from "../facing.js";
-import { WindupState }   from "../states/WindupState.js";
-import { HitState }      from "../states/HitState.js";
-import { RecoveryState } from "../states/RecoveryState.js";
+import { settle } from "../settle.js";
+import { BasicAttackState } from "../states/BasicAttackState.js";
 import { ENEMY_COMBAT, toMs } from "../../../../shared/combatConfig.js";
 
 const enemyMat      = new THREE.MeshBasicMaterial({ color: 0xff3333 });
@@ -25,9 +24,7 @@ export class EnemyView {
 		this._yaw    = 0;
 		scene.add(this.mesh);
 		this._states = {
-			windup:   new WindupState(toMs(ENEMY_COMBAT.windupTicks), this.mesh),
-			hit:      new HitState(toMs(ENEMY_COMBAT.attackTicks), this.mesh),
-			recovery: new RecoveryState(toMs(ENEMY_COMBAT.recoveryTicks), this.mesh),
+			basicAttack: new BasicAttackState(toMs(ENEMY_COMBAT.windupTicks), toMs(ENEMY_COMBAT.attackTicks), this.mesh),
 		};
 
 		this._barGroup = new THREE.Group();
@@ -64,7 +61,7 @@ export class EnemyView {
 		this._yaw = turnToward(this._yaw, this._facing);
 		const state = this._states[this._state];
 		if (state) state.apply();
-		else { this.mesh.rotation.x = 0; this.mesh.rotation.z = 0; this.mesh.userData.swingYaw = 0; }
+		else settle(this.mesh);
 		this.mesh.rotation.y = this._yaw + this.mesh.userData.swingYaw;
 	}
 

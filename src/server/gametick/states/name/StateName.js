@@ -3,11 +3,7 @@ export const StateName = Object.freeze({
 	MOVING:       "moving",
 	TARGETING:    "targeting",
 	CHASE_AROUND: "chaseAround",
-	WINDUP:       "windup",
-	HIT:          "hit",
-	JUMP_WINDUP:  "jumpWindup",
-	JUMP_AIR:     "jumpAir",
-	JUMP_RECOVERY: "jumpRecovery",
-	RECOVERY:     "recovery",
+	BASIC_ATTACK: "basicAttack",
+	JUMP_ATTACK:  "jumpAttack",
 	DEAD:         "dead",
 });
