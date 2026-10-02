@@ -1,5 +1,18 @@
 export class Hud {
-	constructor() {
+	constructor(pingService) {
+		this._pingService = pingService;
+		this._perfEl = document.createElement("div");
+		Object.assign(this._perfEl.style, {
+			position: "fixed", top: "8px", right: "12px",
+			zIndex: "200", font: "12px/1.6 monospace",
+			color: "#0f0", textShadow: "0 0 4px #000",
+			textAlign: "right", pointerEvents: "none",
+		});
+		document.body.appendChild(this._perfEl);
+		this._frameCount = 0;
+		this._fps        = 0;
+		this._prevNow    = 0;
+
 		const root = document.createElement("div");
 		Object.assign(root.style, {
 			position: "fixed", bottom: "24px", left: "50%",
@@ -46,6 +59,14 @@ export class Hud {
 		});
 		wrap.appendChild(fill);
 		return { wrap, fill };
+	}
+
+	tickPerf(now) {
+		this._frameCount++;
+		if (this._frameCount % 10 === 0)
+			this._fps = Math.round(1000 / (now - (this._prevNow || now)));
+		this._prevNow = now;
+		this._perfEl.textContent = `${this._fps} fps  ${this._pingService.ms} ms`;
 	}
 
 	update(player, wave) {

@@ -19,15 +19,11 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-camera.position.set(0, 5, 5);
-camera.up.set(0, 0, -1);
-camera.lookAt(0, 0, 0);
-
 // ── app ───────────────────────────────────────────────────────────────────────
-const hud          = new Hud();
 const gameState    = new GameState();
-const stateService = new GameStateService(gameState, scene, hud);
 const pingService  = new PingService(() => receiver.ws);
+const hud          = new Hud(pingService);
+const stateService = new GameStateService(gameState, scene, hud);
 const receiver     = new Receiver(SERVER, stateService, pingService);
 const sender       = new Sender(() => receiver.ws);
 const game         = new Service(camera, () => gameState.myId);
@@ -35,22 +31,19 @@ const game         = new Service(camera, () => gameState.myId);
 setupInput(game, renderer.domElement);
 
 // ── render loop ───────────────────────────────────────────────────────────────
-const perfEl = document.getElementById("perf");
-let frameCount = 0, fps = 0, prevNow = 0;
-
 renderer.setAnimationLoop((now) => {
-	frameCount++;
-	if (frameCount % 10 === 0) fps = Math.round(1000 / (now - (prevNow || now)));
-	prevNow = now;
-	perfEl.textContent = `${fps} fps  ${pingService.ms} ms`;
+	hud.tickPerf(now);
 
 	sender.flush(game.outbox);
+	resetCameraPosition();
 
+	renderer.render(scene, camera);
+});
+
+function resetCameraPosition() {
 	const p = gameState.localPlayer;
 	if (p) {
 		camera.position.set(p.x + CAM_OFFSET.x, CAM_OFFSET.y, p.z + CAM_OFFSET.z);
 		camera.lookAt(p.x, 0, p.z);
 	}
-
-	renderer.render(scene, camera);
-});
+}
