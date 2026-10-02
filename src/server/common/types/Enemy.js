@@ -3,6 +3,7 @@ import { WindupState }   from "../../gametick/states/WindupState.js";
 import { AttackState }   from "../../gametick/states/AttackState.js";
 import { RecoveryState } from "../../gametick/states/RecoveryState.js";
 import { PrepState }     from "../../gametick/states/PrepState.js";
+import { IdleState }     from "../../gametick/states/IdleState.js";
 
 export class Enemy {
 	constructor(id, x, z, hp, speed, attackRange = 2.5) {
@@ -21,6 +22,7 @@ export class Enemy {
 			attack:   new AttackState(ENEMY_COMBAT.attackTicks),
 			recovery: new RecoveryState(ENEMY_COMBAT.recoveryTicks),
 			prep:     new PrepState(ENEMY_COMBAT.prepTicks),
+			idle:     new IdleState(),
 		};
 	}
 }

@@ -9,7 +9,9 @@ export class AttackState {
 		this._timer = Math.max(1, Math.round(this._baseTicks / attackSpeed));
 	}
 
-	tick(onExpire) {
-		if (--this._timer <= 0) onExpire();
+	tick(actor) {
+		if (--this._timer > 0) return;
+		actor.states.recovery.enter(actor.attackSpeed);
+		actor.state = "recovery";
 	}
 }

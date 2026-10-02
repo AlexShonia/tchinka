@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Receiver }         from "./incoming/Receiver.js";
-import { Sender }           from "./outgoing/sender/Sender.js";
+import { Sender }           from "./outgoing/Sender.js";
 import { GameState }        from "./common/GameState.js";
 import { GameStateService } from "./incoming/service/GameStateService.js";
 import { PingService }      from "./incoming/service/PingService.js";

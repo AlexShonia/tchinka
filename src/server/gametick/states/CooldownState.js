@@ -9,7 +9,7 @@ export class CooldownState {
 		this._timer = Math.round(this._baseTicks / attackSpeed);
 	}
 
-	tick(onExpire) {
-		if (--this._timer <= 0) onExpire();
+	tick(actor) {
+		if (--this._timer <= 0) actor.state = "idle";
 	}
 }

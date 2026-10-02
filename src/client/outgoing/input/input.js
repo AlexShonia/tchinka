@@ -24,6 +24,7 @@ export class InputController {
 		});
 	}
 
+	// TODO: this shouldnt be in here should be out in tick.js on client
 	tick() {
 		_raycaster.setFromCamera(_mouse, this._camera);
 		const views = [...this._getEnemies()];

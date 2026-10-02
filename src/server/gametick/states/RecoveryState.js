@@ -9,7 +9,15 @@ export class RecoveryState {
 		this._timer = Math.max(1, Math.round(this._baseTicks / attackSpeed));
 	}
 
-	tick(onExpire) {
-		if (--this._timer <= 0) onExpire();
+	tick(actor) {
+		if (--this._timer > 0) return;
+
+		if (actor.states.cooldown) {
+			actor.states.cooldown.enter(actor.attackSpeed);
+			actor.state = "cooldown";
+		} else {
+			actor.states.prep.enter();
+			actor.state = "prep";
+		}
 	}
 }
