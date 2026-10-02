@@ -46,7 +46,6 @@ export class Alive extends Entity {
 
 	// a state reports an event; this entity's transition map says where it leads (no entry = ignored)
 	transition(event, context) {
-		if (this.currentState.ignores(event)) return;
 		const next = this.combatState.transitions[this.combatState.state]?.[event];
 		if (next === undefined) return;
 		this.getState(next).initialize(context);

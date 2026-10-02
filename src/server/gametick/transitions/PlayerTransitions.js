@@ -23,7 +23,7 @@ export const PlayerTransitions = {
 		[StateEvent.ABILITY_ARMED]:    StateName.JUMP_ATTACK,
 		[StateEvent.ATTACK_FINISHED]:  StateName.TARGETING,
 	},
-	[StateName.JUMP_ATTACK]: { // MOVE_REQUESTED is vetoed by the state while in the air
+	[StateName.JUMP_ATTACK]: {
 		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
 		[StateEvent.ATTACK_FINISHED]:  StateName.TARGETING,
 	},

@@ -5,8 +5,7 @@ import { AbilityName } from "./name/AbilityName.js";
 
 const Phase = Object.freeze({ WINDUP: "windup", AIR: "air", RECOVERY: "recovery" });
 
-// Crouch and tilt back (cancellable, ability stays armed), leap straight up and down (not cancellable),
-// then recover. The ability is only spent if the landing actually damages someone.
+// Crouch and tilt back, leap straight up and down, then recover. The ability is only spent if the landing actually damages someone.
 export class JumpAttackState extends BaseState {
 	constructor(actor, windupTicks, airTicks, damageMultiplier, cooldownTicks) {
 		super(actor, StateName.JUMP_ATTACK);
@@ -27,10 +26,6 @@ export class JumpAttackState extends BaseState {
 
 	passiveTick() {
 		if (this.cooldownTimer > 0) this.cooldownTimer--;
-	}
-
-	ignores(event) {
-		return event === StateEvent.MOVE_REQUESTED && this._phase === Phase.AIR;
 	}
 
 	initialize({ targetId }) {

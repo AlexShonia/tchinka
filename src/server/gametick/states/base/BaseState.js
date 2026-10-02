@@ -10,11 +10,6 @@ export class BaseState {
 		return this.name;
 	}
 
-	// states can veto an event the map would otherwise act on (e.g. no cancelling mid-air)
-	ignores(event) {
-		return false;
-	}
-
 	initialize(context) {}
 	passiveTick() {}
 	tick(gameData) {}
