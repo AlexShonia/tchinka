@@ -7,10 +7,12 @@ export const EnemyTransitions = {
 		[Event.TARGET_FOUND]:    State.CHASE_AROUND,
 	},
 	[State.CHASE_AROUND]: {
-		[Event.TARGET_LOST]:     State.SEEK_TARGET,
+		[Event.TARGET_DEAD]:     State.SEEK_TARGET,
 		[Event.TARGET_REACHED]:  State.BASIC_ATTACK,
 	},
 	[State.BASIC_ATTACK]: {
 		[Event.ATTACK_FINISHED]: State.CHASE_AROUND,
+		[Event.TARGET_OUT_OF_RANGE]: State.CHASE_AROUND,
+		[Event.TARGET_DEAD]:     State.SEEK_TARGET,
 	},
 };

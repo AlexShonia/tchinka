@@ -27,6 +27,9 @@ export class Receiver {
 		if (msg.type === "ability" && typeof msg.key === "string")
 			this._service.useAbility(this._player, msg.key);
 
+		if (msg.type === "attackNearest")
+			this._service.attackNearest(this._player);
+
 		if (msg.type === "attack" && msg.enemyId != null)
 			this._service.attackEnemy(this._player, msg.enemyId);
 	}

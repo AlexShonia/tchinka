@@ -15,7 +15,7 @@ export class TargetingState extends BaseState {
 	tick(gameData) {
 		const target = gameData.findAlive(this.targetId);
 		if (!target || target.isDead || !this.actor.canAttack(target)) {
-			this.actor.transition(Event.TARGET_LOST);
+			this.actor.transition(Event.TARGET_DEAD);
 			return;
 		}
 

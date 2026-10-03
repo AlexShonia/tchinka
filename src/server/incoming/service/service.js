@@ -1,3 +1,4 @@
+import { nearestTarget } from "../../utils/nearest.js";
 import { Player }      from "../../common/types/Player.js";
 import { Event }  from "../../gametick/transitions/types/Event.js";
 import { AbilityName } from "../../gametick/states/name/AbilityName.js";
@@ -30,6 +31,13 @@ export class Service {
 	useAbility(player, key) {
 		const ability = ABILITY_KEYS[key];
 		if (ability) player.useAbility(ability);
+	}
+
+	// A: go into targeting on the nearest enemy (attacks once in range), nothing happens if there is none
+	attackNearest(player) {
+		if (player.isDead) return;
+		const target = nearestTarget(player, this._gameData);
+		if (target) this.attackEnemy(player, target.id);
 	}
 
 	attackEnemy(player, enemyId) {

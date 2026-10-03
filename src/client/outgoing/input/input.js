@@ -17,6 +17,7 @@ export class InputController {
 
 		window.addEventListener("keydown", (e) => {
 			if (e.code === "KeyQ" && !e.repeat) service.useAbility("q");
+			if (e.code === "KeyA" && !e.repeat) service.attackNearest();
 		});
 
 		domElement.addEventListener("click", (e) => {

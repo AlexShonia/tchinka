@@ -38,7 +38,14 @@ export class BasicAttackState extends BaseState {
 
 	tick(gameData) {
 		const target = gameData.findAlive(this.targetId);
-		this.actor.faceTowards(target);
+		if (!target || target.isDead || !this.actor.canAttack(target)) {
+			this.actor.transition(Event.TARGET_DEAD);
+			return;
+		}
+		if (Math.hypot(target.x - this.actor.x, target.z - this.actor.z) > this.actor.attackRange) {
+			this.actor.transition(Event.TARGET_OUT_OF_RANGE, { targetId: this.targetId });
+			return;
+		}
 
 		if (this.actor.hasArmedAbility) { // abilities have their own cooldown, they don't wait for the attack
 			this.actor.transition(Event.ABILITY_ARMED, { targetId: this.targetId });

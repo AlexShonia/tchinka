@@ -30,6 +30,11 @@ export class Service {
 		this.outbox.push({ type: "ability", key });
 	}
 
+	attackNearest() {
+		if (!this._getMyId()) return;
+		this.outbox.push({ type: "attackNearest" });
+	}
+
 	attackEnemy(enemyId) {
 		if (!this._getMyId()) return;
 		this.outbox.push({ type: "attack", enemyId });

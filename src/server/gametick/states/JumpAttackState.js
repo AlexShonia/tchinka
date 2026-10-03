@@ -37,7 +37,6 @@ export class JumpAttackState extends BaseState {
 	tick(gameData) {
 		const actor  = this.actor;
 		const target = gameData.findAlive(this.targetId);
-		actor.faceTowards(target);
 
 		if (this._phase === Phase.WINDUP) {
 			if (--this._timer > 0) return;

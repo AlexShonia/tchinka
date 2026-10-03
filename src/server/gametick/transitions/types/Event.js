@@ -14,10 +14,13 @@ export const Event = Object.freeze({
 	TARGET_FOUND:     "targetFound",     // { targetId } found something to chase
 
 	// emitted by TargetingState and ChaseAroundState
-	TARGET_LOST:      "targetLost",      // target is gone, dead or not attackable
 	TARGET_REACHED:   "targetReached",   // { targetId } in attack range / at the chase spot
 
+	// emitted by TargetingState, ChaseAroundState and BasicAttackState
+	TARGET_DEAD:      "targetDead",      // target is gone, dead or not attackable
+
 	// emitted by BasicAttackState
+	TARGET_OUT_OF_RANGE: "targetOutOfRange", // { targetId } target moved out of attack range, go after it again
 	ABILITY_ARMED:    "abilityArmed",    // { targetId } an ability is armed and replaces the running attack
 
 	// emitted by BasicAttackState and JumpAttackState

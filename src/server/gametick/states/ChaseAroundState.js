@@ -18,7 +18,7 @@ export class ChaseAroundState extends BaseState {
 	tick(gameData) { //TODO this chace logic runs on every tick maybe weird
 		const target = gameData.findAlive(this.targetId);
 		if (!target || target.isDead) {
-			this.actor.transition(Event.TARGET_LOST);
+			this.actor.transition(Event.TARGET_DEAD);
 			return;
 		}
 

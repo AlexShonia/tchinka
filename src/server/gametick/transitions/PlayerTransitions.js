@@ -15,7 +15,7 @@ export const PlayerTransitions = {
 	[State.TARGETING]: {
 		[Event.MOVE_REQUESTED]:   State.MOVING,
 		[Event.ATTACK_REQUESTED]: State.TARGETING,
-		[Event.TARGET_LOST]:      State.IDLE,
+		[Event.TARGET_DEAD]:      State.IDLE,
 		[Event.TARGET_REACHED]:   State.BASIC_ATTACK,
 	},
 	[State.BASIC_ATTACK]: {
@@ -23,6 +23,8 @@ export const PlayerTransitions = {
 		[Event.MOVE_REQUESTED]:   State.MOVING,
 		[Event.ABILITY_ARMED]:    State.JUMP_ATTACK,
 		[Event.ATTACK_FINISHED]:  State.TARGETING,
+		[Event.TARGET_OUT_OF_RANGE]: State.TARGETING,
+		[Event.TARGET_DEAD]:      State.IDLE,
 	},
 	[State.JUMP_ATTACK]: {
 		[Event.MOVE_REQUESTED]:   State.MOVING,
