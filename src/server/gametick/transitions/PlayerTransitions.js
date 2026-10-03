@@ -1,30 +1,32 @@
-import { StateName }  from "../states/name/StateName.js";
-import { StateEvent } from "../states/name/StateEvent.js";
+import { State }  from "./types/State.js";
+import { Event } from "./types/Event.js";
 
-// state -> { event -> next state }. An event missing from a state's row is ignored.
+// State -> { Event -> next State }. An Event missing from a State's row is ignored.
 export const PlayerTransitions = {
-	[StateName.IDLE]: {
-		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
-		[StateEvent.ATTACK_REQUESTED]: StateName.TARGETING,
+	[State.IDLE]: {
+		[Event.MOVE_REQUESTED]:   State.MOVING,
+		[Event.ATTACK_REQUESTED]: State.TARGETING,
 	},
-	[StateName.MOVING]: {
-		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
-		[StateEvent.ATTACK_REQUESTED]: StateName.TARGETING,
-		[StateEvent.ARRIVED]:          StateName.IDLE,
+	[State.MOVING]: {
+		[Event.MOVE_REQUESTED]:   State.MOVING,
+		[Event.ATTACK_REQUESTED]: State.TARGETING,
+		[Event.ARRIVED]:          State.IDLE,
 	},
-	[StateName.TARGETING]: {
-		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
-		[StateEvent.ATTACK_REQUESTED]: StateName.TARGETING,
-		[StateEvent.TARGET_LOST]:      StateName.IDLE,
-		[StateEvent.TARGET_REACHED]:   StateName.BASIC_ATTACK,
+	[State.TARGETING]: {
+		[Event.MOVE_REQUESTED]:   State.MOVING,
+		[Event.ATTACK_REQUESTED]: State.TARGETING,
+		[Event.TARGET_LOST]:      State.IDLE,
+		[Event.TARGET_REACHED]:   State.BASIC_ATTACK,
 	},
-	[StateName.BASIC_ATTACK]: {
-		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
-		[StateEvent.ABILITY_ARMED]:    StateName.JUMP_ATTACK,
-		[StateEvent.ATTACK_FINISHED]:  StateName.TARGETING,
+	[State.BASIC_ATTACK]: {
+		[Event.ATTACK_REQUESTED]: State.TARGETING,
+		[Event.MOVE_REQUESTED]:   State.MOVING,
+		[Event.ABILITY_ARMED]:    State.JUMP_ATTACK,
+		[Event.ATTACK_FINISHED]:  State.TARGETING,
 	},
-	[StateName.JUMP_ATTACK]: {
-		[StateEvent.MOVE_REQUESTED]:   StateName.MOVING,
-		[StateEvent.ATTACK_FINISHED]:  StateName.TARGETING,
+	[State.JUMP_ATTACK]: {
+		[Event.MOVE_REQUESTED]:   State.MOVING,
+		[Event.ATTACK_FINISHED]:  State.TARGETING,
+		[Event.ATTACK_REQUESTED]: State.TARGETING,
 	},
 };

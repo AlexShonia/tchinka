@@ -1,12 +1,12 @@
 import { BaseState }  from "./base/BaseState.js";
-import { StateName }  from "./name/StateName.js";
-import { StateEvent } from "./name/StateEvent.js";
+import { State }  from "../transitions/types/State.js";
+import { Event } from "../transitions/types/Event.js";
 
 const Phase = Object.freeze({ WINDUP: "windup", HIT: "hit", RECOVERY: "recovery" });
 
 export class BasicAttackState extends BaseState {
 	constructor(actor, windupTicks, hitTicks, recoveryTicks) {
-		super(actor, StateName.BASIC_ATTACK);
+		super(actor, State.BASIC_ATTACK);
 		this._windupTicks   = windupTicks;
 		this._hitTicks      = hitTicks;
 		this._recoveryTicks = recoveryTicks;
@@ -18,7 +18,7 @@ export class BasicAttackState extends BaseState {
 
 	// recovery (also when we only wait out a cooldown) is not drawn as an attack, the client just sees us idle
 	get visualState() {
-		return this._phase === Phase.RECOVERY ? StateName.IDLE : this.name;
+		return this._phase === Phase.RECOVERY ? State.IDLE : this.name;
 	}
 
 	passiveTick() {
@@ -41,7 +41,7 @@ export class BasicAttackState extends BaseState {
 		this.actor.faceTowards(target);
 
 		if (this.actor.hasArmedAbility) { // abilities have their own cooldown, they don't wait for the attack
-			this.actor.transition(StateEvent.ABILITY_ARMED, { targetId: this.targetId });
+			this.actor.transition(Event.ABILITY_ARMED, { targetId: this.targetId });
 			return;
 		}
 
@@ -61,7 +61,7 @@ export class BasicAttackState extends BaseState {
 		}
 
 		if (this.recoveryTimer > 0) return; // recovery lasts until the cooldown is over
-		this.actor.transition(StateEvent.ATTACK_FINISHED, { targetId: this.targetId });
+		this.actor.transition(Event.ATTACK_FINISHED, { targetId: this.targetId });
 	}
 
 	_scaled(ticks) {

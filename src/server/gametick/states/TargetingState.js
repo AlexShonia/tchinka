@@ -1,10 +1,10 @@
 import { BaseState } from "./base/BaseState.js";
-import { StateName }        from "./name/StateName.js";
-import { StateEvent } from "./name/StateEvent.js";
+import { State }        from "../transitions/types/State.js";
+import { Event } from "../transitions/types/Event.js";
 
 export class TargetingState extends BaseState {
 	constructor(actor) {
-		super(actor, StateName.TARGETING);
+		super(actor, State.TARGETING);
 		this.targetId = null;
 	}
 
@@ -15,14 +15,14 @@ export class TargetingState extends BaseState {
 	tick(gameData) {
 		const target = gameData.findAlive(this.targetId);
 		if (!target || target.isDead || !this.actor.canAttack(target)) {
-			this.actor.transition(StateEvent.TARGET_LOST);
+			this.actor.transition(Event.TARGET_LOST);
 			return;
 		}
 
 		this.actor.faceTowards(target);
 		const dist = Math.hypot(target.x - this.actor.x, target.z - this.actor.z);
 		if (dist <= this.actor.attackRange) {
-			this.actor.transition(StateEvent.TARGET_REACHED, { targetId: this.targetId });
+			this.actor.transition(Event.TARGET_REACHED, { targetId: this.targetId });
 			return;
 		}
 

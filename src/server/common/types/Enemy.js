@@ -5,7 +5,7 @@ import { BasicAttackState } from "../../gametick/states/BasicAttackState.js";
 import { ChaseAroundState } from "../../gametick/states/ChaseAroundState.js";
 import { IdleState }         from "../../gametick/states/IdleState.js";
 import { DeadState }        from "../../gametick/states/DeadState.js";
-import { StateName }        from "../../gametick/states/name/StateName.js";
+import { State }        from "../../gametick/transitions/types/State.js";
 import { nearestTarget }    from "../../utils/nearest.js";
 import { EnemyTransitions } from "../../gametick/transitions/EnemyTransitions.js";
 
@@ -22,12 +22,12 @@ export class Enemy extends Alive {
 		this.damage      = ENEMY_COMBAT.damage;
 
 		this.combatState = {
-			state: StateName.IDLE,
+			state: State.IDLE,
 			states: {
-				[StateName.IDLE]:         new IdleState(this),
-				[StateName.BASIC_ATTACK]: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
-				[StateName.CHASE_AROUND]: new ChaseAroundState(this),
-				[StateName.DEAD]:         new DeadState(this),
+				[State.IDLE]:         new IdleState(this),
+				[State.BASIC_ATTACK]: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
+				[State.CHASE_AROUND]: new ChaseAroundState(this),
+				[State.DEAD]:         new DeadState(this),
 			},
 			transitions: EnemyTransitions,
 		};

@@ -7,7 +7,7 @@ import { MovingState }       from "../../gametick/states/MovingState.js";
 import { TargetingState }    from "../../gametick/states/TargetingState.js";
 import { IdleState }         from "../../gametick/states/IdleState.js";
 import { DeadState }         from "../../gametick/states/DeadState.js";
-import { StateName }        from "../../gametick/states/name/StateName.js";
+import { State }        from "../../gametick/transitions/types/State.js";
 import { AbilityName }       from "../../gametick/states/name/AbilityName.js";
 import { PlayerTransitions } from "../../gametick/transitions/PlayerTransitions.js";
 
@@ -22,18 +22,18 @@ export class Player extends Alive {
 		this.damage              = PLAYER_COMBAT.damage;
 
 		this.combatState = {
-			state: StateName.IDLE,
+			state: State.IDLE,
 			states: {
-				[StateName.IDLE]:         new IdleState(this),
-				[StateName.MOVING]:       new MovingState(this),
-				[StateName.TARGETING]:    new TargetingState(this),
-				[StateName.BASIC_ATTACK]: new BasicAttackState(this, PLAYER_COMBAT.windupTicks, PLAYER_COMBAT.attackTicks, PLAYER_COMBAT.recoveryTicks),
-				[StateName.JUMP_ATTACK]:  new JumpAttackState(this, PLAYER_JUMP.windupTicks, PLAYER_JUMP.airTicks, PLAYER_JUMP.damageMultiplier, PLAYER_JUMP.cooldownTicks),
-				[StateName.DEAD]:         new DeadState(this),
+				[State.IDLE]:         new IdleState(this),
+				[State.MOVING]:       new MovingState(this),
+				[State.TARGETING]:    new TargetingState(this),
+				[State.BASIC_ATTACK]: new BasicAttackState(this, PLAYER_COMBAT.windupTicks, PLAYER_COMBAT.attackTicks, PLAYER_COMBAT.recoveryTicks),
+				[State.JUMP_ATTACK]:  new JumpAttackState(this, PLAYER_JUMP.windupTicks, PLAYER_JUMP.airTicks, PLAYER_JUMP.damageMultiplier, PLAYER_JUMP.cooldownTicks),
+				[State.DEAD]:         new DeadState(this),
 			},
 			transitions: PlayerTransitions,
 			abilities: {
-				[AbilityName.JUMPING_ATTACK]: { armed: false, state: StateName.JUMP_ATTACK } // JUMP_ATTACK owns the ability cooldown
+				[AbilityName.JUMPING_ATTACK]: { armed: false, state: State.JUMP_ATTACK } // JUMP_ATTACK owns the ability cooldown
 			},
 		};
 	}

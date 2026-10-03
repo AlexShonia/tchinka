@@ -1,5 +1,5 @@
 import { Player }      from "../../common/types/Player.js";
-import { StateEvent }  from "../../gametick/states/name/StateEvent.js";
+import { Event }  from "../../gametick/transitions/types/Event.js";
 import { AbilityName } from "../../gametick/states/name/AbilityName.js";
 
 const ABILITY_KEYS = { q: AbilityName.JUMPING_ATTACK };
@@ -24,7 +24,7 @@ export class Service {
 	get playerCount() { return this._gameData.players.size; }
 
 	movePlayer(player, x, z) {
-		player.transition(StateEvent.MOVE_REQUESTED, { moveTarget: { x, z } });
+		player.transition(Event.MOVE_REQUESTED, { moveTarget: { x, z } });
 	}
 
 	useAbility(player, key) {
@@ -33,6 +33,6 @@ export class Service {
 	}
 
 	attackEnemy(player, enemyId) {
-		player.transition(StateEvent.ATTACK_REQUESTED, { targetId: enemyId });
+		player.transition(Event.ATTACK_REQUESTED, { targetId: enemyId });
 	}
 }

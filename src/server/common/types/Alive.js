@@ -1,5 +1,5 @@
 import { Entity } from "./Entity.js";
-import { StateName }        from "../../gametick/states/name/StateName.js";
+import { State }        from "../../gametick/transitions/types/State.js";
 
 export class Alive extends Entity {
 	constructor() {
@@ -10,7 +10,7 @@ export class Alive extends Entity {
 		this.health            = 0;
 		this.hit               = false;
 		this.combatState = {
-			state:       StateName.IDLE,
+			state:       State.IDLE,
 			states:      {},
 			transitions: {},
 		};
@@ -29,11 +29,11 @@ export class Alive extends Entity {
 	}
 
 	get isDead() {
-		return this.combatState.state === StateName.DEAD;
+		return this.combatState.state === State.DEAD;
 	}
 
 	get isAttackOnCooldown() {
-		return this.getState(StateName.BASIC_ATTACK).recoveryTimer > 0;
+		return this.getState(State.BASIC_ATTACK).recoveryTimer > 0;
 	}
 
 	getState(name) {
@@ -79,7 +79,7 @@ export class Alive extends Entity {
 		this.hit     = true;
 		if (this.health > 0) return;
 		this.health = 0;
-		this.changeState(StateName.DEAD);
+		this.changeState(State.DEAD);
 	}
 
 }

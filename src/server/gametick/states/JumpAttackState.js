@@ -1,6 +1,6 @@
 import { BaseState }   from "./base/BaseState.js";
-import { StateName }   from "./name/StateName.js";
-import { StateEvent }  from "./name/StateEvent.js";
+import { State }   from "../transitions/types/State.js";
+import { Event }  from "../transitions/types/Event.js";
 import { AbilityName } from "./name/AbilityName.js";
 
 const Phase = Object.freeze({ WINDUP: "windup", AIR: "air", RECOVERY: "recovery" });
@@ -8,7 +8,7 @@ const Phase = Object.freeze({ WINDUP: "windup", AIR: "air", RECOVERY: "recovery"
 // Crouch and tilt back, leap straight up and down, then recover. The ability is only spent if the landing actually damages someone.
 export class JumpAttackState extends BaseState {
 	constructor(actor, windupTicks, airTicks, damageMultiplier, cooldownTicks) {
-		super(actor, StateName.JUMP_ATTACK);
+		super(actor, State.JUMP_ATTACK);
 		this._windupTicks      = windupTicks;
 		this._airTicks         = airTicks;
 		this._damageMultiplier = damageMultiplier;
@@ -21,7 +21,7 @@ export class JumpAttackState extends BaseState {
 
 	// recovery is not drawn as an attack, the client just sees us idle
 	get visualState() {
-		return this._phase === Phase.RECOVERY ? StateName.IDLE : this.name;
+		return this._phase === Phase.RECOVERY ? State.IDLE : this.name;
 	}
 
 	passiveTick() {
@@ -43,7 +43,7 @@ export class JumpAttackState extends BaseState {
 			if (--this._timer > 0) return;
 			this._phase = Phase.AIR;
 			this._timer = this._scaled(this._airTicks);
-			actor.getState(StateName.BASIC_ATTACK).startCooldown(this._airTicks); // attack cooldown covers the leap + recovery
+			actor.getState(State.BASIC_ATTACK).startCooldown(this._airTicks); // attack cooldown covers the leap + recovery
 			return;
 		}
 
@@ -62,7 +62,7 @@ export class JumpAttackState extends BaseState {
 		}
 
 		if (actor.isAttackOnCooldown) return; // recovery lasts until the attack cooldown is over
-		actor.transition(StateEvent.ATTACK_FINISHED, { targetId: this.targetId });
+		actor.transition(Event.ATTACK_FINISHED, { targetId: this.targetId });
 	}
 
 	_scaled(ticks) {

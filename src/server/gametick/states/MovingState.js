@@ -1,10 +1,10 @@
 import { BaseState } from "./base/BaseState.js";
-import { StateName }        from "./name/StateName.js";
-import { StateEvent } from "./name/StateEvent.js";
+import { State }        from "../transitions/types/State.js";
+import { Event } from "../transitions/types/Event.js";
 
 export class MovingState extends BaseState {
 	constructor(actor) {
-		super(actor, StateName.MOVING);
+		super(actor, State.MOVING);
 		this.moveTarget = null;
 	}
 
@@ -20,7 +20,7 @@ export class MovingState extends BaseState {
 		if (dist <= this.actor.moveSpeed) {
 			this.actor.x = this.moveTarget.x;
 			this.actor.z = this.moveTarget.z;
-			this.actor.transition(StateEvent.ARRIVED);
+			this.actor.transition(Event.ARRIVED);
 		} else {
 			this.actor.x += (dx / dist) * this.actor.moveSpeed;
 			this.actor.z += (dz / dist) * this.actor.moveSpeed;
