@@ -3,11 +3,11 @@ import { Event } from "./types/Event.js";
 
 // State -> { Event -> next State }. An Event missing from a State's row is ignored.
 export const EnemyTransitions = {
-	[State.IDLE]: {
+	[State.SEEK_TARGET]: {
 		[Event.TARGET_FOUND]:    State.CHASE_AROUND,
 	},
 	[State.CHASE_AROUND]: {
-		[Event.TARGET_LOST]:     State.IDLE,
+		[Event.TARGET_LOST]:     State.SEEK_TARGET,
 		[Event.TARGET_REACHED]:  State.BASIC_ATTACK,
 	},
 	[State.BASIC_ATTACK]: {

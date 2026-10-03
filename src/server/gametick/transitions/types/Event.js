@@ -10,8 +10,8 @@ export const Event = Object.freeze({
 	// emitted by MovingState
 	ARRIVED:          "arrived",         // reached the destination
 
-	// emitted by IdleState
-	TARGET_FOUND:     "targetFound",     // { targetId } an enemy noticed something to chase
+	// emitted by SeekTargetState
+	TARGET_FOUND:     "targetFound",     // { targetId } found something to chase
 
 	// emitted by TargetingState and ChaseAroundState
 	TARGET_LOST:      "targetLost",      // target is gone, dead or not attackable

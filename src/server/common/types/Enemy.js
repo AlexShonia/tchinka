@@ -3,10 +3,9 @@ import { Alive }            from "./Alive.js";
 import { Player }           from "./Player.js";
 import { BasicAttackState } from "../../gametick/states/BasicAttackState.js";
 import { ChaseAroundState } from "../../gametick/states/ChaseAroundState.js";
-import { IdleState }         from "../../gametick/states/IdleState.js";
+import { SeekTargetState }   from "../../gametick/states/SeekTargetState.js";
 import { DeadState }        from "../../gametick/states/DeadState.js";
 import { State }        from "../../gametick/transitions/types/State.js";
-import { nearestTarget }    from "../../utils/nearest.js";
 import { EnemyTransitions } from "../../gametick/transitions/EnemyTransitions.js";
 
 export class Enemy extends Alive {
@@ -22,9 +21,9 @@ export class Enemy extends Alive {
 		this.damage      = ENEMY_COMBAT.damage;
 
 		this.combatState = {
-			state: State.IDLE,
+			state: State.SEEK_TARGET,
 			states: {
-				[State.IDLE]:         new IdleState(this),
+				[State.SEEK_TARGET]:  new SeekTargetState(this),
 				[State.BASIC_ATTACK]: new BasicAttackState(this, ENEMY_COMBAT.windupTicks, ENEMY_COMBAT.attackTicks, ENEMY_COMBAT.recoveryTicks),
 				[State.CHASE_AROUND]: new ChaseAroundState(this),
 				[State.DEAD]:         new DeadState(this),
@@ -35,9 +34,5 @@ export class Enemy extends Alive {
 
 	canAttack(target) {
 		return target instanceof Player;
-	}
-
-	findTarget(gameData) {
-		return nearestTarget(this, gameData);
 	}
 }

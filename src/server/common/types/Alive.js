@@ -56,11 +56,6 @@ export class Alive extends Entity {
 		return false;
 	}
 
-	// who to go after while idle; players wait for requests, so nobody by default
-	findTarget(gameData) {
-		return null;
-	}
-
 	// damages the target if it is alive, attackable and within attackRange; returns whether it did
 	hitTarget(target, multiplier = 1) {
 		if (!target || target.isDead || !this.canAttack(target)) return false;
