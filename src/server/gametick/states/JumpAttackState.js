@@ -3,7 +3,7 @@ import { State }   from "../transitions/types/State.js";
 import { Event }  from "../transitions/types/Event.js";
 import { AbilityName } from "./name/AbilityName.js";
 
-const Phase = Object.freeze({ WINDUP: "windup", AIR: "air", RECOVERY: "recovery" });
+import { JumpAttackPhase as Phase } from "../transitions/types/SubState.js";
 
 // Crouch and tilt back, leap straight up and down, then recover. The ability is only spent if the landing actually damages someone.
 export class JumpAttackState extends BaseState {
@@ -17,6 +17,10 @@ export class JumpAttackState extends BaseState {
 		this.targetId          = null;
 		this.maxCooldown       = cooldownTicks;
 		this.cooldownTimer     = 0; // the ability's own cooldown, separate from the attack cooldown on BasicAttackState
+	}
+
+	get substate() {
+		return this._phase;
 	}
 
 	// recovery is not drawn as an attack, the client just sees us idle

@@ -1,5 +1,6 @@
 import { Entity } from "./Entity.js";
 import { State }        from "../../gametick/transitions/types/State.js";
+import { subState }     from "../../gametick/transitions/types/SubState.js";
 
 export class Alive extends Entity {
 	constructor() {
@@ -45,9 +46,13 @@ export class Alive extends Entity {
 	}
 
 	// a state reports an event; this entity's transition map says where it leads (no entry = ignored)
+	// a row for the current substate (see SubState.js) wins over the state's row, even with a null target (= ignored)
 	transition(event, context) {
-		const next = this.combatState.transitions[this.combatState.state]?.[event];
-		if (next === undefined) return;
+		const { state, transitions } = this.combatState;
+		const substate = this.currentState.substate;
+		const specific = substate && transitions[subState(state, substate)];
+		const next     = specific && event in specific ? specific[event] : transitions[state]?.[event];
+		if (next === undefined || next === null) return;
 		this.getState(next).initialize(context);
 		this.changeState(next);
 	}

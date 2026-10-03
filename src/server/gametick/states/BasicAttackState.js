@@ -1,8 +1,7 @@
 import { BaseState }  from "./base/BaseState.js";
 import { State }  from "../transitions/types/State.js";
 import { Event } from "../transitions/types/Event.js";
-
-const Phase = Object.freeze({ WINDUP: "windup", HIT: "hit", RECOVERY: "recovery" });
+import { BasicAttackPhase as Phase } from "../transitions/types/SubState.js";
 
 export class BasicAttackState extends BaseState {
 	constructor(actor, windupTicks, hitTicks, recoveryTicks) {
@@ -14,6 +13,10 @@ export class BasicAttackState extends BaseState {
 		this._timer         = 0;
 		this.targetId       = null;
 		this.recoveryTimer  = 0;     // the attack cooldown: starts with the hit, counts down in passiveTick even while we are in another state
+	}
+
+	get substate() {
+		return this._phase;
 	}
 
 	// recovery (also when we only wait out a cooldown) is not drawn as an attack, the client just sees us idle

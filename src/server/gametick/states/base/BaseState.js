@@ -10,6 +10,11 @@ export class BaseState {
 		return this.name;
 	}
 
+	// phase inside this state, for transition rows keyed by subState(state, phase); null = no phases
+	get substate() {
+		return null;
+	}
+
 	initialize(context) {}
 	passiveTick() {}
 	tick(gameData) {}
