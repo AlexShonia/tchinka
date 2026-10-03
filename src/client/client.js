@@ -10,7 +10,7 @@ import { createWorld }      from "./common/view/world.js";
 import { InputController }  from "./outgoing/input/input.js";
 
 const SERVER     = `ws://${location.hostname}:1234`;
-const CAM_OFFSET = new THREE.Vector3(0, 8, 5);
+const CAM_OFFSET = new THREE.Vector3(0, 4, 3);
 
 // ── three.js setup ────────────────────────────────────────────────────────────
 const scene    = new THREE.Scene();
