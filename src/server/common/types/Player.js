@@ -1,4 +1,4 @@
-import { PLAYER_MOVE_SPEED, PLAYER_COMBAT, PLAYER_JUMP } from "../../../shared/combatConfig.js";
+import { PLAYER_MOVE_SPEED, PLAYER_MAX_HEALTH, PLAYER_MAX_MANA, PLAYER_PROGRESSION, PLAYER_COMBAT, PLAYER_JUMP } from "../../../shared/combatConfig.js";
 import { Alive }             from "./Alive.js";
 import { Enemy }             from "./Enemy.js";
 import { BasicAttackState }  from "../../gametick/states/BasicAttackState.js";
@@ -15,9 +15,11 @@ export class Player extends Alive {
 	constructor(id) {
 		super();
 		this.id                  = id;
-		this.mana                = 100;
+		this.mana                = PLAYER_MAX_MANA;
+		this.level               = 0;
+		this.xp                  = 0;
 		this.attackRange         = 3;
-		this.health              = 100;
+		this.health              = PLAYER_MAX_HEALTH;
 		this.moveSpeed           = PLAYER_MOVE_SPEED;
 		this.damage              = PLAYER_COMBAT.damage;
 
@@ -33,7 +35,7 @@ export class Player extends Alive {
 			},
 			transitions: PlayerTransitions,
 			abilities: {
-				[AbilityName.JUMPING_ATTACK]: { armed: false, state: State.JUMP_ATTACK } // JUMP_ATTACK owns the ability cooldown
+				[AbilityName.JUMPING_ATTACK]: { armed: false, state: State.JUMP_ATTACK, unlockLevel: PLAYER_JUMP.unlockLevel, manaCost: PLAYER_JUMP.manaCost } // JUMP_ATTACK owns the ability cooldown
 			},
 		};
 	}
@@ -42,19 +44,35 @@ export class Player extends Alive {
 		return target instanceof Enemy;
 	}
 
-	// arms the ability; the attack state notices it on its next tick (also while an attack is already running)
+	get xpToNext() {
+		return PLAYER_PROGRESSION.xpPerLevel * (this.level + 1);
+	}
+
+	gainXp(amount) {
+		this.xp += amount;
+		while (this.xp >= this.xpToNext) {
+			this.xp -= this.xpToNext;
+			this.level++;
+		}
+	}
+
+	// pays the mana and arms the ability; the attack state notices it on its next tick (also while an attack is already running)
+	// an already armed ability is ignored so pressing the key again doesn't cost twice
 	useAbility(name) {
 		const ability = this.combatState.abilities[name];
-		if (!ability || this.isDead || this.getState(ability.state).cooldownTimer > 0) return;
+		if (!ability || this.isDead || ability.armed) return;
+		if (this.level < ability.unlockLevel || this.mana < ability.manaCost) return;
+		if (this.getState(ability.state).cooldownTimer > 0) return;
+		this.mana -= ability.manaCost;
 		ability.armed = true;
 	}
 
-	// what the client needs to draw the abilities: armed flag and cooldown (in ticks) per ability
+	// what the client needs to draw the abilities: armed flag, unlocked, mana cost and cooldown (in ticks) per ability
 	get abilitySnapshot() {
 		const snapshot = {};
 		for (const [name, ability] of Object.entries(this.combatState.abilities)) {
 			const state = this.getState(ability.state);
-			snapshot[name] = { armed: ability.armed, cooldown: state.cooldownTimer, maxCooldown: state.maxCooldown };
+			snapshot[name] = { armed: ability.armed, unlocked: this.level >= ability.unlockLevel, unlockLevel: ability.unlockLevel, manaCost: ability.manaCost, cooldown: state.cooldownTimer, maxCooldown: state.maxCooldown };
 		}
 		return snapshot;
 	}

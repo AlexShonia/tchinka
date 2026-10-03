@@ -45,7 +45,7 @@ export class EnemyView {
 		if (data.state !== this._state) {
 			this._state = data.state;
 			const state = this._states[data.state];
-			if (state) state.enter(data.attackSpeed ?? 1, this.targetEnemyId);
+			if (state) { this._yaw = this._facing; state.enter(data.attackSpeed ?? 1, this.targetEnemyId); }
 		}
 
 		const damaged = data.hp < data.maxHp;
@@ -58,8 +58,8 @@ export class EnemyView {
 	}
 
 	tick(now) {
-		this._yaw = turnToward(this._yaw, this._facing);
 		const state = this._states[this._state];
+		if (!state) this._yaw = turnToward(this._yaw, this._facing); // never turn while attacking, the swing starts already facing the target
 		if (state) state.apply();
 		else settle(this.mesh);
 		this.mesh.rotation.y = this._yaw + this.mesh.userData.swingYaw;

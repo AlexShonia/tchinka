@@ -20,6 +20,7 @@ export class PlayerView {
 		this._hitTime = 0;
 		this.x = 0; this.z = 0;
 		this.health = 100; this.mana = 100; this.dead = false;
+		this.level = 0; this.xp = 0; this.xpToNext = 1;
 		this.abilities = {};
 		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), isLocal ? myMat : otherMat);
 		setupFacing(this.mesh);
@@ -35,6 +36,7 @@ export class PlayerView {
 	update(data) {
 		this.x      = data.x;      this.z    = data.z;
 		this.health = data.health; this.mana = data.mana; this.dead = data.dead;
+		this.level  = data.level;  this.xp   = data.xp;   this.xpToNext = data.xpToNext;
 		this.abilities = data.abilities ?? {};
 		this.mesh.position.set(data.x, 0.5, data.z);
 		this._facing = data.facing ?? 0;
@@ -42,13 +44,13 @@ export class PlayerView {
 		if (data.state !== this._state) {
 			this._state = data.state;
 			const state = this._states[data.state];
-			if (state) state.enter(data.attackSpeed ?? 1, this.targetEnemyId);
+			if (state) { this._yaw = this._facing; state.enter(data.attackSpeed ?? 1, this.targetEnemyId); }
 		}
 	}
 
 	tick(now) {
-		this._yaw = turnToward(this._yaw, this._facing);
 		const state = this._states[this._state];
+		if (!state) this._yaw = turnToward(this._yaw, this._facing); // never turn while attacking, the swing starts already facing the target
 		if (state) state.apply();
 		else settle(this.mesh);
 		this.mesh.rotation.y = this._yaw + this.mesh.userData.swingYaw;

@@ -1,7 +1,5 @@
 import { Enemy } from "../common/types/Enemy.js";
-
-const PLAYER_MAX_MANA      = 100;
-const MANA_REGEN           = 0.3;
+import { PLAYER_MAX_MANA, MANA_REGEN, PLAYER_PROGRESSION } from "../../shared/combatConfig.js";
 
 const BASE_ENEMY_SPEED     = 0.05;
 const ENEMY_SPEED_PER_WAVE = 0.008;
@@ -34,7 +32,12 @@ function tickEnemies(gameData) {
 }
 
 function removeDeadEnemies(gameData) {
-	gameData.enemies = gameData.enemies.filter(e => !e.isDead);
+	const alive  = gameData.enemies.filter(e => !e.isDead);
+	const killed = gameData.enemies.length - alive.length;
+	gameData.enemies = alive;
+	if (killed === 0) return;
+	for (const p of gameData.players.values())
+		if (!p.isDead) p.gainXp(killed * PLAYER_PROGRESSION.xpPerKill);
 }
 
 function tickMana(gameData) {

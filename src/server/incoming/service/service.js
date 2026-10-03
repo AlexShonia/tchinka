@@ -41,6 +41,7 @@ export class Service {
 	}
 
 	attackEnemy(player, enemyId) {
+		if (player.currentState.targetId === enemyId) return; // already targeting/attacking this one (spam clicks must not restart anything)  TODO SOMETHING TO THINK AOBUT IS IT SUPPOSED TO BE HERE OR IN STATE ITSELF BUT STATE ITSELF BUGS OUT NOW BUT ONT THE POINT
 		player.transition(Event.ATTACK_REQUESTED, { targetId: enemyId });
 	}
 }
