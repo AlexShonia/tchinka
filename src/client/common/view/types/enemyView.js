@@ -1,11 +1,10 @@
 import * as THREE from "three";
 import { setupFacing, turnToward } from "../facing.js";
+import { createGargoyle } from "../models.js";
 import { settle } from "../settle.js";
 import { BasicAttackState } from "../states/BasicAttackState.js";
 import { ENEMY_COMBAT, toMs } from "../../../../shared/combatConfig.js";
 
-const enemyMat      = new THREE.MeshBasicMaterial({ color: 0xff3333 });
-const enemyHoverMat = new THREE.MeshBasicMaterial({ color: 0xff8855 });
 const bgMat         = new THREE.MeshBasicMaterial({ color: 0x333333 });
 const fillMat       = new THREE.MeshBasicMaterial({ color: 0xdd1111 });
 
@@ -18,7 +17,7 @@ export class EnemyView {
 		this._state  = "idle";
 		this.x = 0; this.z = 0; this.hp = 1; this.maxHp = 1;
 
-		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), enemyMat);
+		this.mesh = createGargoyle();
 		setupFacing(this.mesh);
 		this._facing = 0;
 		this._yaw    = 0;
@@ -66,7 +65,7 @@ export class EnemyView {
 	}
 
 	setHovered(on) {
-		this.mesh.material = on ? enemyHoverMat : enemyMat;
+		this.mesh.userData.glow(on ? 0x662200 : 0);
 	}
 
 	remove() {

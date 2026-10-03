@@ -33,8 +33,10 @@ export class InputController {
 	tick() {
 		_raycaster.setFromCamera(_mouse, this._camera);
 		const views = [...this._getEnemies()];
-		const hit   = _raycaster.intersectObjects(views.map(v => v.mesh))[0];
-		const next  = hit ? views.find(v => v.mesh === hit.object) : null;
+		const hit   = _raycaster.intersectObjects(views.map(v => v.mesh), true)[0]; // models are groups of parts
+		let owner   = hit?.object;
+		while (owner && !views.some(v => v.mesh === owner)) owner = owner.parent;
+		const next  = owner ? views.find(v => v.mesh === owner) : null;
 		if (next !== this._hovered) {
 			this._hovered?.setHovered(false);
 			next?.setHovered(true);

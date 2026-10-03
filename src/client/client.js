@@ -6,6 +6,7 @@ import { GameStateService } from "./incoming/service/GameStateService.js";
 import { PingService }      from "./incoming/service/PingService.js";
 import { Service }          from "./outgoing/input/service/service.js";
 import { Hud }              from "./common/view/types/Hud.js";
+import { createWorld }      from "./common/view/world.js";
 import { InputController }  from "./outgoing/input/input.js";
 
 const SERVER     = `ws://${location.hostname}:1234`;
@@ -18,6 +19,12 @@ const renderer = new THREE.WebGLRenderer();
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+sun.position.set(-4, 10, 6);
+scene.add(sun);
+const world = createWorld(scene);
 
 // ── app ───────────────────────────────────────────────────────────────────────
 const gameState    = new GameState();
@@ -46,5 +53,6 @@ function resetCameraPosition() {
 	if (p) {
 		camera.position.set(p.x + CAM_OFFSET.x, CAM_OFFSET.y, p.z + CAM_OFFSET.z);
 		camera.lookAt(p.x, 0, p.z);
+		world.follow(p.x, p.z);
 	}
 }

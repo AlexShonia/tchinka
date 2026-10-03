@@ -1,3 +1,4 @@
+import { resetPose } from "../settle.js";
 import { JUMP_TILT_BACK, JUMP_LAND_TILT, JUMP_CROUCH, JUMP_SQUASH, JUMP_HEIGHT, smooth } from "./poses.js";
 
 const STRETCH_END  = 0.2; // share of the leap spent springing back up from the crouch
@@ -18,6 +19,7 @@ export class JumpAttackState {
 	}
 
 	enter(attackSpeed = 1) {
+		resetPose(this._mesh);
 		this._start       = performance.now();
 		this._attackSpeed = attackSpeed;
 	}

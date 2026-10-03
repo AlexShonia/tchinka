@@ -1,3 +1,4 @@
+import { resetPose } from "../settle.js";
 import { TILT_BACK, OVERSHOOT } from "./poses.js";
 
 // Windup and hit as one animation: turn right during the windup, swing through to the left on the hit.
@@ -13,6 +14,7 @@ export class BasicAttackState {
 	}
 
 	enter(attackSpeed = 1) {
+		resetPose(this._mesh);
 		this._start       = performance.now();
 		this._attackSpeed = attackSpeed;
 	}

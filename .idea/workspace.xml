@@ -6,17 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="9711a74e-74f0-489c-91ab-4dabf671827b" name="Changes" comment="jump and fking move">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-C71rOJ72.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-C17qUOgl.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/common/view/facing.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/facing.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/Hud.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/Hud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/settle.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/settle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/BasicAttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/BasicAttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/states/JumpAttackState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/states/JumpAttackState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/common/view/types/blockView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/blockView.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/enemyView.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/common/view/types/playerView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/common/types/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/common/types/Player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/gametick/tick.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/gametick/tick.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/incoming/service/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/incoming/service/service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/outgoing/Sender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/outgoing/Sender.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/combatConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/combatConfig.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/outgoing/input/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/outgoing/input/input.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

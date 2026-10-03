@@ -1,15 +1,12 @@
-import * as THREE from "three";
 import { setupFacing, turnToward } from "../facing.js";
+import { createKnight } from "../models.js";
 import { settle } from "../settle.js";
 import { BasicAttackState } from "../states/BasicAttackState.js";
 import { JumpAttackState }  from "../states/JumpAttackState.js";
 import { PLAYER_COMBAT, PLAYER_JUMP, toMs } from "../../../../shared/combatConfig.js";
 
-const myMat       = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-const otherMat    = new THREE.MeshBasicMaterial({ color: 0x0ffff0, wireframe: true });
-const criticalMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-const armedMat    = new THREE.MeshBasicMaterial({ color: 0xffaa00, wireframe: true });
-
+const GLOW_HIT   = 0xff0000;
+const GLOW_ARMED = 0x884400;
 const CRITICAL_DURATION = 400;
 
 export class PlayerView {
@@ -22,7 +19,7 @@ export class PlayerView {
 		this.health = 100; this.mana = 100; this.dead = false;
 		this.level = 0; this.xp = 0; this.xpToNext = 1;
 		this.abilities = {};
-		this.mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), isLocal ? myMat : otherMat);
+		this.mesh = createKnight(isLocal);
 		setupFacing(this.mesh);
 		this._facing = 0;
 		this._yaw    = 0;
@@ -61,7 +58,7 @@ export class PlayerView {
 		const hitElapsed = now - this._hitTime;
 		const inCritical = hitElapsed >= 0 && hitElapsed < CRITICAL_DURATION;
 		const armed = Object.values(this.abilities).some(a => a.armed);
-		this.mesh.material = inCritical ? criticalMat : armed ? armedMat : (this._isLocal ? myMat : otherMat);
+		this.mesh.userData.glow(inCritical ? GLOW_HIT : armed ? GLOW_ARMED : 0);
 	}
 
 	remove() { this._scene.remove(this.mesh); }
