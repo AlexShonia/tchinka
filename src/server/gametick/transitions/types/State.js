@@ -7,5 +7,8 @@ export const State = Object.freeze({
 	CHASE_AROUND: "chaseAround",
 	BASIC_ATTACK: "basicAttack",
 	JUMP_ATTACK:  "jumpAttack",
+	SHOULDER_CHARGE: "shoulderCharge",
+	SPIN_ATTACK:     "spinAttack",
+	SHIELD_THROW:    "shieldThrow",
 	DEAD:         "dead",
 });

@@ -26,7 +26,46 @@ export const PLAYER_JUMP = {
 	damageMultiplier: 2,
 	cooldownTicks:    250,
 	manaCost:         30,
-	unlockLevel:      1,
+	unlockLevel:      0,
+};
+
+// placeholder numbers; speeds are world units per tick
+export const PLAYER_CHARGE = {
+	windupTicks:      8,
+	speed:            0.45,
+	bumpDistance:     1.2,
+	recoveryTicks:    20,
+	damageMultiplier: 2,
+	knockback:        2.5,
+	range:            10,
+	cooldownTicks:    300,
+	manaCost:         20,
+	unlockLevel:      0,
+};
+
+// damage lands every tick, so the multiplier is tiny
+export const PLAYER_SPIN = {
+	durationTicks:       150,
+	radius:              2.5,
+	damageMultiplier:    0.1,
+	moveSpeedMultiplier: 0.6,
+	cooldownTicks:       600,
+	manaCost:            40,
+	unlockLevel:         0,
+};
+
+export const PLAYER_SHIELD = {
+	windupTicks:      10,
+	speed:            0.4,
+	hitRadius:        0.7,
+	catchDistance:    0.8,
+	damageMultiplier: 1.5,
+	bounceRange:      8,
+	maxBounces:       5,
+	range:            8,
+	cooldownTicks:    400,
+	manaCost:         35,
+	unlockLevel:      0,
 };
 
 export const ENEMY_COMBAT = {

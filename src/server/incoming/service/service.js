@@ -3,7 +3,12 @@ import { Player }      from "../../common/types/Player.js";
 import { Event }  from "../../gametick/transitions/types/Event.js";
 import { AbilityName } from "../../gametick/states/name/AbilityName.js";
 
-const ABILITY_KEYS = { q: AbilityName.JUMPING_ATTACK };
+const ABILITY_KEYS = {
+	q: AbilityName.JUMPING_ATTACK,
+	w: AbilityName.SHOULDER_CHARGE,
+	e: AbilityName.SPIN_ATTACK,
+	r: AbilityName.SHIELD_THROW,
+};
 
 export class Service {
 	constructor(gameData) {
@@ -30,7 +35,10 @@ export class Service {
 
 	useAbility(player, key) {
 		const ability = ABILITY_KEYS[key];
-		if (ability) player.useAbility(ability);
+		if (!ability) return;
+		const current = this._gameData.findAlive(player.currentState.targetId); // keep fighting the same enemy, else the closest one
+		const target  = current && !current.isDead && player.canAttack(current) ? current : nearestTarget(player, this._gameData);
+		player.useAbility(ability, target);
 	}
 
 	// A: go into targeting on the nearest enemy (attacks once in range), nothing happens if there is none

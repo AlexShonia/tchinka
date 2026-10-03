@@ -8,3 +8,11 @@ export function nearestTarget(actor, gameData) {
 	return nearest;
 }
 
+
+// everything the actor can attack within `radius` of the point (x, z)
+export function targetsWithin(actor, gameData, x, z, radius) {
+	const found = [];
+	for (const t of gameData.allAlive())
+		if (t !== actor && !t.isDead && actor.canAttack(t) && Math.hypot(t.x - x, t.z - z) <= radius) found.push(t);
+	return found;
+}

@@ -25,12 +25,31 @@ const ICON_JUMP = `<svg viewBox="0 0 40 40" width="34" height="34" fill="none" s
 	<path d="M5 29l3 2M35 29l-3 2" stroke="#ffb347" stroke-width="2"/>
 </svg>`;
 
+const ICON_CHARGE = `<svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path d="M3 12h10M1 20h12M3 28h10" stroke="#9fd0ff" stroke-width="2"/>
+	<path d="M16 8l12 4 8 10-6 10-14 2z" fill="#dfe9f5" stroke="#4a8fe0" stroke-width="2"/>
+	<path d="M22 14l8 4" stroke="#4a8fe0" stroke-width="2"/>
+</svg>`;
+
+const ICON_SPIN = `<svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<circle cx="20" cy="20" r="14" stroke="#7be08a" stroke-width="2" stroke-dasharray="14 6"/>
+	<path d="M20 6l5-4M20 34l-5 4" stroke="#7be08a" stroke-width="2"/>
+	<path d="M12 28L28 12" stroke="#e8eef5" stroke-width="4"/>
+	<path d="M10 30l4-4" stroke="#d4a72c" stroke-width="4"/>
+</svg>`;
+
+const ICON_SHIELD = `<svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path d="M20 5l11 4v10c0 8-5 13-11 16C14 32 9 27 9 19V9z" fill="#c9d1dc" stroke="#d4a72c" stroke-width="2.5"/>
+	<path d="M20 11v18M13 18h14" stroke="#d4a72c" stroke-width="2.5"/>
+	<path d="M33 6l4 3-4 3" stroke="#ff8a8a" stroke-width="2"/>
+</svg>`;
+
 // one entry per slot: the key shown on it, the server's ability name (none = not implemented yet), its icon and a color theme
 const SLOTS = [
 	{ key: "Q", ability: "jumpingAttack", icon: ICON_JUMP, accent: "#ff9a2e", glow: "#5a2608" },
-	{ key: "W" },
-	{ key: "E" },
-	{ key: "R" },
+	{ key: "W", ability: "shoulderCharge", icon: ICON_CHARGE, accent: "#4a8fe0", glow: "#10305a" },
+	{ key: "E", ability: "spinAttack", icon: ICON_SPIN, accent: "#52c466", glow: "#123d1a" },
+	{ key: "R", ability: "shieldThrow", icon: ICON_SHIELD, accent: "#d4a72c", glow: "#4a3608" },
 	{ key: "T" },
 ];
 

@@ -45,16 +45,17 @@ export class Alive extends Entity {
 		this.combatState.state = name;
 	}
 
-	// a state reports an event; this entity's transition map says where it leads (no entry = ignored)
+	// a state reports an event; this entity's transition map says where it leads (no entry = ignored); returns whether it moved
 	// a row for the current substate (see SubState.js) wins over the state's row, even with a null target (= ignored)
 	transition(event, context) {
 		const { state, transitions } = this.combatState;
 		const substate = this.currentState.substate;
 		const specific = substate && transitions[subState(state, substate)];
 		const next     = specific && event in specific ? specific[event] : transitions[state]?.[event];
-		if (next === undefined || next === null) return;
+		if (next === undefined || next === null) return false;
 		this.getState(next).initialize(context);
 		this.changeState(next);
+		return true;
 	}
 
 	canAttack(target) {

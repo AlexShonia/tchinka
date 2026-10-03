@@ -7,6 +7,10 @@ export const Event = Object.freeze({
 	MOVE_REQUESTED:   "moveRequested",   // { moveTarget: { x, z } }
 	ATTACK_REQUESTED: "attackRequested", // { targetId }
 
+	DASH_REQUESTED:   "dashRequested",   // { targetId } W: shoulder charge at an enemy
+	SPIN_REQUESTED:   "spinRequested",   // E: spin attack
+	SHIELD_REQUESTED: "shieldRequested", // { targetId } R: throw the shield
+
 	// emitted by MovingState
 	ARRIVED:          "arrived",         // reached the destination
 
@@ -25,4 +29,7 @@ export const Event = Object.freeze({
 
 	// emitted by BasicAttackState and JumpAttackState
 	ATTACK_FINISHED:  "attackFinished",  // { targetId } windup, hit and recovery are all over
+
+	// emitted by ShoulderChargeState, SpinAttackState and ShieldThrowState
+	ABILITY_FINISHED: "abilityFinished", // the ability ran its course
 });
